@@ -23,4 +23,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes();
 
-Route::get('/barang', [App\Http\Controllers\BarangController::class, 'index'])->name('barang');
+Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+
+Route::get('/profile_edit', [App\Http\Controllers\ProfileEditController::class, 'index'])->name('profile_edit');
