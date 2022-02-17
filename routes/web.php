@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Auth::routes();
@@ -25,4 +25,9 @@ Auth::routes();
 
 Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
 
-Route::get('/profile_edit', [App\Http\Controllers\ProfileEditController::class, 'index'])->name('profile_edit');
+Route::get('/profile/edit', [App\Http\Controllers\ProfileEditController::class, 'index'])->name('profile_edit');
+
+Route::get('/home/master/barang', [App\Http\Controllers\BarangController::class, 'index'])->name('barang');
+Route::get('/home/master/barang/tambah', [App\Http\Controllers\BarangTambahController::class, 'index'])->name('barangtambah');
+
+//Route::get('/home/permintaan-pembelian', [App\Http\Controllers\::class, 'index'])->name('permintaan_pembelian');
