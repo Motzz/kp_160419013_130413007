@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Barang -> Tambah</h1>
+    <h1 class="h3 mb-0 text-gray-800">Satuan -> Tambah</h1>
 </div>
 
 <div class="container">
@@ -22,12 +22,14 @@
                  
                 <div class="card-body">
             
-                    <form action="" >
+                    <form action="{{route('satuan.update')}}" method="POST" >
                       @csrf
+                      @method('PUT')
 
                         <div class="form-group">
-                           <label for="title">Nama barang</label>
-                           <input type="text" name="barang" class="form-control" >
+                           <label for="title">Nama Satuan</label>
+                           <input require type="text" name="satuan" class="form-control" 
+                           value="{{old('name','$satuan->name')}}" >
 
                            <!--@error('title')
                            <span class="error"role="alert">
@@ -35,22 +37,6 @@
                            </span>
                            @enderror-->
                        </div>
-        
-                        <div class="form-group">
-                            <label for="body" >Kode</label>
-                            <input type="text" name="kode" class="form-control" placeholder="Opsional">
-                            <!--<figcaption class="blockquote-footer">
-                                Opsional <cite title="Source Title"></cite>
-                            </figcaption> -->
-                           
-
-                          <!-- @error('body')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
-                        </div>
-
 
                        <button class="btn btn-primary">Tambah</button>
                     </form>
