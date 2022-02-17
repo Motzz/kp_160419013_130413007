@@ -110,7 +110,7 @@ class SatuanController extends Controller
             'name'=> 'required'
          ]);
          $satuan->update($data);
-         return redirect()->route('stories.index')->with('status','Success updated!!');//balek ke halaman awal
+         return redirect()->route('satuan.index')->with('status','Success updated!!');//balek ke halaman awal
         
     }
 
@@ -122,7 +122,9 @@ class SatuanController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::table('satuan')->where('id', $id)->delete();
+        DB::table('satuan')
+            ->where('id', $id)
+            ->delete();
         return redirect()->route('satuan.index')->with('status','Success!!');
     }
 }

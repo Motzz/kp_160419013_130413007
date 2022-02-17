@@ -36,7 +36,7 @@ Route::get('/home/master/barang/edit', [App\Http\Controllers\BarangTambahControl
 
 Route::get('/home/master/satuan', [App\Http\Controllers\SatuanController::class, 'index'])->name('satuan');
 Route::get('/home/master/satuan/tambah', [App\Http\Controllers\SatuanTambahController::class, 'index'])->name('satuantambah');
-Route::get('/home/master/satuan/tambahproses', [App\Http\Controllers\SatuanTambahController::class, 'create'])->name('satuantambahproses');
+//Route::get('/home/master/satuan/tambahproses', [App\Http\Controllers\SatuanTambahController::class, 'create'])->name('satuantambahproses');
 Route::get('/home/master/satuan/edit', [App\Http\Controllers\SatuanTambahController::class, 'index'])->name('satuanedit');
 
 Route::resource('satuan', 'App\Http\Controllers\SatuanController');
