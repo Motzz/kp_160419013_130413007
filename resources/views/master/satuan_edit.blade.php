@@ -17,19 +17,19 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Tambah barang
+                    Edit satuan
                 </div>
                  
                 <div class="card-body">
             
-                    <form action="{{route('satuan.update')}}" method="POST" >
+                    <form action="{{route('satuan.update',[$satuan])}}" method="POST" >
                       @csrf
                       @method('PUT')
 
                         <div class="form-group">
                            <label for="title">Nama Satuan</label>
                            <input require type="text" name="satuan" class="form-control" 
-                           value="{{old('name','$satuan->name')}}" >
+                           value="{{old('name',$satuan->name)}}" >
 
                            <!--@error('title')
                            <span class="error"role="alert">
@@ -38,7 +38,7 @@
                            @enderror-->
                        </div>
 
-                       <button class="btn btn-primary">Tambah</button>
+                       <button class="btn btn-primary">Save</button>
                     </form>
 
                 </div>
