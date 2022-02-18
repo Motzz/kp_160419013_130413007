@@ -14,4 +14,5 @@ class Satuan extends Model
     protected $fillable=[
         'name',
     ];
+     
 }

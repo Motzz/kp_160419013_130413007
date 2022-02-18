@@ -19,41 +19,29 @@
                  
                 <div class="card-body">
             
-                    <form action="" >
+                    <form action="{{route('barang.store')}}" method="POST">
                       @csrf
 
                         <div class="form-group">
                            <label for="title">Nama barang</label>
-                           <input type="text" name="barang" class="form-control" >
+                           <input type="text" name="name" class="form-control" value="{{old('name','')}}" >
 
-                           <!--@error('title')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
+                      
                        </div>
         
                         <div class="form-group">
                             <label for="body" >Kode</label>
-                            <input type="text" name="kode" class="form-control" placeholder="Opsional">
-                            <!--<figcaption class="blockquote-footer">
-                                Opsional <cite title="Source Title"></cite>
-                            </figcaption> -->
-                           
-                          <!-- @error('body')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
+                            <input type="text" name="code" class="form-control" placeholder="Opsional" value="{{old('code','')}}">
+                            
+
                         </div>
                         <div class="form-group">
                             <label for="Satuan" >Satuan</label>
                             <select name="Satuan" class="form-control">
-                            <option value="">--Pilih satuan--</option>
-                            @foreach($dataSatuan as $key => $data)
-                            <option name="{{$data->id}}" value="{{$data->name}}">{{$data->name}}</option>
-                            @endforeach
-       
+                                     <option value="">--Pilih satuan--</option>
+                                     @foreach($dataSatuan as $key => $data)
+                                     <option name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @endforeach
                             </select>
                         </div>
 

@@ -19,37 +19,39 @@
                  
                 <div class="card-body">
             
-                    <form action="" >
+                    <form action="{{route('barang.update',[$barang])}}" method="POST">
                       @csrf
+                      @method('PUT')
 
                         <div class="form-group">
                            <label for="title">Nama barang</label>
-                           <input type="text" name="barang" class="form-control" >
+                           <input type="text" name="barang" class="form-control" value="{{old('name',$barang->name)}}">
 
-                           <!--@error('title')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
+                         
                        </div>
         
                         <div class="form-group">
                             <label for="body" >Kode</label>
-                            <input type="text" name="kode" class="form-control" placeholder="Opsional">
-                            <!--<figcaption class="blockquote-footer">
-                                Opsional <cite title="Source Title"></cite>
-                            </figcaption> -->
-                           
+                            <input type="text" name="barang" class="form-control" placeholder="Opsional" value="{{old('code',$barang->code)}}">
+                        
+                        </div>
 
-                          <!-- @error('body')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
+                         <div class="form-group">
+                            <label for="Satuan" >Satuan</label>
+                            <select name="barang" class="form-control">
+                                     <option value="">--Pilih satuan--</option>
+                                     @foreach($dataSatuan as $key => $data)
+                                     @if($data->id == $barang->idSatuan )
+                                     <option selected name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @else
+                                     <option name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>                             
+                                     @endif      
+                                     @endforeach   
+                           </select>
                         </div>
 
 
-                       <button class="btn btn-primary">Tambah</button>
+                       <button class="btn btn-primary">Save</button>
                     </form>
 
                 </div>

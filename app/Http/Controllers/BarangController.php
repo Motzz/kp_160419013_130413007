@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Satuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -40,6 +41,7 @@ class BarangController extends Controller
     public function create()
     {
         //
+        return view('master.barang_tambah');
     }
 
     /**
@@ -51,6 +53,26 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         //
+        /*$data = $request->collect();
+        
+        // insert data ke table pegawai
+         DB::table('barang')->insert([
+            'name' => $request->name,
+            'code' => $request->code,
+            'idSatuan' => $request->idSatuan
+        ]);
+        // alihkan halaman ke halaman pegawai
+        return redirect()->route('barang.index')->with('status','Success!!');*/
+
+        $data = $request->collect();
+        
+        DB::table('barang')->insert(array(
+             'name' => $data['name'],
+             'code' => $data['code'],
+             'idSatuan' => $data['Satuan'],
+             )
+        ); 
+        return redirect()->route('barang.index')->with('status','Success!!');
     }
 
     /**
@@ -62,6 +84,7 @@ class BarangController extends Controller
     public function show(Barang $barang)
     {
         //
+        
     }
 
     /**
@@ -73,6 +96,12 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         //
+         $dataSatuan = DB::table('satuan')
+            ->get();
+        return view('master.barang_edit',[
+            'barang'=>$barang,
+            'dataSatuan' => $dataSatuan
+        ]);
     }
 
     /**
@@ -85,6 +114,17 @@ class BarangController extends Controller
     public function update(Request $request, Barang $barang)
     {
         //
+        $data = $request->collect(); //la teros iki
+        
+        DB::table('barang')
+            ->where('id', $barang['id'])
+            ->update(array(
+                'name' => $data['barang'],
+                'code' => $data['barang'],
+                'idSatuan' => $data['barang'],
+            ));
+
+        return redirect()->route('barang.index')->with('status','Success!!');  
     }
 
     /**
@@ -96,5 +136,7 @@ class BarangController extends Controller
     public function destroy(Barang $barang)
     {
         //
+        $barang->delete();
+        return redirect()->route('barang.index')->with('status','Success!!');
     }
 }
