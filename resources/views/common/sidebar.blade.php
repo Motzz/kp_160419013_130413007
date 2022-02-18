@@ -109,7 +109,7 @@
             <a class="collapse-item" href="{{('/home/master/barang')}}">Barang</a>
             <a class="collapse-item" href="{{('/home/master/satuan')}}">Satuan</a>
             <a class="collapse-item" href="{{('/home/master/lokasi')}}">Lokasi</a>
-            <a class="collapse-item" href="{{('/home/master/roles')}}">Roles</a>
+            <a class="collapse-item" href="{{('/home/master/role')}}">Roles</a>
             <!--@if(1==1){
                 <a class="collapse-item" href="{{('/home/master/supplier')}}">Supplier</a>
                 @endif

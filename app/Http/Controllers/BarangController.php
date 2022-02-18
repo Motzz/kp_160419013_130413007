@@ -119,9 +119,9 @@ class BarangController extends Controller
         DB::table('barang')
             ->where('id', $barang['id'])
             ->update(array(
-                'name' => $data['barang'],
-                'code' => $data['barang'],
-                'idSatuan' => $data['barang'],
+                'name' => $data['name'],
+                'code' => $data['code'],
+                'idSatuan' => $data['satuan'],
             ));
 
         return redirect()->route('barang.index')->with('status','Success!!');  

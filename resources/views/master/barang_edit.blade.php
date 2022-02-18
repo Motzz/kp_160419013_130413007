@@ -25,20 +25,20 @@
 
                         <div class="form-group">
                            <label for="title">Nama barang</label>
-                           <input type="text" name="barang" class="form-control" value="{{old('name',$barang->name)}}">
+                           <input type="text" name="name" class="form-control" value="{{old('name',$barang->name)}}">
 
                          
                        </div>
         
                         <div class="form-group">
                             <label for="body" >Kode</label>
-                            <input type="text" name="barang" class="form-control" placeholder="Opsional" value="{{old('code',$barang->code)}}">
+                            <input type="text" name="code" class="form-control" placeholder="Opsional" value="{{old('code',$barang->code)}}">
                         
                         </div>
 
                          <div class="form-group">
                             <label for="Satuan" >Satuan</label>
-                            <select name="barang" class="form-control">
+                            <select name="satuan" class="form-control">
                                      <option value="">--Pilih satuan--</option>
                                      @foreach($dataSatuan as $key => $data)
                                      @if($data->id == $barang->idSatuan )

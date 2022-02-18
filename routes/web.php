@@ -43,3 +43,9 @@ Route::get('/home/master/satuan/tambah', [App\Http\Controllers\SatuanTambahContr
 Route::get('/home/master/satuan/edit', [App\Http\Controllers\SatuanTambahController::class, 'index'])->name('satuanedit');
 Route::resource('satuan', 'App\Http\Controllers\SatuanController');
 //Route::get('/home/permintaan-pembelian', [App\Http\Controllers\::class, 'index'])->name('permintaan_pembelian');
+
+/*role*/
+Route::get('/home/master/role', [App\Http\Controllers\RoleController::class, 'index'])->name('role');
+Route::get('/home/master/role/tambah', [App\Http\Controllers\RoleController::class, 'tambah'])->name('roletambah');
+Route::get('/home/master/role/edit', [App\Http\Controllers\RoleTambahController::class, 'index'])->name('roleedit');
+Route::resource('role', 'App\Http\Controllers\RoleController');
