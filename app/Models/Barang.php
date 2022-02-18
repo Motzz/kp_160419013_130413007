@@ -12,5 +12,6 @@ class Barang extends Model
     protected $fillable=[
         'name',
         'code',
+        'idSatuan',
     ];
 }

@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Barang -> Tambah</h1>
+    <h1 class="h3 mb-0 text-gray-800">Barang -> Edit</h1>
 </div>
 
 <div class="container">
@@ -40,21 +40,12 @@
                                 Opsional <cite title="Source Title"></cite>
                             </figcaption> -->
                            
+
                           <!-- @error('body')
                            <span class="error"role="alert">
                                <strong>{{$message}}</strong>
                            </span>
                            @enderror-->
-                        </div>
-                        <div class="form-group">
-                            <label for="Satuan" >Satuan</label>
-                            <select name="Satuan" class="form-control">
-                            <option value="">--Pilih satuan--</option>
-                            @foreach($dataSatuan as $key => $data)
-                            <option name="{{$data->id}}" value="{{$data->name}}">{{$data->name}}</option>
-                            @endforeach
-       
-                            </select>
                         </div>
 
 

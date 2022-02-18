@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class BarangTambahController extends Controller
+class BarangController extends Controller
 {
     //
     public function __construct()
@@ -20,10 +19,6 @@ class BarangTambahController extends Controller
      */
     public function index()
     {
-        $dataSatuan = DB::table('satuan')
-            ->get();
-        return view('/master/barang_tambah',[
-            'dataSatuan' => $dataSatuan,
-        ]);
+        return view('/master/barang');
     }
 }
