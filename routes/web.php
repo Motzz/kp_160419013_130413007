@@ -56,8 +56,20 @@ Route::get('/home/master/PT/tambah', [App\Http\Controllers\PTController::class, 
 Route::get('/home/master/PT/edit', [App\Http\Controllers\PTController::class, 'index'])->name('ptEdit');
 Route::resource('pt', 'App\Http\Controllers\PTController');
 
-/*PT*/
+/*Proses_Transaksi    - no debug still dont know*/
 Route::get('/home/master/prosesTransaksi', [App\Http\Controllers\ProsesTransaksiController::class, 'index'])->name('transaksi');
 Route::get('/home/master/prosesTransaksi/tambah', [App\Http\Controllers\ProsesTransaksiController::class, 'create'])->name('transaksiTambah'); //create nama method di controller
 Route::get('/home/master/prosesTransaksi/edit', [App\Http\Controllers\ProsesTransaksiController::class, 'index'])->name('transaksiEdit');
 Route::resource('transaksi', 'App\Http\Controllers\ProsesTransaksiController');
+
+/*Lokasi   - no debug still dont know*/
+Route::get('/home/master/lokasi', [App\Http\Controllers\LokasiController::class, 'index'])->name('lokasi');
+Route::get('/home/master/lokasi/tambah', [App\Http\Controllers\LokasiController::class, 'create'])->name('lokasiTambah'); //create nama method di controller
+Route::get('/home/master/lokasi/edit', [App\Http\Controllers\LokasiController::class, 'index'])->name('lokasiEdit');
+Route::resource('transaksi', 'App\Http\Controllers\LokasiController');
+
+/*Gudang   - no debug still dont know*/
+Route::get('/home/master/gudang', [App\Http\Controllers\GudangController::class, 'index'])->name('gudang');
+Route::get('/home/master/gudang/tambah', [App\Http\Controllers\GudangController::class, 'create'])->name('gudangTambah'); //create nama method di controller
+Route::get('/home/master/gudang/edit', [App\Http\Controllers\GudangController::class, 'index'])->name('gudangEdit');
+Route::resource('transaksi', 'App\Http\Controllers\GudangController');
