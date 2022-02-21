@@ -12,10 +12,10 @@
                         @csrf
 
                         <div class="row mb-3">
-                            <label for="nik" class="col-md-4 col-form-label text-md-end">{{ __('NIK') }}</label>
+                            <label for="nik" class="col-md-4 col-form-label text-md-end">NIK</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="text" class="form-control @error('nik') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="email" value="{{ old('nik') }}" required autocomplete="nik" autofocus>
 
                                 @error('nik')
                                     <span class="invalid-feedback" role="alert">

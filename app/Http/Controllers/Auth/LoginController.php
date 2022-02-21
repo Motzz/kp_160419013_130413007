@@ -37,4 +37,18 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function nik(){
+        return 'nik';
+    }
+    
+    /*public function login(Request $request)
+    {
+        $credentials = $request->only('nik', 'password');
+ 
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+            return redirect()->intended('home');
+        }
+    }*/
 }
