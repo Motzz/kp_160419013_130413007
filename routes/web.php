@@ -26,6 +26,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Auth::routes();
 
+Route::post('login', [App\Http\Controllers\Auth\LoginController::class, 'login']);
+
 Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
 
 Route::get('/profile/edit', [App\Http\Controllers\ProfileEditController::class, 'index'])->name('profile_edit');
@@ -39,10 +41,8 @@ Route::resource('barang', 'App\Http\Controllers\BarangController');
 /*satuan*/
 Route::get('/home/master/satuan', [App\Http\Controllers\SatuanController::class, 'index'])->name('satuan');
 Route::get('/home/master/satuan/tambah', [App\Http\Controllers\SatuanTambahController::class, 'index'])->name('satuantambah');
-//Route::get('/home/master/satuan/tambahproses', [App\Http\Controllers\SatuanTambahController::class, 'create'])->name('satuantambahproses');
 Route::get('/home/master/satuan/edit', [App\Http\Controllers\SatuanTambahController::class, 'index'])->name('satuanedit');
 Route::resource('satuan', 'App\Http\Controllers\SatuanController');
-//Route::get('/home/permintaan-pembelian', [App\Http\Controllers\::class, 'index'])->name('permintaan_pembelian');
 
 /*role*/
 Route::get('/home/master/role', [App\Http\Controllers\RoleController::class, 'index'])->name('role');
