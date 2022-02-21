@@ -30,17 +30,25 @@
                        </div>
         
                         <div class="form-group">
-                            <label for="body" >Kode</label>
-                            <input type="text" name="code" class="form-control" placeholder="Opsional" value="{{old('code','')}}">
+                            <label for="body" >Alias</label>
+                            <input type="text" name="alias" class="form-control" value="{{old('alias','')}}">
                             
 
                         </div>
+
                         <div class="form-group">
-                            <label for="Satuan" >Satuan</label>
-                            <select name="Satuan" class="form-control">
-                                     <option value="">--Pilih satuan--</option>
-                                     @foreach($dataSatuan as $key => $data)
-                                     <option name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                            <label for="body" >Keterangan</label>
+                            <input type="text" name="keterangan" class="form-control" placeholder="Opsional" value="{{old('keterangan','')}}">
+                            
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pt" >PT</label>
+                            <select name="pt" class="form-control">
+                                     <option value="">--Pilih PT--</option>
+                                     @foreach($dataPt as $key => $data)
+                                     <option name="idPt" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
                                      @endforeach
                             </select>
                         </div>
