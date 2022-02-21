@@ -116,7 +116,7 @@
             }-->
             <a class="collapse-item" href="{{('/home/master/gudang')}}">Gudang</a>
             <a class="collapse-item" href="{{('/home/master/gudang')}}">Lokasi</a>
-            <a class="collapse-item" href="{{('/home/master/gudang')}}">PT</a>
+            <a class="collapse-item" href="{{('/home/master/PT')}}">PT</a>
 
 
         </div>

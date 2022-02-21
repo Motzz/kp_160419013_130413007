@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Barang -> Tambah</h1>
+    <h1 class="h3 mb-0 text-gray-800">Barang -> Edit</h1>
 </div>
 
 <div class="container">
@@ -19,12 +19,12 @@
                  
                 <div class="card-body">
             
-                    <form action="{{route('role.store')}}" method="POST">
+                    <form action="{{route('role.update',[$role])}}" method="POST">
                       @csrf
 
                         <div class="form-group">
                            <label for="title">Nama</label>
-                           <input type="text" name="name" class="form-control" value="{{old('name','')}}" >
+                           <input type="text" name="name" class="form-control" value="{{old('name',$role->name)}}" >
 
                       
                        </div>

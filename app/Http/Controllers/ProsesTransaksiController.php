@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\ProsesTransaksi;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class RoleController extends Controller
+class ProsesTransaksiController extends Controller
 {
 
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-    public function tambah()
-    {
-        //
-        return view('/master/role_tambah');
     }
 
     /**
@@ -28,9 +21,9 @@ class RoleController extends Controller
     public function index()
     {
         //
-        $data = DB::table('roles')
+        $data = DB::table('proses_transaksi')
             ->get();
-        return view('/master/role',[
+        return view('master.transaksi',[
             'data' => $data,
         ]);
     }
@@ -43,7 +36,7 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('master.role_tambah');
+        return view('master.transaksi_tambah');
     }
 
     /**
@@ -57,21 +50,20 @@ class RoleController extends Controller
         //
         $data = $request->collect();
         
-        DB::table('role')->insert(array(
+        DB::table('transaksi')->insert(array(
              'name' => $data['name'],
-             'access' => $data['access'],
              )
         ); 
-        return redirect()->route('role.index')->with('status','Success!!');
+        return redirect()->route('transaksi.index')->with('status','Success!!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\ProsesTransaksi  $prosesTransaksi
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show(ProsesTransaksi $prosesTransaksi)
     {
         //
     }
@@ -79,14 +71,14 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\ProsesTransaksi  $prosesTransaksi
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(ProsesTransaksi $prosesTransaksi)
     {
         //
-        return view('master.role_edit',[
-            'role'=>$role
+        return view('master.transaksi_edit',[
+            'transaksi'=>$prosesTransaksi
         ]);
     }
 
@@ -94,34 +86,33 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\ProsesTransaksi  $prosesTransaksi
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, ProsesTransaksi $prosesTransaksi)
     {
         //
         $data = $request->collect(); //la teros iki
         
-        DB::table('role')
-            ->where('id', $role['id'])
+        DB::table('proses_transaksi')
+            ->where('id', $prosesTransaksi['id'])
             ->update(array(
-                'name' => $data['name'],
-                'access' => $data['access'],
+                'name' => $data['transaksi']
             ));
 
-        return redirect()->route('satuan.index')->with('status','Success!!');    
+        return redirect()->route('transaksi.index')->with('status','Success!!');      
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\ProsesTransaksi  $prosesTransaksi
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy(ProsesTransaksi $prosesTransaksi)
     {
         //
-        $role->delete();
-        return redirect()->route('role.index')->with('status','Success!!');
+        $prosesTransaksi->delete();
+        return redirect()->route('transaksi.index')->with('status','Success!!');
     }
 }

@@ -2,35 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
+use App\Models\PT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class RoleController extends Controller
+class PTController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    public function tambah()
-    {
-        //
-        return view('/master/role_tambah');
-    }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+     public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
         //
-        $data = DB::table('roles')
+        $data = DB::table('pt')
             ->get();
-        return view('/master/role',[
+        return view('master.pt',[
             'data' => $data,
         ]);
     }
@@ -43,7 +37,7 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('master.role_tambah');
+        return view('master.pt_tambah');
     }
 
     /**
@@ -57,21 +51,21 @@ class RoleController extends Controller
         //
         $data = $request->collect();
         
-        DB::table('role')->insert(array(
+        DB::table('pt')->insert(array(
              'name' => $data['name'],
-             'access' => $data['access'],
+             'alias' => $data['alias'],
              )
         ); 
-        return redirect()->route('role.index')->with('status','Success!!');
+        return redirect()->route('pt.index')->with('status','Success!!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show(PT $pT)
     {
         //
     }
@@ -79,49 +73,34 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(PT $pT)
     {
         //
-        return view('master.role_edit',[
-            'role'=>$role
-        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, PT $pT)
     {
         //
-        $data = $request->collect(); //la teros iki
-        
-        DB::table('role')
-            ->where('id', $role['id'])
-            ->update(array(
-                'name' => $data['name'],
-                'access' => $data['access'],
-            ));
-
-        return redirect()->route('satuan.index')->with('status','Success!!');    
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy(PT $pT)
     {
         //
-        $role->delete();
-        return redirect()->route('role.index')->with('status','Success!!');
     }
 }
