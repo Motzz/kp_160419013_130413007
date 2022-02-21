@@ -66,10 +66,16 @@ Route::resource('transaksi', 'App\Http\Controllers\ProsesTransaksiController');
 Route::get('/home/master/lokasi', [App\Http\Controllers\LokasiController::class, 'index'])->name('lokasi');
 Route::get('/home/master/lokasi/tambah', [App\Http\Controllers\LokasiController::class, 'create'])->name('lokasiTambah'); //create nama method di controller
 Route::get('/home/master/lokasi/edit', [App\Http\Controllers\LokasiController::class, 'index'])->name('lokasiEdit');
-Route::resource('transaksi', 'App\Http\Controllers\LokasiController');
+Route::resource('lokasi', 'App\Http\Controllers\LokasiController');
 
 /*Gudang   - no debug still dont know*/
 Route::get('/home/master/gudang', [App\Http\Controllers\GudangController::class, 'index'])->name('gudang');
 Route::get('/home/master/gudang/tambah', [App\Http\Controllers\GudangController::class, 'create'])->name('gudangTambah'); //create nama method di controller
 Route::get('/home/master/gudang/edit', [App\Http\Controllers\GudangController::class, 'index'])->name('gudangEdit');
-Route::resource('transaksi', 'App\Http\Controllers\GudangController');
+Route::resource('gudang', 'App\Http\Controllers\GudangController');
+
+/*Gudang   - no debug still dont know  belum dibuat blade nya*/
+Route::get('/home/master/supplier', [App\Http\Controllers\SupplierController::class, 'index'])->name('supplier');
+Route::get('/home/master/supplier/tambah', [App\Http\Controllers\SupplierController::class, 'create'])->name('supplierTambah'); //create nama method di controller
+Route::get('/home/master/supplier/edit', [App\Http\Controllers\SupplierController::class, 'index'])->name('supplierEdit');
+Route::resource('supplier', 'App\Http\Controllers\SupplierController');
