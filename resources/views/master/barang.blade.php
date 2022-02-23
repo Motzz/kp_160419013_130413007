@@ -42,7 +42,7 @@
                               @foreach($dataSatuan as $key => $data2)
                               @if($data2->id == $data->idSatuan)
                               <td>{{$data2->name}}</td>
-                              break
+                            
                               @endif           
                               @endforeach
                               

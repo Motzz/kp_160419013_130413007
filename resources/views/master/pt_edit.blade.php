@@ -33,6 +33,7 @@
                            <label for="title">Alias PT</label>
                            <input require type="text" name="alias" class="form-control" value="{{old('alias',$pt->Alias)}}" >
 
+                      
                        </div>
 
                        <button class="btn btn-primary">save</button>

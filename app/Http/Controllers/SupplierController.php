@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class SupplierController extends Controller
 {
 
@@ -21,9 +21,9 @@ class SupplierController extends Controller
     public function index()
     {
         //
-        $data = DB::table('supplier')
+        $data = DB::table('suppliers')
             ->get();
-        return view('/master/supplier',[
+        return view('master.supplier',[
             'data' => $data,
         ]);
     }
@@ -50,7 +50,7 @@ class SupplierController extends Controller
         //
         $data = $request->collect();
         
-        DB::table('supplier')->insert(array(
+        DB::table('suppliers')->insert(array(
              'name' => $data['name'],
              'alamat' => $data['alamat'],
              'email' => $data['email'],
@@ -100,7 +100,7 @@ class SupplierController extends Controller
         //
         $data = $request->collect(); //la teros iki
         
-        DB::table('supplier')
+        DB::table('suppliers')
             ->where('id', $supplier['id'])
             ->update(array(
                 'name' => $data['name'],

@@ -5,7 +5,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">gudang</h1>
+    <h1 class="h3 mb-0 text-gray-800">Gudang</h1>
     <a href="{{route('gudang.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
         Tambah gudang <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
@@ -44,7 +44,7 @@
                               @foreach($dataLokasi as $key => $data2)
                               @if($data2->id == $data->idLokasi)
                               <td>{{$data2->name}}</td>
-                              break
+                              
                               @endif           
                               @endforeach
                               

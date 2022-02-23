@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Satuan -> Edit</h1>
+    <h1 class="h3 mb-0 text-gray-800">Bank -> Edit</h1>
 </div>
 
 <div class="container">
@@ -17,25 +17,24 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Edit satuan
+                    Edit Bank
                 </div>
                  
                 <div class="card-body">
             
-                    <form action="{{route('satuan.update',[$satuan])}}" method="POST" >
+                    <form action="{{route('bank.update',[$bank])}}" method="POST" >
                       @csrf
-                      @method('PUT')
+                       @method('PUT')
 
-                        <div class="form-group">
-                           <label for="title">Nama Satuan</label>
-                           <input require type="text" name="satuan" class="form-control" 
-                           value="{{old('name',$satuan->name)}}" >
+                         <div class="form-group">
+                           <label for="title">Nama Bank</label>
+                           <input require type="text" name="name" class="form-control" 
+                           value="{{old('name',$bank->name)}}" >
 
-                           <!--@error('title')
-                           <span class="error"role="alert">
-                               <strong>{{$message}}</strong>
-                           </span>
-                           @enderror-->
+                           <label for="title">Alias Bank</label>
+                           <input require type="text" name="alias" class="form-control" 
+                           value="{{old('alias',$bank->alias)}}" >
+
                        </div>
 
                        <button class="btn btn-primary">Save</button>

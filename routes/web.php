@@ -50,11 +50,7 @@ Route::get('/home/master/role/tambah', [App\Http\Controllers\RoleController::cla
 Route::get('/home/master/role/edit', [App\Http\Controllers\RoleController::class, 'index'])->name('roleedit');
 Route::resource('role', 'App\Http\Controllers\RoleController');
 
-/*PT*/
-Route::get('/home/master/PT', [App\Http\Controllers\PTController::class, 'index'])->name('pt');
-/*Route::get('/home/master/PT/tambah', [App\Http\Controllers\PTController::class, 'create'])->name('ptTambah'); //create nama method di controller
-Route::get('/home/master/PT/edit/', [App\Http\Controllers\PTController::class, 'edit'])->name('ptEdit');*/
-Route::resource('pt', 'App\Http\Controllers\PTController');
+
 
 /*Proses_Transaksi    - no debug still dont know*/
 Route::get('/home/master/prosesTransaksi', [App\Http\Controllers\ProsesTransaksiController::class, 'index'])->name('transaksi');
@@ -62,15 +58,17 @@ Route::get('/home/master/prosesTransaksi/tambah', [App\Http\Controllers\ProsesTr
 Route::get('/home/master/prosesTransaksi/edit', [App\Http\Controllers\ProsesTransaksiController::class, 'index'])->name('transaksiEdit');
 Route::resource('transaksi', 'App\Http\Controllers\ProsesTransaksiController');
 
-/*Lokasi   - no debug still dont know*/
-Route::get('/home/master/lokasi', [App\Http\Controllers\LokasiController::class, 'index'])->name('lokasi');
+/*Lokasi */
 Route::resource('lokasi', 'App\Http\Controllers\LokasiController');
 
-/*Gudang   - no debug still dont know*/
+
+/*PT*/
+Route::resource('pt', 'App\Http\Controllers\PTController');
+/*Gudang */
 Route::resource('gudang', 'App\Http\Controllers\GudangController');
 
-/*Gudang   - no debug still dont know  belum dibuat blade nya*/
-Route::get('/home/master/supplier', [App\Http\Controllers\SupplierController::class, 'index'])->name('supplier');
-Route::get('/home/master/supplier/tambah', [App\Http\Controllers\SupplierController::class, 'create'])->name('supplierTambah'); //create nama method di controller
-Route::get('/home/master/supplier/edit', [App\Http\Controllers\SupplierController::class, 'index'])->name('supplierEdit');
+/*supplier   - no debug still dont know  belum dibuat blade nya*/
 Route::resource('supplier', 'App\Http\Controllers\SupplierController');
+
+/*bank   - no debug still dont know  belum dibuat blade nya*/
+Route::resource('bank', 'App\Http\Controllers\BankController');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bank;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class BankController extends Controller
 {
     /**
@@ -12,9 +12,19 @@ class BankController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         //
+        $datas = DB::table('bank')
+            ->get();
+        return view('master.bank',[
+            'datas' => $datas,
+        ]);
     }
 
     /**
@@ -25,6 +35,7 @@ class BankController extends Controller
     public function create()
     {
         //
+         return view('master.bank_tambah');
     }
 
     /**
@@ -36,6 +47,14 @@ class BankController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->collect();
+        
+        DB::table('bank')->insert(array(
+             'name' => $data['name'],
+             'alias' => $data['alias'],
+             )
+        ); 
+        return redirect()->route('bank.index')->with('status','Success!!');
     }
 
     /**
@@ -58,6 +77,9 @@ class BankController extends Controller
     public function edit(Bank $bank)
     {
         //
+         return view('master.bank_edit',[
+             'bank'=>$bank
+         ]);
     }
 
     /**
@@ -70,6 +92,16 @@ class BankController extends Controller
     public function update(Request $request, Bank $bank)
     {
         //
+        $data = $request->collect(); //la teros iki
+        
+        DB::table('bank')
+            ->where('id', $bank['id'])
+            ->update(array(
+                'name' => $data['name'],
+                'alias' => $data['alias']
+            ));
+
+        return redirect()->route('bank.index')->with('status','Success!!');       
     }
 
     /**
@@ -81,5 +113,7 @@ class BankController extends Controller
     public function destroy(Bank $bank)
     {
         //
+         $bank->delete();
+        return redirect()->route('bank.index')->with('status','Success!!');
     }
 }

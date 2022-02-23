@@ -117,6 +117,10 @@
             <a class="collapse-item" href="{{route('gudang.index')}}">Gudang</a>
             <a class="collapse-item" href="{{route('pt.index')}}">PT</a>
 
+            <a class="collapse-item" href="{{route('bank.index')}}">Bank</a>
+              <a class="collapse-item" href="{{route('supplier.index')}}">Supplier</a>
+
+
 
         </div>
     </div>
