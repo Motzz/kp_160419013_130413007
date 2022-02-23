@@ -91,6 +91,16 @@ class PTController extends Controller
     public function update(Request $request, PT $pT)
     {
         //
+        $data = $request->collect(); //la teros iki
+        
+        DB::table('pt')
+            ->where('id', $pT['id'])
+            ->update(array(
+                'name' => $data['name'],
+                'alias' => $data['alias'],
+            ));
+
+        return redirect()->route('pt.index')->with('status','Success!!');         
     }
 
     /**
@@ -101,6 +111,7 @@ class PTController extends Controller
      */
     public function destroy(PT $pT)
     {
-        //
+          $pT->delete();
+          return redirect()->route('pt.index')->with('status','Success!!');
     }
 }
