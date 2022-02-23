@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">PT -> Tambah</h1>
+    <h1 class="h3 mb-0 text-gray-800">PT -> edit</h1>
 </div>
 
 <div class="container">
@@ -17,26 +17,25 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    Tambah PT
+                    Edit PT
                 </div>
                  
                 <div class="card-body">
             
-                    <form action="{{route('pt.store')}('pt.update',[$pt]}" method="POST" >
+            
+                    <form action="{{route('pt.update',[$pt])}}" method="POST">
                       @csrf
+                      @method('PUT')
 
                         <div class="form-group">
                            <label for="title">Nama PT</label>
-                           <input require type="text" name="name" class="form-control" 
-                           value="{{old('name','')}}" >
+                           <input require type="text" name="name" class="form-control" value="{{old('name',$pt->name)}}" >
                            <label for="title">Alias PT</label>
-                           <input require type="text" name="alias" class="form-control" 
-                           value="{{old('alias','')}}" >
+                           <input require type="text" name="alias" class="form-control" value="{{old('alias',$pt->Alias)}}" >
 
-                      
                        </div>
 
-                       <button class="btn btn-primary">Tambah</button>
+                       <button class="btn btn-primary">save</button>
                     </form>
 
                 </div>

@@ -108,15 +108,14 @@
             <a class="collapse-item" href="blank.html">Blank Page</a>-->
             <a class="collapse-item" href="{{('/home/master/barang')}}">Barang</a>
             <a class="collapse-item" href="{{('/home/master/satuan')}}">Satuan</a>
-            <a class="collapse-item" href="{{('/home/master/lokasi')}}">Lokasi</a>
+            <a class="collapse-item" href="{{route('lokasi.index')}}">Lokasi</a>
             <a class="collapse-item" href="{{('/home/master/role')}}">Roles</a>
             <!--@if(1==1){
                 <a class="collapse-item" href="{{('/home/master/supplier')}}">Supplier</a>
                 @endif
             }-->
-            <a class="collapse-item" href="{{('/home/master/gudang')}}">Gudang</a>
-            <a class="collapse-item" href="{{('/home/master/gudang')}}">Lokasi</a>
-            <a class="collapse-item" href="{{('/home/master/PT')}}">PT</a>
+            <a class="collapse-item" href="{{route('gudang.index')}}">Gudang</a>
+            <a class="collapse-item" href="{{route('pt.index')}}">PT</a>
 
 
         </div>

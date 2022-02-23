@@ -22,10 +22,10 @@ class PTController extends Controller
     public function index()
     {
         //
-        $data = DB::table('pt')
+        $datas = DB::table('pt')
             ->get();
         return view('master.pt',[
-            'data' => $data,
+            'datas' => $datas,
         ]);
     }
 
@@ -76,9 +76,12 @@ class PTController extends Controller
      * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function edit(PT $pT)
+    public function edit(PT $pt)
     {
         //
+           return view('master.pt_edit',[
+             'pt'=>$pt
+         ]);
     }
 
     /**
@@ -88,13 +91,13 @@ class PTController extends Controller
      * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PT $pT)
+    public function update(Request $request, PT $pt)
     {
         //
         $data = $request->collect(); //la teros iki
         
         DB::table('pt')
-            ->where('id', $pT['id'])
+            ->where('id', $pt['id'])
             ->update(array(
                 'name' => $data['name'],
                 'alias' => $data['alias'],
@@ -109,9 +112,10 @@ class PTController extends Controller
      * @param  \App\Models\PT  $pT
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PT $pT)
+    public function destroy(PT $pt)
     {
-          $pT->delete();
+        //
+          $pt->delete();
           return redirect()->route('pt.index')->with('status','Success!!');
     }
 }

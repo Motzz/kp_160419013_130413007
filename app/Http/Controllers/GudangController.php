@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gudang;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class GudangController extends Controller
 {
 
@@ -25,7 +25,7 @@ class GudangController extends Controller
             ->get();
         $dataLokasi = DB::table('lokasi')
             ->get();
-        return view('/master/gudang',[
+        return view('master.gudang',[
             'dataGudang' => $dataGudang,
             'dataLokasi' => $dataLokasi,
         ]);
@@ -39,7 +39,14 @@ class GudangController extends Controller
     public function create()
     {
         //
-        return view('master.gudang_tambah');
+          $dataGudang = DB::table('gudang')
+            ->get();
+        $dataLokasi = DB::table('lokasi')
+            ->get();
+        return view('master.gudang_tambah',[
+            'dataGudang' => $dataGudang,
+            'dataLokasi' => $dataLokasi,
+        ]);
     }
 
     /**

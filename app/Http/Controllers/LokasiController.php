@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lokasi;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class LokasiController extends Controller
 {
 
@@ -25,7 +25,7 @@ class LokasiController extends Controller
             ->get();
         $dataPt = DB::table('pt')
             ->get();
-        return view('/master/lokasi',[
+        return view('master.lokasi',[
             'dataLokasi' => $dataLokasi,
             'dataPt' => $dataPt,
         ]);
@@ -39,7 +39,14 @@ class LokasiController extends Controller
     public function create()
     {
         //
-        return view('master.lokasi_tambah');
+        $dataLokasi = DB::table('lokasi')
+            ->get();
+        $dataPt = DB::table('pt')
+            ->get();
+         return view('master.lokasi_tambah',[
+            'dataLokasi'=>$dataLokasi,
+            'dataPt' => $dataPt,
+        ]);
     }
 
     /**
