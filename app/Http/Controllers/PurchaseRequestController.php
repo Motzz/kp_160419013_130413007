@@ -54,7 +54,21 @@ class PurchaseRequestController extends Controller
     public function create()
     {
         //
-        return view('master.purchase_request_tambah');
+        $user = Auth::user();
+
+        $dataGudang = DB::table('gudang')
+            ->select('gudang.*')
+            ->join('lokasi','gudang.idLokasi','=','lokasi.id')
+            ->join('users','lokasi.id','=','users.idLokasi')
+            ->where('users.idlokasi', $user->idLokasi)
+            ->get();
+    
+        $dataBarang = DB::table('barang')
+            ->get();
+        return view('master.purchase_request_tambah',[
+            'dataGudang' => $dataGudang,
+            'dataBarang' => $dataBarang,
+        ]);
         
     }
 
@@ -99,9 +113,9 @@ class PurchaseRequestController extends Controller
         for($i = 0; $i < $data['total_barang']; $i++){
             DB::table('purchase_request_detail')->insert(array(
                 'idPurchaseRequest' => $idpr,
-                'jumlah' => $data['??????'],
-                'harga' => $data['???????'],
-                'idBarang' => $data['????'],
+                'jumlah' => $data['jumlah'.$i],
+                //'harga' => $data['???????'],
+                'idBarang' => $data['barang'.$i],
                 )
            ); 
         }
@@ -127,6 +141,7 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
+        
     }
 
     /**
@@ -139,6 +154,42 @@ class PurchaseRequestController extends Controller
     public function update(Request $request, PurchaseRequest $purchaseRequest)
     {
         //
+        $data = $request->collect();
+        $user = Auth::user();
+        $year = date("Y");
+        $month = date("mm");
+
+        $dataLokasi = DB::table('lokasi')
+            ->join('pt', 'lokasi.idPt', '=', 'pt.id')
+            ->join('gudang', 'lokasi.id', '=', 'gudang.idLokasi')
+            ->where('lokasi.id', '=', $user->idLokasi)
+            ->get();
+        
+        $dataPermintaan = DB::table('purchase_request')
+            ->where('name', '=', 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/*")
+            ->get();
+        
+
+        $totalIndex = str_pad("array_count_values($dataPermintaan) + 1",4,'0',STR_PAD_LEFT);
+
+        $idpr = DB::table('purchase_request')->insertGetId(array(
+            'name' => 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/".$totalIndex,
+            'idLokasi' => $dataLokasi[0]->id,
+            'idGudang' => $data['??? berdasarkan combo box'],
+            'updated_by'=> $user->id,
+            'updated_on'=> date("Y-m-d h:i:sa"),
+            )
+       ); 
+
+        for($i = 0; $i < $data['total_barang']; $i++){
+            DB::table('purchase_request_detail')->insert(array(
+                'idPurchaseRequest' => $idpr,
+                'jumlah' => $data['jumlah'.$i],
+                //'harga' => $data['???????'],
+                'idBarang' => $data['barang'.$i],
+                )
+           ); 
+        }
     }
 
     /**

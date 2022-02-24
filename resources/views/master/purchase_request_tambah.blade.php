@@ -29,6 +29,9 @@
                                     <option value="">
                                         --Pilih gudang--
                                     </option>
+                                    @foreach($dataGudang as $key => $data)
+                                     <option name="idGudang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @endforeach
                                 </select>
                                 <br />
                                 
@@ -36,14 +39,13 @@
                             </div>
                             <div class="form-group"  id='tmbhBarang'>
                                 
-                                <select name="name[]" class="form-control" id="barang">
-                                    <option value="">
-                                        --Pilih barang--
-                                    </option>
+                                <select name="barang[]" class="form-control" id="barang">
+                                    <option value="">--Pilih barang--</option>
+                                    @foreach($dataBarang as $key => $data)
+                                    <option name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                    @endforeach
                                 </select>
-                                <input type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" 
-                                aria-describedby="basic-addon2"id="angka" /> <br>
-                        
+                                <input type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="angka" /> <br>
                             </div>
                             
                         
@@ -67,12 +69,12 @@
 </div>
 </div>
 <script type="text/javascript">
-    var tambahCombo = "";
+    var tambahCombo = $("#tmbhBarang").html();
     var totalTambah = 0;
     $("body").on("click", "#tambah", function () {
         totalTambah++;
-        tambahCombo="<select name='barang[]' class='form-control'id='barang"+totalTambah+"'><option value=''> --Pilih Barang--</option></select><br>";
-
+        //tambahCombo="<select name='barang[]' class='form-control'id='barang"+totalTambah+"'><option value=''> --Pilih Barang--</option></select><br>";
+        
  
         $('#tmbhBarang').append(tambahCombo);
     });

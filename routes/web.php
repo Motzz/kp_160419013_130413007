@@ -74,4 +74,7 @@ Route::resource('supplier', 'App\Http\Controllers\SupplierController');
 Route::resource('bank', 'App\Http\Controllers\BankController');
 
 //Purchase Request 
-Route::resource('transaksi', 'App\Http\Controllers\PurchaseRequestController');
+Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestController');
+
+//Info Supplier (ex:tik, alat tulis, gadget, dll) 
+Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');
