@@ -21,12 +21,13 @@ class PurchaseRequestController extends Controller
      */
     public function index()
     {
+        $user = Auth::user();
         //
         $data = DB::table('purchase_request')
             ->join('users', 'purchase_request.created_by', '=', 'users.id')
-            ->where('purchase_request.idLokasi', '=', 'users.idLokasi')
+            ->where('purchase_request.idLokasi', '=', $user->idLokasi)
             ->get();
-        return view('master.supplier',[
+        return view('master.purchase_request',[
             'data' => $data,
         ]);
 
@@ -40,7 +41,7 @@ class PurchaseRequestController extends Controller
             ->join('purchase_request_detail', 'purchase_request.id', '=', 'purchase_request_detail.idPurchaseRequest')
             ->where('purchase_request.id', '=', $data['id'])
             ->get();
-        return view('master.supplier',[
+        return view('master.purchase_request',[
             'data' => $data,
         ]);
 
@@ -141,7 +142,7 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
-        
+
     }
 
     /**

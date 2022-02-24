@@ -19,7 +19,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{route('purchaseRequest.store')}}" method="POST">
+                        <form action="{{route('barang.store')}}" method="POST">
                             @csrf
 
                             
