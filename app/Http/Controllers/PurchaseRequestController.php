@@ -74,29 +74,34 @@ class PurchaseRequestController extends Controller
 
         $dataLokasi = DB::table('lokasi')
             ->join('pt', 'lokasi.idPt', '=', 'pt.id')
+            ->join('gudang', 'lokasi.id', '=', 'gudang.idLokasi')
             ->where('lokasi.id', '=', $user->idLokasi)
             ->get();
         
+        $dataPermintaan = DB::table('purchase_request')
+            ->where('name', '=', 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/*")
+            ->get();
         
 
-        DB::table('purchase_request')->insert(array(
-            'name' => 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/",
-            'alamat' => $data['alamat'],
-            'email' => $data['email'],
-            'bank' => $data['bank'],
-            'nomor_rekening' => $data['nomor_rekening'],
-            'nomor_telepon' => $data['nomor_telepon'],
+        $totalIndex = str_pad("array_count_values($dataPermintaan) + 1",4,'0',STR_PAD_LEFT);
+
+        $idpr = DB::table('purchase_request')->insertGetId(array(
+            'name' => 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/".$totalIndex,
+            'idLokasi' => $dataLokasi[0]->id,
+            'idGudang' => $data['??? berdasarkan combo box'],
+            'created_by'=> $user->id,
+            'created_on'=> date("Y-m-d h:i:sa"),
+            'updated_by'=> $user->id,
+            'updated_on'=> date("Y-m-d h:i:sa"),
             )
        ); 
 
-        for($i = 0; $i < $data['totalbarang']; $i++){
-            DB::table('suppliers')->insert(array(
-                'name' => $data['name'],
-                'alamat' => $data['alamat'],
-                'email' => $data['email'],
-                'bank' => $data['bank'],
-                'nomor_rekening' => $data['nomor_rekening'],
-                'nomor_telepon' => $data['nomor_telepon'],
+        for($i = 0; $i < $data['total_barang']; $i++){
+            DB::table('purchase_request_detail')->insert(array(
+                'idPurchaseRequest' => $idpr,
+                'jumlah' => $data['??????'],
+                'harga' => $data['???????'],
+                'idBarang' => $data['????'],
                 )
            ); 
         }
@@ -145,5 +150,6 @@ class PurchaseRequestController extends Controller
     public function destroy(PurchaseRequest $purchaseRequest)
     {
         //
+        
     }
 }

@@ -9,13 +9,14 @@ class PurchaseRequest extends Model
 {
     use HasFactory;
 
-    protected $table = 'suppliers';
+    protected $table = 'purchase_request';
 
     protected $fillable=[
         'name',
         'totalHarga',
         'idLokasi',
-        'date',
+        'idGudang',
+        'tanggalDiterima',
         'created_by',
         'created_on',
         'updated_by',
