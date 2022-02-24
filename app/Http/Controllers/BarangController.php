@@ -96,7 +96,7 @@ class BarangController extends Controller
     public function edit(Barang $barang)
     {
         //
-         $dataSatuan = DB::table('satuan')
+        $dataSatuan = DB::table('satuan')
             ->get();
         return view('master.barang_edit',[
             'barang'=>$barang,

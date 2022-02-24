@@ -34,8 +34,8 @@ Route::get('/profile/edit', [App\Http\Controllers\ProfileEditController::class, 
 
 /*barang*/
 Route::get('/home/master/barang', [App\Http\Controllers\BarangController::class, 'index'])->name('barang');
-Route::get('/home/master/barang/tambah', [App\Http\Controllers\BarangTambahController::class, 'index'])->name('barangtambah');
-Route::get('/home/master/barang/edit', [App\Http\Controllers\BarangTambahController::class, 'index'])->name('barangedit');
+Route::get('/home/master/barang/tambah', [App\Http\Controllers\BarangController::class, 'index'])->name('barangtambah');
+Route::get('/home/master/barang/edit', [App\Http\Controllers\BarangController::class, 'index'])->name('barangedit');
 Route::resource('barang', 'App\Http\Controllers\BarangController');
 
 /*satuan*/
@@ -72,3 +72,6 @@ Route::resource('supplier', 'App\Http\Controllers\SupplierController');
 
 /*bank   - no debug still dont know  belum dibuat blade nya*/
 Route::resource('bank', 'App\Http\Controllers\BankController');
+
+//Purchase Request 
+Route::resource('transaksi', 'App\Http\Controllers\PurchaseRequestController');
