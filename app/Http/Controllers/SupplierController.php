@@ -23,8 +23,14 @@ class SupplierController extends Controller
         //
         $data = DB::table('suppliers')
             ->get();
+        $dataBank = DB::table('bank')
+            ->get();
+        $dataInfoSupplier = DB::table('infoSupplier')
+            ->get();
         return view('master.supplier',[
             'data' => $data,
+            'dataBank' => $dataBank,
+            'dataInfoSupplier' => $dataInfoSupplier,
         ]);
     }
 
@@ -36,7 +42,17 @@ class SupplierController extends Controller
     public function create()
     {
         //
-        return view('master.supplier_tambah');
+        $data = DB::table('suppliers')
+            ->get();
+        $dataBank = DB::table('bank')
+            ->get();
+        $dataInfoSupplier = DB::table('infoSupplier')
+            ->get();
+        return view('master.supplier_tambah',[
+            'data' => $data,
+            'dataBank' => $dataBank,
+            'dataInfoSupplier' => $dataInfoSupplier,
+        ]);
     }
 
     /**
@@ -54,9 +70,10 @@ class SupplierController extends Controller
              'name' => $data['name'],
              'alamat' => $data['alamat'],
              'email' => $data['email'],
-             'bank' => $data['bank'],
+             'idBank'=>$data['idBank'],
              'nomor_rekening' => $data['nomor_rekening'],
              'nomor_telepon' => $data['nomor_telepon'],
+             'idInfoSupplier'=>$data['idInfoSupplier']
              )
         ); 
         return redirect()->route('supplier.index')->with('status','Success!!');
@@ -83,9 +100,18 @@ class SupplierController extends Controller
     public function edit(Supplier $supplier)
     {
         //
+        $dataBank = DB::table('bank')
+            ->get();
+        $dataInfoSupplier = DB::table('infoSupplier')
+            ->get();
         return view('master.supplier_edit',[
-            'supplier'=>$supplier
+            'supplier'=>$supplier,
+            'dataBank' => $dataBank,
+            'dataInfoSupplier' => $dataInfoSupplier
         ]);
+             
+    
+      
     }
 
     /**
@@ -106,9 +132,10 @@ class SupplierController extends Controller
                 'name' => $data['name'],
                 'alamat' => $data['alamat'],
                 'email' => $data['email'],
-                'bank' => $data['bank'],
+                'idBank'=>$data['idBank'],
                 'nomor_rekening' => $data['nomor_rekening'],
                 'nomor_telepon' => $data['nomor_telepon'],
+                'idInfoSupplier'=>$data['idInfoSupplier']
             ));
 
         return redirect()->route('supplier.index')->with('status','Success!!');

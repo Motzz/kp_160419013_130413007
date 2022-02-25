@@ -14,8 +14,9 @@ class Supplier extends Model
         'name',
         'alamat',
         'email',
-        'bank',
+        'idBank',
         'nomor_rekening',
         'nomor_telepon',
+        'idInfoSupplier'
     ];
 }

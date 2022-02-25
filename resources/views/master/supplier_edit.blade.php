@@ -40,9 +40,17 @@
                            <input require type="text" name="email" class="form-control" 
                            value="{{old('email',$supplier->email)}}">
 
-                           <label for="title">Bank supplier</label>
-                           <input require type="text" name="bank" class="form-control" 
-                           value="{{old('bank',$supplier->bank)}}" >
+                            <label for="idBank" >Bank</label>
+                            <select name="idBank" class="form-control">
+                                     <option value="">--Pilih Bank--</option>
+                                     @foreach($dataBank as $key => $datas)
+                                     @if($datas->id==$supplier->idBank)
+                                     <option selected name="idBank" value="{{$datas->id}}"{{$datas->name == $datas->id? 'selected' :'' }}>{{$datas->name}}</option>
+                                     @else
+                                    <option name="idBank" value="{{$datas->id}}"{{$datas->name == $datas->id? 'selected' :'' }}>{{$datas->name}}</option>
+                                     @endif
+                                     @endforeach
+                            </select>
 
                            <label for="title">Nomor rekening</label>
                            <input require type="text" name="nomor_rekening" class="form-control" 
@@ -51,6 +59,19 @@
                            <label for="title">Nomor telepon</label>
                            <input require type="text" name="nomor_telepon" class="form-control" 
                            value="{{old('nomor_telepon',$supplier->nomor_telepon)}}" >
+
+                            <label for="idInfoSupplier" >Info Supplier</label>
+                            <select name="idInfoSupplier" class="form-control">
+                                     <option value="">--Pilih InfoSupplier--</option>
+                                     @foreach($dataInfoSupplier as $key => $data)
+                                     @if($data->id == $supplier->idInfoSupplier )
+                                     <option selected name="idInfoSupplier" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @else
+                                     <option name="idInfoSupplier" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>                             
+                                     @endif      
+                                     @endforeach   
+                           </select>
+                        </div>
 
                        </div>
 

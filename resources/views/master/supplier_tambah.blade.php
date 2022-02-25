@@ -37,10 +37,15 @@
                            <label for="title">Email supplier</label>
                            <input require type="text" name="email" class="form-control" 
                            value="{{old('email','')}}">
-
-                           <label for="title">Bank supplier</label>
-                           <input require type="text" name="bank" class="form-control" 
-                           value="{{old('bank','')}}" >
+ 
+                           <label for="idBank" >Bank</label>
+                            <select name="idBank" class="form-control">
+                                     <option value="">--Pilih Bank--</option>
+                                     @foreach($dataBank as $key => $data)
+                                     <option name="idBank" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @endforeach
+                            </select>
+                      
 
                            <label for="title">Nomor rekening</label>
                            <input require type="text" name="nomor_rekening" class="form-control" 
@@ -49,6 +54,14 @@
                            <label for="title">Nomor telepon</label>
                            <input require type="text" name="nomor_telepon" class="form-control" 
                            value="{{old('nomor_telepon','')}}" >
+
+                            <label for="Satuan" >Info Supplier</label>
+                            <select name="idInfoSupplier" class="form-control">
+                                     <option value="">--Pilih InfoSupplier--</option>
+                                     @foreach($dataInfoSupplier as $key => $data)
+                                     <option name="idInfoSupplier" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                     @endforeach
+                            </select>
 
 
 
