@@ -41,7 +41,11 @@ class BarangController extends Controller
     public function create()
     {
         //
-        return view('master.barang_tambah');
+        $dataSatuan = DB::table('satuan')
+            ->get();
+        return view('master.barang_tambah',[
+            'dataSatuan' => $dataSatuan,
+        ]);
     }
 
     /**

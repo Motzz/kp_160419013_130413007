@@ -65,6 +65,8 @@ class PurchaseRequestController extends Controller
             ->get();
     
         $dataBarang = DB::table('barang')
+            ->select('barang.*', 'satuan.name as satuanName')
+            ->join('satuan','barang.idSatuan', '=', 'satuan.id')
             ->get();
         return view('master.purchase_request_tambah',[
             'dataGudang' => $dataGudang,
@@ -83,27 +85,30 @@ class PurchaseRequestController extends Controller
     {
         //
         $data = $request->collect();
+        //echo $data['barang'][0];
+        //echo count($data['jumlah']);
         $user = Auth::user();
         $year = date("Y");
         $month = date("mm");
 
         $dataLokasi = DB::table('lokasi')
+            ->select('lokasi.*','pt.Alias as ptAlias')
             ->join('pt', 'lokasi.idPt', '=', 'pt.id')
             ->join('gudang', 'lokasi.id', '=', 'gudang.idLokasi')
             ->where('lokasi.id', '=', $user->idLokasi)
             ->get();
         
         $dataPermintaan = DB::table('purchase_request')
-            ->where('name', '=', 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/*")
+            ->where('name', '=', 'NPP/'.$dataLokasi[0]->ptAlias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/*")
             ->get();
         
 
         $totalIndex = str_pad("array_count_values($dataPermintaan) + 1",4,'0',STR_PAD_LEFT);
 
         $idpr = DB::table('purchase_request')->insertGetId(array(
-            'name' => 'NPP/'.$dataLokasi[0]->pt_Alias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/".$totalIndex,
+            'name' => 'NPP/'.$dataLokasi[0]->ptAlias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/".$totalIndex,
             'idLokasi' => $dataLokasi[0]->id,
-            'idGudang' => $data['??? berdasarkan combo box'],
+            'idGudang' => $data['gudang'],
             'created_by'=> $user->id,
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
@@ -111,15 +116,16 @@ class PurchaseRequestController extends Controller
             )
        ); 
 
-        for($i = 0; $i < $data['total_barang']; $i++){
+        for($i = 0; $i < count($data['barang']); $i++){
             DB::table('purchase_request_detail')->insert(array(
                 'idPurchaseRequest' => $idpr,
-                'jumlah' => $data['jumlah'.$i],
-                //'harga' => $data['???????'],
-                'idBarang' => $data['barang'.$i],
+                'jumlah' => $data['jumlah'][$i],
+                'idBarang' => $data['barang'][$i],
                 )
            ); 
         }
+
+        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 
     /**

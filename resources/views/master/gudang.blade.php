@@ -25,7 +25,7 @@
                               <th scope="col">Name</th>
                               <th scope="col">Alias</th>
                               <th scope="col">Keterangan</th>
-                              <th scope="col">PT</th>
+                              <th scope="col">Lokasi</th>
                               <th scope="col">Handle</th>
                             </tr>
                           </thead>
