@@ -23,9 +23,15 @@ class PurchaseRequestController extends Controller
     {
         $user = Auth::user();
         //
+        $getLokasi = DB::table('gudang')
+            ->where('gudang.id', '=', $user->idGudang)
+            ->get();
         $data = DB::table('purchase_request')
+            ->select('purchase_request.*')
             ->join('users', 'purchase_request.created_by', '=', 'users.id')
-            ->where('purchase_request.idLokasi', '=', $user->idLokasi)
+            ->join('gudang','users.idGudang','=','gudang.id')
+            ->join('lokasi','gudang.idLokasi', '=', 'lokasi.id')
+            ->where('lokasi.id', '=', $getLokasi[0]->idLokasi)
             ->get();
         return view('master.purchase_request',[
             'data' => $data,
@@ -57,11 +63,14 @@ class PurchaseRequestController extends Controller
         //
         $user = Auth::user();
 
+        $getLokasi = DB::table('gudang')
+            ->where('gudang.id', '=', $user->idGudang)
+            ->get();
+
         $dataGudang = DB::table('gudang')
             ->select('gudang.*')
             ->join('lokasi','gudang.idLokasi','=','lokasi.id')
-            ->join('users','lokasi.id','=','users.idLokasi')
-            ->where('users.idlokasi', $user->idLokasi)
+            ->where('lokasi.id', $getLokasi[0]->idLokasi)
             ->get();
     
         $dataBarang = DB::table('barang')
@@ -89,21 +98,26 @@ class PurchaseRequestController extends Controller
         //echo count($data['jumlah']);
         $user = Auth::user();
         $year = date("Y");
-        $month = date("mm");
+        $month = date("m");
+
+        $getLokasi = DB::table('gudang')
+            ->where('gudang.id', '=', $user->idGudang)
+            ->get();
+        
 
         $dataLokasi = DB::table('lokasi')
             ->select('lokasi.*','pt.Alias as ptAlias')
             ->join('pt', 'lokasi.idPt', '=', 'pt.id')
             ->join('gudang', 'lokasi.id', '=', 'gudang.idLokasi')
-            ->where('lokasi.id', '=', $user->idLokasi)
+            ->where('lokasi.id', '=', $getLokasi[0]->idLokasi)
             ->get();
         
         $dataPermintaan = DB::table('purchase_request')
-            ->where('name', '=', 'NPP/'.$dataLokasi[0]->ptAlias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/*")
+            ->where('name', 'like', 'NPP/'.$dataLokasi[0]->ptAlias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/%")
             ->get();
         
 
-        $totalIndex = str_pad("array_count_values($dataPermintaan) + 1",4,'0',STR_PAD_LEFT);
+        $totalIndex = str_pad(strval(count($dataPermintaan) + 1),4,'0',STR_PAD_LEFT);
 
         $idpr = DB::table('purchase_request')->insertGetId(array(
             'name' => 'NPP/'.$dataLokasi[0]->ptAlias.'/'.$dataLokasi[0]->alias.'/'.$year.'/'.$month."/".$totalIndex,
@@ -160,7 +174,7 @@ class PurchaseRequestController extends Controller
      */
     public function update(Request $request, PurchaseRequest $purchaseRequest)
     {
-        //
+        //belommm
         $data = $request->collect();
         $user = Auth::user();
         $year = date("Y");
@@ -208,6 +222,13 @@ class PurchaseRequestController extends Controller
     public function destroy(PurchaseRequest $purchaseRequest)
     {
         //
-        
+       // echo $purchaseRequest->id;
+        dd($purchaseRequest->id);
+       // kdue lak delete form purchae where id lokasi ==id ne purchase and idopositoke==idne purchase??
+       /* DB::table('purchase_request_detail')
+            ->where('idPurchaseRequest','=',$purchaseRequest->id)
+            ->delete();
+        $purchaseRequest->delete();*/
+       return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 }
