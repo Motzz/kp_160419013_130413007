@@ -162,7 +162,7 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
-        
+        return view('master.purchase_request_edit');
 
     }
 
