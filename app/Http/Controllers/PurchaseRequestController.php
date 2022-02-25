@@ -162,6 +162,7 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
+        
 
     }
 
@@ -211,6 +212,7 @@ class PurchaseRequestController extends Controller
                 )
            ); 
         }
+        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 
     /**
@@ -223,12 +225,11 @@ class PurchaseRequestController extends Controller
     {
         //
        // echo $purchaseRequest->id;
-        dd($purchaseRequest->id);
-       // kdue lak delete form purchae where id lokasi ==id ne purchase and idopositoke==idne purchase??
-       /* DB::table('purchase_request_detail')
+        //dd($purchaseRequest->id);
+        DB::table('purchase_request_detail')
             ->where('idPurchaseRequest','=',$purchaseRequest->id)
             ->delete();
-        $purchaseRequest->delete();*/
+        $purchaseRequest->delete();
        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 }
