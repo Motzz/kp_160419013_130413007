@@ -78,3 +78,12 @@ Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestControll
 
 //Info Supplier (ex:tik, alat tulis, gadget, dll) 
 Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');
+
+//Menu (ex:master, home, pemesanan, profil, dll) 
+Route::resource('menu', 'App\Http\Controllers\MenuController');\
+    
+//SubMenu (ex:barang_tambah, barang_edit, npp_tambah, po_tambah, dll   nyimpen id menu) 
+Route::resource('submenu', 'App\Http\Controllers\SubMenuController');
+
+//UserAccess (mnm dari 2 diatas) (ex:nama e tambah apa , access nya itu boolean (1 dan 0) nyimpen id submenu, dll) 
+Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');

@@ -1,12 +1,10 @@
 @extends('layouts.home_master')
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
 <style>
     p {
         font-family: "Nunito", sans-serif;
     }
 </style>
+
 @section('content')
 <div class="container-fluid">
     <!-- Page Heading -->
@@ -19,18 +17,22 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{route('barang.store')}}" method="POST">
+                        <form action="{{route('purchaseRequest.update',[$purchaseRequest])}}" method="POST">
                             @csrf
 
                             
                            <div class="form-group" >
                                 <label for="Satuan">Gudang</label>
-                                <select name="gudang" class="form-control">
+                                <select require name="gudang" class="form-control">
                                     <option value="">
                                         --Pilih gudang--
                                     </option>
                                     @foreach($dataGudang as $key => $data)
-                                     <option name="idGudang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                    @if($data->id==$purchaseRequest->idGudang)
+                                     <option selected name="idGudang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                    @else
+                                     <option  name="idGudang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                    @endif
                                      @endforeach
                                 </select>
                                 <br />
@@ -39,13 +41,17 @@
                             </div>
                             <div class="form-group"  id='tmbhBarang'>
                                 
-                                <select name="barang[]" class="form-control" id="barang">
+                                <select require name="barang[]" class="form-control" id="barang">
                                     <option value="">--Pilih barang--</option>
                                     @foreach($dataBarang as $key => $data)
-                                    <option name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                    @if($data->id==$purchaseRequest->idBarang && $data->id==$purchaseRequest->idSatuan)
+                                    <option selected name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}} ({{$data->satuanName}}) </option>
+                                    @else
+                                    <option name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}} ({{$data->satuanName}}) </option>
+                                    @endif
                                     @endforeach
                                 </select>
-                                <input type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="angka" /> <br>
+                                <input min=1 require name="jumlah[]" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="angka" /> <br>
                             </div>
                             
                         
@@ -67,20 +73,21 @@
         </div>
     </div>
 </div>
-</div>
+
+
 <script type="text/javascript">
     var tambahCombo = "";
     var totalTambah = 0;
     $("body").on("click", "#tambah", function () {
         totalTambah++;
         //tambahCombo="<select name='barang[]' class='form-control'id='barang"+totalTambah+"'><option value=''> --Pilih Barang--</option></select><br>";
-        tambahCombo += '<select name="barang[]" class="form-control" id="barang'+totalTambah+'">\n';
+        tambahCombo += '<select require name="barang[]" class="form-control" id="barang'+totalTambah+'">\n';
         tambahCombo += '<option value="">--Pilih barang--</option>\n';
         tambahCombo += '@foreach($dataBarang as $key => $data)\n';
-        tambahCombo += '<option name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>\n';
+        tambahCombo += '<option name="idBarang" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}} ({{$data->satuanName}}) </option>\n';
         tambahCombo += '@endforeach\n';
         tambahCombo += '</select>\n';
-        tambahCombo += '<input id="jml'+totalTambah+'" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient'+"'"+'s username" aria-describedby="basic-addon2"id="angka" />\n';
+        tambahCombo += '<input min=1 require name="jumlah[]" id="jml'+totalTambah+'" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient'+"'"+'s username" aria-describedby="basic-addon2"id="angka" />\n';
         tambahCombo += '<br id="br'+totalTambah+'">\n';
         
         $('#tmbhBarang').append(tambahCombo);
@@ -95,5 +102,7 @@
         }
         
     });
-</script>
-@endsection       
+</script>  
+@endsection    
+
+ 

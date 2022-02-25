@@ -162,7 +162,27 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
-        return view('master.purchase_request_edit');
+          $user = Auth::user();
+
+        $getLokasi = DB::table('gudang')
+            ->where('gudang.id', '=', $user->idGudang)
+            ->get();
+
+        $dataGudang = DB::table('gudang')
+            ->select('gudang.*')
+            ->join('lokasi','gudang.idLokasi','=','lokasi.id')
+            ->where('lokasi.id', $getLokasi[0]->idLokasi)
+            ->get();
+    
+        $dataBarang = DB::table('barang')
+            ->select('barang.*', 'satuan.name as satuanName')
+            ->join('satuan','barang.idSatuan', '=', 'satuan.id')
+            ->get();
+        return view('master.purchase_request_edit',[
+            'purchaseRequest'=>$purchaseRequest,
+            'dataGudang' => $dataGudang,
+            'dataBarang' => $dataBarang,
+        ]);
 
     }
 
