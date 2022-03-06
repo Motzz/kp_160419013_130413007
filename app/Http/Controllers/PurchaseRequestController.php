@@ -128,7 +128,7 @@ class PurchaseRequestController extends Controller
             'updated_by'=> $user->id,
             'updated_on'=> date("Y-m-d h:i:sa"),
             )
-       ); 
+        ); 
 
         for($i = 0; $i < count($data['barang']); $i++){
             DB::table('purchase_request_detail')->insert(array(

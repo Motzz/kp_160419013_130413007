@@ -87,3 +87,10 @@ Route::resource('submenu', 'App\Http\Controllers\SubMenuController');
 
 //UserAccess (mnm dari 2 diatas) (ex:nama e tambah apa , access nya itu boolean (1 dan 0) nyimpen id submenu, dll) 
 Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
+
+
+//item baru
+Route::resource('item', 'App\Http\Controllers\ItemController');
+
+//COA baru
+Route::resource('coa', 'App\Http\Controllers\COAController');
