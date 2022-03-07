@@ -35,7 +35,10 @@ class ItemController extends Controller
             ->where('Item.Hapus', '=', 0)
             ->get();
 
-        dd($dataItem);
+        //dd($dataItem);
+        return view('master.item.index',[
+            'dataItem' => $dataItem
+        ]);
         /*$dataSatuan = DB::table('satuan')
             ->get();
         return view('/master/barang',[
