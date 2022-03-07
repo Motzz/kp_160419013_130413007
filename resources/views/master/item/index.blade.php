@@ -1,5 +1,8 @@
 @extends('layouts.home_master')
-
+<?php 
+//$currentUrl = Route::current()->getName();  buat dapetno nama directory nya / route yang diapakek
+//echo($currentUrl);
+?>
 @section('content')
 <div class="container-fluid">
 
