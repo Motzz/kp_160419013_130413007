@@ -166,8 +166,23 @@ class ItemController extends Controller
 
         dd($dataItem);
         */
+        $dataType = DB::table('ItemType')
+            ->get();
+        $dataUnit = DB::table('Unit')
+            ->get();
+        $dataCategory = DB::table('ItemCategory')
+            ->get();
+        $dataTracing = DB::table('ItemTracing')
+            ->get();
+        $dataTag = DB::table('ItemTag')
+            ->get();
         return view('master.item_edit',[
             'item'=>$item,
+            'dataType'=>$dataType,
+            'dataUnit'=>$dataUnit,
+            'dataCategory'=>$dataCategory,
+            'dataTracing'=>$dataTracing,
+            'dataTag'=>$dataTag,
         ]);
     }
 
@@ -212,7 +227,7 @@ class ItemController extends Controller
             for($i = 0; $i < count($data['itemTagTotal']); $i++){
             DB::table('ItemTagValues')
                 ->insert(array(
-                    'ItemID' => $idItem,
+                    'ItemID' => $item->ItemID,
                     'ItemTagID' => $data['itemTagID'][$i],
                     )
                 ); 
@@ -239,7 +254,7 @@ class ItemController extends Controller
             }
         }
         
-        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
+        return redirect()->route('item.index')->with('status','Success!!');
     }
 
     /**
@@ -251,7 +266,7 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
-         $user = Auth::user();
+        $user = Auth::user();
         DB::table('Item')
             ->where('ItemID', $item->ItemID)
             ->update(array(
@@ -259,6 +274,10 @@ class ItemController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
                 'Hapus' => 1,
         ));
+        DB::table('ItemTagValues')
+            ->where('ItemID','=',$item->ItemID)
+            ->delete();
+
 
         return redirect()->route('item.index')->with('status','Success!!');
     }

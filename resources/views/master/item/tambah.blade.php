@@ -4,6 +4,10 @@
                 font-family: 'Nunito', sans-serif;
             }
  </style>
+ <?php 
+$currentUrl = Route::current()->getName();  //buat dapetno nama directory nya / route yang diapakek
+//echo($currentUrl);
+?>
 @section('content')
 <div class="container-fluid">
 

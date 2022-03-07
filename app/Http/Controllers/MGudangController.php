@@ -52,9 +52,12 @@ class MGudangController extends Controller
             ->get();
         $dataMPerusahaan = DB::table('MPerusahaan')
             ->get();    
-        return view('master.mGudang_tambah',[
+        $dataMGudangAreaSimpan = DB::table('MGudangAreaSimpan')
+            ->get();     
+        return view('master.mGudang.tambah',[
             'dataMKota' => $dataMKota,
             'dataMPerusahaan' => $dataMPerusahaan,
+            'dataMGudangAreaSimpan' => $dataMGudangAreaSimpan,
         ]);
     }
 
@@ -70,8 +73,8 @@ class MGudangController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         
-        DB::table('MGudang')
-            ->insert(array(
+        $idGudang = DB::table('MGudang')
+            ->insertGetId(array(
                 'ccode' => $data['code'],
                 'cname' => $data['name'],   
                 'cidp' => $data['perusahaan'],
@@ -82,6 +85,17 @@ class MGudangController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+
+        for($i = 0; $i < count($data['gudangAreaSimpanTotal']); $i++){
+            DB::table('MGudangValues')->insert(array(
+                'MGudangID' => $idGudang,
+                'MGudangAreaSimpanID' => $data['gudangAreaSimpanID'][$i],
+                )
+            ); 
+        }
+
+        return redirect()->route('gudang.index')->with('status','Success!!');
+
     }
 
     /**
@@ -93,12 +107,12 @@ class MGudangController extends Controller
     public function show(MGudang $mGudang)
     {
         //
-        $data = DB::table('MGudang')
+        /*$data = DB::table('MGudang')
             ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
             ->join('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
-            ->get();
-        return view('master.mGudang_detail',[
-            'data' => $data,
+            ->get();*/
+        return view('master.mGudang.detail',[
+            'mGudang' => $mGudang,
         ]);
     }
 
@@ -115,10 +129,13 @@ class MGudangController extends Controller
             ->get();
         $dataMPerusahaan = DB::table('MPerusahaan')
             ->get();    
+        $dataMGudangAreaSimpan = DB::table('MGudangAreaSimpan')
+            ->get();  
         return view('master.mGudang_edit',[
             'mGudang' =>$mGudang,
             'dataMKota' => $dataMKota,
             'dataMPerusahaan' => $dataMPerusahaan,
+            'dataMGudangAreaSimpan' => $dataMGudangAreaSimpan,
         ]);
     }
 
@@ -145,6 +162,46 @@ class MGudangController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+
+        $dataGudangValues = DB::table('MGudangValues')
+            ->where('MGudangID', $mGudang->MGudangID)
+            ->get();
+
+        if(count($dataTagValues) > count($data['gudangAreaSimpanTotal'])){
+            DB::table('MGudangValues')
+                ->where('MGudangID','=',$mGudang->MGudangID)
+                ->delete();
+
+            for($i = 0; $i < count($data['gudangAreaSimpanTotal']); $i++){
+            DB::table('MGudangValues')
+                ->insert(array(
+                    'MGudangID' => $mGudang->MGudangID,
+                    'MGudangAreaSimpanID' => $data['mGudangAreaSimpanID'][$i],
+                    )
+                ); 
+            }
+        }
+        else{
+            for($i = 0; $i < count($data['gudangAreaSimpanTotal']); $i++){
+                if($i < count($dataTagValues)){
+                    DB::table('MGudangValues')
+                        ->where('MGudangID', $mGudang->MGudangID)
+                        ->update(array(
+                            'MGudangAreaSimpanID' => $data['mGudangAreaSimpanID'][$i],
+                        )
+                    );
+                }
+                else{
+                    DB::table('MGudangValues')
+                        ->insert(array(
+                            'MGudangID' => $mGudang->MGudangID,
+                            'MGudangAreaSimpanID' => $data['mGudangAreaSimpanID'][$i],
+                        )
+                    ); 
+                }
+            }
+        }
+        return redirect()->route('gudang.index')->with('status','Success!!');
     }
 
     /**
@@ -157,5 +214,10 @@ class MGudangController extends Controller
     {
         //
         $mGudang->destroy();
+        DB::table('MGudangValues')
+            ->where('MGudangID','=',$mGudang->MGudangID)
+            ->delete();
+
+        return redirect()->route('gudang.index')->with('status','Success!!');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Auth;
 
 class RoleController extends Controller
 {
@@ -12,12 +13,6 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-    public function tambah()
-    {
-        //
-        return view('/master/role_tambah');
     }
 
     /**
@@ -29,8 +24,11 @@ class RoleController extends Controller
     {
         //
         $data = DB::table('roles')
+            ->select('roles.*', 'menu.Name','menu.Url')
+            ->leftjoin('role_access','roles.id','=','role_access.idRole')
+            ->leftjoin('menu','role_access.idMenu','=','menu.MenuID')
             ->get();
-        return view('/master/role',[
+        return view('master.roles.index',[
             'data' => $data,
         ]);
     }
@@ -43,7 +41,10 @@ class RoleController extends Controller
     public function create()
     {
         //
-        return view('master.role_tambah');
+        $dataMenu = DB::table('menu')->get();
+        return view('master.roles.tambah',[
+            'dataMenu' => $dataMenu,
+        ]);
     }
 
     /**
@@ -56,12 +57,27 @@ class RoleController extends Controller
     {
         //
         $data = $request->collect();
+        $user = Auth::user();
         
-        DB::table('role')->insert(array(
-             'name' => $data['name'],
-             'access' => $data['access'],
-             )
-        ); 
+        $idRole = DB::table('roles')
+            ->insertGetId(array(
+                'name' => $data['name'],
+                'deskripsi' => $data['deskripsi'],
+                'CreatedBy'=> $user->id,
+                'CreatedOn'=> date("Y-m-d h:i:sa"),
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+            )
+        );
+
+        for($i = 0; $i < count($data['menuTotal']); $i++){
+            DB::table('role_access')->insert(array(
+                'idRole' => $idRole,
+                'idMenu' => $data['menuID'][$i],
+                )
+           ); 
+        }
+
         return redirect()->route('role.index')->with('status','Success!!');
     }
 
@@ -74,6 +90,9 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         //
+        return view('master.roles.tambah',[
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -85,8 +104,10 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         //
-        return view('master.role_edit',[
-            'role'=>$role
+        $dataMenu = DB::table('menu')->get();
+        return view('master.role.edit',[
+            'role'=>$role,
+            'dataMenu'=>$dataMenu,
         ]);
     }
 
@@ -100,16 +121,57 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         //
-        $data = $request->collect(); //la teros iki
-        
-        DB::table('role')
-            ->where('id', $role['id'])
+        $data = $request->collect();
+        $user = Auth::user();
+
+        DB::table('roles')
+            ->where('id', $role->id)
             ->update(array(
                 'name' => $data['name'],
-                'access' => $data['access'],
-            ));
+                'deskripsi' => $data['deskripsi'],
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+        ));
 
-        return redirect()->route('satuan.index')->with('status','Success!!');    
+        $dataRoleAccess = DB::table('role_access')
+            ->where('idRole', $role->id)
+            ->get();
+
+        if(count($dataRoleAccess) > count($data['menuTotal'])){
+            DB::table('role_access')
+                ->where('idRole', $role->id)
+                ->delete();
+
+            for($i = 0; $i < count($data['menuTotal']); $i++){
+            DB::table('role_access')
+                ->insert(array(
+                    'idRole' => $role->id,
+                    'idMenu' => $data['menuID'][$i],
+                    )
+                ); 
+            }
+        }
+        else{
+            for($i = 0; $i < count($data['menuTotal']); $i++){
+                if($i < count($dataRoleAccess)){
+                    DB::table('role_access')
+                        ->where('idRole', $role->id)
+                        ->update(array(
+                            'idMenu' => $data['menuID'][$i],
+                        )
+                    );
+                }
+                else{
+                    DB::table('role_access')->insert(array(
+                        'idRole' => $idRole,
+                        'idMenu' => $data['menuID'][$i],
+                        )
+                    ); 
+                }
+            }
+        }
+
+        return redirect()->route('role.index')->with('status','Success!!');    
     }
 
     /**
@@ -122,6 +184,10 @@ class RoleController extends Controller
     {
         //
         $role->delete();
+        DB::table('role_access')
+            ->where('idRole', $role->id)
+            ->delete();
+
         return redirect()->route('role.index')->with('status','Success!!');
     }
 }
