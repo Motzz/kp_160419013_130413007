@@ -79,8 +79,10 @@ Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestControll
 //Info Supplier (ex:tik, alat tulis, gadget, dll) 
 Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');
 
+
+/*==================================yang belom==========================================*/ 
 //Menu (ex:master, home, pemesanan, profil, dll) 
-Route::resource('menu', 'App\Http\Controllers\MenuController');\
+Route::resource('menu', 'App\Http\Controllers\MenuController');
     
 //SubMenu (ex:barang_tambah, barang_edit, npp_tambah, po_tambah, dll   nyimpen id menu) 
 Route::resource('submenu', 'App\Http\Controllers\SubMenuController');

@@ -23,8 +23,14 @@ class COAController extends Controller
         //
         $dataCOA = DB::table('COA')
             ->get();
-        return view('master.coa',[
+        $dataCOAHead = DB::table('COAHead')
+            ->get();
+        $dataCOADetail = DB::table('COADetail')
+            ->get();
+        return view('master.coa.index',[
             'dataCOA' => $dataCOA,
+            'dataCOAHead' => $dataCOAHead,
+            'dataCOADetail' => $dataCOADetail,
         ]);
     }
 
@@ -36,11 +42,15 @@ class COAController extends Controller
     public function create()
     {
         //
+        $dataCOA = DB::table('COA')
+            ->get();
         $dataCOAHead = DB::table('COAHead')
             ->get();
         $dataCOADetail = DB::table('COADetail')
             ->get();
-        return view('master.itemCategory_tambah',[
+
+        return view('master.COA.tambah',[
+            'dataCOA' => $dataCOA,
             'dataCOAHead' => $dataCOAHead,
             'dataCOADetail' => $dataCOADetail,
         ]);
@@ -60,25 +70,26 @@ class COAController extends Controller
         
         DB::table('COA')
             ->insert(array(
-                'Nomor' => $data['nomor'],
-                'Nama' => $data['nama'],
-                'Chead' => $data['chead'],
-                'Cdet' => $data['cdet'],
+                'Nomor' => $data['Nomor'],
+                'Nama' => $data['Nama'],
+                'Chead' => $data['Chead'],
+                'Cdet' => $data['Cdet'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+        return redirect()->route('coa.index')->with('status','Success!!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\COA  $cOA
+     * @param  \App\Models\COA  $COA
      * @return \Illuminate\Http\Response
      */
-    public function show(COA $cOA)
+    public function show(COA $coa)
     {
         //
         $dataCOA = DB::table('COA')
@@ -93,18 +104,18 @@ class COAController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\COA  $cOA
+     * @param  \App\Models\COA  $COA
      * @return \Illuminate\Http\Response
      */
-    public function edit(COA $cOA)
+    public function edit(COA $coa)
     {
         //
         $dataCOAHead = DB::table('COAHead')
             ->get();
         $dataCOADetail = DB::table('COADetail')
             ->get();
-        return view('master.coa_edit',[
-            'cOA'=>$cOA,
+        return view('master.coa.edit',[
+            'COA'=>$coa,
             'dataCOAHead' => $dataCOAHead,
             'dataCOADetail' => $dataCOADetail,
         ]);
@@ -114,16 +125,16 @@ class COAController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\COA  $cOA
+     * @param  \App\Models\COA  $COA
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, COA $cOA)
+    public function update(Request $request, COA $coa)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
         DB::table('COA')
-            ->where('COAID', $cOA['id'])
+            ->where('COAID', $coa['COAID'])
             ->update(array(
                 'Nomor' => $data['nomor'],
                 'Nama' => $data['nama'],
@@ -133,17 +144,19 @@ class COAController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+          return redirect()->route('coa.index')->with('status','Success!!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\COA  $cOA
+     * @param  \App\Models\COA  $COA
      * @return \Illuminate\Http\Response
      */
-    public function destroy(COA $cOA)
+    public function destroy(COA $coa)
     {
         //
-        $cOA->delete();
+        $coa->delete();
+        return redirect()->route('coa.index')->with('status','Success!!');
     }
 }

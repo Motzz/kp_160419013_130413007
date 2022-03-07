@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class COADetail extends Model
 {
     use HasFactory;
+    protected $table = 'COADetail';
 }
