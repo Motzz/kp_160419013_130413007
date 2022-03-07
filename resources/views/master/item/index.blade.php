@@ -5,9 +5,9 @@
 
 <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">COA</h1>
+        <h1 class="h3 mb-0 text-gray-800">Item</h1>
          <br>
-         <a href="{{route('coa.create')}}" class="btn btn-primary btn-responsive">Tambah COA
+         <a href="{{route('item.create')}}" class="btn btn-primary btn-responsive">Tambah Item
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
               </svg>
@@ -22,9 +22,9 @@
                           <thead>
                             <tr>
                               <th scope="col">#</th>
-                              <th scope="col">Nama item</th>
-                              <th scope="col">ID Kategori Item</th>
-                              <th scope="col">Notes</th>
+                              <th scope="col">Nama Item</th>
+                              <th scope="col">Kategori item</th>
+                              <th scope="col">Keterangan</th>
                               <th scope="col">Handle</th>
                             </tr>
                           </thead>
@@ -34,8 +34,7 @@
                               <th scope="row">{{$data->ItemID}}</th>
                               <td>{{$data->ItemName}}</td>
                               <td>{{$data->ItemCategoryID}}</td>
-                              <td>{{$data->Notes}}</td>
-                               
+                              <td>{{$data->categoryName}}</td>
                               <td>  
                               <a href="{{route('item.edit',[$data->ItemID])}}" class="btn btn-primary btn-responsive">Edit</a> 
                                   <form action="{{route('item.destroy',[$data->ItemID])}}" method="POST" class="btn btn-responsive">
@@ -53,7 +52,10 @@
                             </tr>
                             @endforeach                            
                           </tbody>
+                        
                         </table>
+                          {{$dataItem->links()}}
+                        
                        
    </div>
   </div>

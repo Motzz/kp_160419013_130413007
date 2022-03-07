@@ -9,7 +9,7 @@
 
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">COA -> Tambah</h1>
+    <h1 class="h3 mb-0 text-gray-800">item -> Tambah</h1>
 </div>
 
 <div class="container">
@@ -22,27 +22,67 @@
                  
                 <div class="card-body">
             
-                    <form action="{{route('coa.store')}}" method="POST" >
+                    <form action="{{route('item.store')}}" method="POST" >
                       @csrf
 
                         <div class="form-group">
-                           <label for="title">Nomor COA</label>
-                           <input require type="text" name="Nomor" class="form-control" 
-                           value="{{old('Nomor','')}}" >
+                           <label for="title">Tipe Item</label>
+                           <input require type="text" name="typeItem" class="form-control" 
+                           value="{{old('typeItem','')}}" >
+                        </div>
 
-                           <label for="title">Nama COA</label>
-                           <input require type="text" name="Nama" class="form-control" 
-                           value="{{old('Nama','')}}" >
+                        <div class="form-group">
+                            <label for="title">Nama Item</label>
+                           <input require type="text" name="nameItem" class="form-control" 
+                           value="{{old('nameItem','')}}" >
+                        </div>
 
-                           <label for="title">Chead</label>
-                           <input require type="number" name="Chead" class="form-control" 
-                           value="{{old('Chead','')}}" >
+                        <div class="form-group">
+                            <label for="title">Unit item</label>
+                           <input require type="number" name="itemUnit" class="form-control" 
+                           value="{{old('itemUnit','')}}" >
 
-                           <label for="title">Cdet</label>
-                           <input require type="number" name="Cdet" class="form-control" 
-                           value="{{old('Cdet','')}}" >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="title">Kategori Item</label>
+                           <input require type="number" name="itemCategory" class="form-control" 
+                           value="{{old('itemCategory','')}}" >
+                        </div>
 
-                       </div>
+                       <div class="form-group">
+                            <label for="title">Keterangan</label>
+                            <input require type="text" name="note" class="form-control" 
+                           value="{{old('note','')}}" >
+                        </div>
+
+                         <div class="form-group">
+                             <div class="form-check">
+                                <label for="active"class="form-check-input">Bisa dibeli</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" name= "canBePurchased" value="1"{{'1' == old('canBePurchased','')? 'checked' :'' }}>
+                                <br>
+                                <label for="active"class="form-check-input">Bisa dijual</label>
+                                <br>
+                                <input type="checkbox" class="form-check-input" name= "canBeSell" value="0"{{'0'== old('canBeSell','')? 'checked' :'' }}>
+                                <br>
+                            </div>
+                        </div>
+
+                         <div class="form-group">
+                            <label for="title">Item Tracing</label>
+                             <input require type="number" name="itemTracing" class="form-control" 
+                           value="{{old('itemTracing','')}}" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Expired Date</label>
+                             <input type="text" name="expiredDate" class="form-control" 
+                           value="{{old('expiredDate','')}}" >
+                        </div>
+
+                      
+                          
 
                        <button class="btn btn-primary">Tambah</button>
                     </form>

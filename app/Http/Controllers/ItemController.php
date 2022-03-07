@@ -24,8 +24,10 @@ class ItemController extends Controller
         //
         $dataItem = DB::table('Item')
             //->limit(100)
+            
             ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
             'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName', 'ItemTag.ItemTagID as tagID', 'ItemTag.Name as tagName')
+            
             ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
             ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
             ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
@@ -33,7 +35,7 @@ class ItemController extends Controller
             ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
-            ->get();
+            ->simplePaginate(10);
 
         //dd($dataItem);
         return view('master.item.index',[
@@ -66,7 +68,7 @@ class ItemController extends Controller
             ->get();
         $dataTag = DB::table('ItemTag')
             ->get();
-        return view('master.item_tambah',[
+        return view('master.item.tambah',[
             'dataType'=>$dataType,
             'dataUnit'=>$dataUnit,
             'dataCategory'=>$dataCategory,
@@ -97,11 +99,11 @@ class ItemController extends Controller
             'CanBeSell'=> $data['canBeSell'],
             'CanBePurchased'=> $data['canBePurchased'],
             'ItemTracingID'=> $data['itemTracing'],
-            'CreatedBy'=> $user->id,
-            'CreatedOn'=> date("Y-m-d h:i:sa"),
-            'UpdatedBy'=> $user->id,
-            'UpdatedOn'=> date("Y-m-d h:i:sa"),
-            'Hapus' => 0,
+            'CreatedBy'=> $user->id,//
+            'CreatedOn'=> date("Y-m-d h:i:sa"),//
+            'UpdatedBy'=> $user->id,//
+            'UpdatedOn'=> date("Y-m-d h:i:sa"),//
+            'Hapus' => 0,//
             'HaveExpiredDate' => $data['expiredDate'],
             )
         ); 
@@ -249,14 +251,15 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
+         $user = Auth::user();
         DB::table('Item')
-            ->where('id', $item->ItemID)
+            ->where('ItemID', $item->ItemID)
             ->update(array(
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
                 'Hapus' => 1,
         ));
 
-        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
+        return redirect()->route('item.index')->with('status','Success!!');
     }
 }
