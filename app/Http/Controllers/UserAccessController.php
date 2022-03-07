@@ -20,8 +20,10 @@ class UserAccessController extends Controller
             ->leftjoin('user_access', 'menu.MenuID','=','user_access.idMenu')
             ->leftjoin('role_access', 'menu.MenuID','=','role_access.idMenu')
             ->get();
+        $users = DB::table('users')->get();
         return view('master.userAccess.index',[
             'menuByUserID' => $menuByUserID,
+            'users' => $users,
         ]);
     }
 
