@@ -21,6 +21,11 @@ class MGudangAreaSimpanController extends Controller
     public function index()
     {
         //
+        $data = DB::table('MGudangAreaSimpan')
+            ->get();
+        return view('master.mGudangAreaSimpan',[
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -31,6 +36,7 @@ class MGudangAreaSimpanController extends Controller
     public function create()
     {
         //
+         return view('master.mGudangAreaSimpan_tambah');
     }
 
     /**
@@ -42,6 +48,19 @@ class MGudangAreaSimpanController extends Controller
     public function store(Request $request)
     {
         //
+        $data = $request->collect();
+        $user = Auth::user();
+        
+        DB::table('MGudangAreaSimpan')->insert(array(
+                'cname' => $data['name'],
+                'hapus' => 0,
+                'CreatedBy'=> $user->id,
+                'CreatedOn'=> date("Y-m-d h:i:sa"),
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+             )
+        );
+        return redirect()->route('mGudangAreaSimpan.index')->with('status','Success!!');
     }
 
     /**
@@ -53,6 +72,11 @@ class MGudangAreaSimpanController extends Controller
     public function show(MGudangAreaSimpan $mGudangAreaSimpan)
     {
         //
+        $data = DB::table('MGudangAreaSimpan')
+            ->get();
+        return view('master.mGudangAreaSimpan_detail',[
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -64,6 +88,9 @@ class MGudangAreaSimpanController extends Controller
     public function edit(MGudangAreaSimpan $mGudangAreaSimpan)
     {
         //
+        return view('master.mGudangAreaSimpan_edit',[
+            'mGudangAreaSimpan' => $mGudangAreaSimpan,
+        ]);
     }
 
     /**
@@ -76,6 +103,18 @@ class MGudangAreaSimpanController extends Controller
     public function update(Request $request, MGudangAreaSimpan $mGudangAreaSimpan)
     {
         //
+        $data = $request->collect();
+        $user = Auth::user();
+        DB::table('MGudangAreaSimpan')
+            ->where('MGudangAreaSimpanID', $mGudangAreaSimpan['id'])
+            ->update(array(
+                'cname' => $data['name'],   
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+            )
+        );
+        return redirect()->route('mGudangAreaSimpan.index')->with('status','Success!!');
+
     }
 
     /**
@@ -87,5 +126,16 @@ class MGudangAreaSimpanController extends Controller
     public function destroy(MGudangAreaSimpan $mGudangAreaSimpan)
     {
         //
+        $user = Auth::user();
+        DB::table('MGudangAreaSimpan')
+            ->where('MGudangAreaSimpanID', $mGudangAreaSimpan['id'])
+            ->update(array(
+                'hapus' => 1,   
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+            )
+        );
+        return redirect()->route('mGudangAreaSimpan.index')->with('status','Success!!');
+
     }
 }

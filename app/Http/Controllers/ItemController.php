@@ -23,14 +23,15 @@ class ItemController extends Controller
     {
         //
         $dataItem = DB::table('Item')
-            //->select('Item.*', 'ItemType.Name as typeName', 'Unit.Name as unitName', 'ItemCategory.Name as categoryName', 
-            //'ItemTracing.Name as tracingName', 'ItemTag.Name as tagName')
-            ->join('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
-            ->join('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
-            ->join('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
-            ->join('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
-            ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
-            ->join('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            //->limit(100)
+            ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
+            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName', 'ItemTag.ItemTagID as tagID', 'ItemTag.Name as tagName')
+            ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
+            ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
+            ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
+            ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
+            ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->get();
 
         dd($dataItem);
@@ -61,7 +62,14 @@ class ItemController extends Controller
             ->get();
         $dataTag = DB::table('ItemTag')
             ->get();
-        dd($dataItem);
+        return view('master.item_tambah',[
+            'dataType'=>$dataType,
+            'dataUnit'=>$dataUnit,
+            'dataCategory'=>$dataCategory,
+            'dataTracing'=>$dataTracing,
+            'dataTag'=>$dataTag,
+        ]);
+        
     }
 
     /**
@@ -102,7 +110,7 @@ class ItemController extends Controller
            ); 
         }
 
-        //return redirect()->route('purchaseRequest.index')->with('status','Success!!');
+        return redirect()->route('item.index')->with('status','Success!!');
     }
 
     /**
@@ -115,12 +123,15 @@ class ItemController extends Controller
     {
         //
         /*$dataItem = DB::table('Item')
-            ->join('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
-            ->join('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
-            ->join('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
-            ->join('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
-            ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
-            ->join('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            ->select('Item.*', 'ItemType.Name as typeName', 'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
+            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName', 'ItemTag.Name as tagName')
+            ->limit(100)
+            ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
+            ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
+            ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
+            ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
+            ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->get();
 
         dd($dataItem);*/
@@ -138,7 +149,7 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         //
-        $dataItem = DB::table('Item')
+        /*$dataItem = DB::table('Item')
             ->join('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
             ->join('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
             ->join('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
@@ -148,6 +159,10 @@ class ItemController extends Controller
             ->get();
 
         dd($dataItem);
+        */
+        return view('master.item_edit',[
+            'item'=>$item,
+        ]);
     }
 
     /**
@@ -176,7 +191,6 @@ class ItemController extends Controller
                 'ItemTracingID'=> $data['itemTracing'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
-                'Hapus' => 0,
                 'HaveExpiredDate' => $data['expiredDate'],
         ));
 
@@ -231,10 +245,14 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         //
-        DB::table('ItemTagValues')
-            ->where('ItemID','=',$item->ItemID)
-            ->delete();
-        $item->delete();
+        DB::table('Item')
+            ->where('id', $item->ItemID)
+            ->update(array(
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+                'Hapus' => 1,
+        ));
+
         return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 }

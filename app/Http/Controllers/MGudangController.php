@@ -23,9 +23,18 @@ class MGudangController extends Controller
     {
         //
         $data = DB::table('MGudang')
-            ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
-            ->join('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->select('MGudang.*', 'MPerusahaan.cname as perusahaanName','MPerusahaan.cnames as perusahaanNames','users.name as manager', 
+            'MKota.cname as kotaName','MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName', 
+            'MGudangAreaSimpan.MGudangAreaSimpanID as gudangAreaSimpanID', 'MGudangAreaSimpan.cname as gudangAreaSimpanName')
+            ->leftjoin('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->leftjoin('users','MPerusahaan.UserIDManager','=','users.id')
+            ->leftjoin('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->leftjoin('MGudangValues', 'MGudang.MGudangID', '=', 'MGudangValues.MGudangID')
+            ->leftjoin('MGudangAreaSimpan', 'MGudangValues.MGudangAreaSimpanID', '=', 'MGudangAreaSimpan.MGudangAreaSimpanID')
             ->get();
+
         return view('master.mGudang',[
             'data' => $data,
         ]);
