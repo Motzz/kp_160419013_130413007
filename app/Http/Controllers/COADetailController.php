@@ -23,6 +23,8 @@ class COADetailController extends Controller
     {
         //
         $data = DB::table('COADetail')
+            ->select('COADetail.*', 'COAHead.Nama as COAHeadName')
+            ->leftjoin('COAHead','COADetail.CoaHead','=','COAHead.CH_ID')
             ->get();
         return view('master.coaDetail',[
             'data' => $data,
@@ -79,11 +81,12 @@ class COADetailController extends Controller
     public function show(COADetail $cOADetail)
     {
         //
-        $data = DB::table('COADetail')
-            ->join('COAHead', 'COADetail.CoaHead','=','COAHead.CH_ID')
-            ->get();
+        /*$data = DB::table('COADetail')
+            ->select('COADetail.*', 'COAHead.Nama as COAHeadName')
+            ->leftjoin('COAHead','COADetail.CoaHead','=','COAHead.CH_ID')
+            ->get();*/
         return view('master.coaDetail_detail',[
-            'data' => $data,
+            'cOADetail' => $cOADetail,
         ]);
     }
 
@@ -140,5 +143,6 @@ class COADetailController extends Controller
     {
         //
         $cOADetail->destroy();
+        
     }
 }

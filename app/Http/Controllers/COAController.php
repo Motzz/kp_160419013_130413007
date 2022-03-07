@@ -22,6 +22,9 @@ class COAController extends Controller
     {
         //
         $dataCOA = DB::table('COA')
+            ->select('COA.*','COAHead.Nama as COAHeadName','COADetail.CDet_Name as COADetailName','COADetail.Keterangan as COADetailKeterangan')
+            ->leftjoin('COAHead','COA.Chead','=','COAHead.CH_ID')
+            ->leftjoin('COADetail','COA.Cdet','=','COADetail.COADetailID')
             ->get();
         return view('master.coa',[
             'dataCOA' => $dataCOA,
@@ -144,6 +147,15 @@ class COAController extends Controller
     public function destroy(COA $cOA)
     {
         //
-        $cOA->delete();
+        //$cOA->delete();
+        $user = Auth::user();
+        DB::table('COADetail')
+            ->where('CoaDetailID', $cOADetail['id'])
+            ->update(array(
+                'Hapus' => 1,
+                'UpdatedBy'=> $user->id,
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+            )
+        );
     }
 }

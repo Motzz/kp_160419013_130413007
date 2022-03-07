@@ -32,6 +32,7 @@ class ItemController extends Controller
             ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
             ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            ->where('Item.Hapus', '=', 0)
             ->get();
 
         dd($dataItem);

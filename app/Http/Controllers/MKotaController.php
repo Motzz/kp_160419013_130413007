@@ -24,6 +24,9 @@ class MKotaController extends Controller
     {
         //
         $data = DB::table('MKota')
+            ->select('MKota.*', 'MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
             ->get();
         return view('master.mKota',[
             'data' => $data,
@@ -84,12 +87,13 @@ class MKotaController extends Controller
     public function show(MKota $mKota)
     {
         //
-        $data = DB::table('MKota')
-            ->join('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
-            ->join('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
-            ->get();
+        /*$data = DB::table('MKota')
+            ->select('MKota.*', 'MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->get();*/
         return view('master.mKota_detail',[
-            'data' => $data,
+            'mKota' => $mKota,
         ]);
     }
 

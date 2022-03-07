@@ -89,6 +89,7 @@ class ItemCategoryController extends Controller
         $dataCOA = DB::table('COA')
             ->get();
         return view('master.itemCategory_detail',[
+            'itemCategory' => $itemCategory,
             'dataCategory' => $dataCategory,
             'dataCOA' => $dataCOA,
         ]);
@@ -106,7 +107,7 @@ class ItemCategoryController extends Controller
         $dataCOA = DB::table('COA')
             ->get();
         return view('master.itemType_edit',[
-            'itemCategory'=>$itemCategory,
+            'itemCategory' => $itemCategory,
             'dataCOA' => $dataCOA,
         ]);
     }

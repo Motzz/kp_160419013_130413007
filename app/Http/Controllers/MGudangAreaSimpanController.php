@@ -22,6 +22,7 @@ class MGudangAreaSimpanController extends Controller
     {
         //
         $data = DB::table('MGudangAreaSimpan')
+            ->where('Hapus','=',0)
             ->get();
         return view('master.mGudangAreaSimpan',[
             'data' => $data,

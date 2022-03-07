@@ -72,10 +72,9 @@ class MProvinsiController extends Controller
     public function show(MProvinsi $mProvinsi)
     {
         //
-        $data = DB::table('MProvinsi')
-            ->get();
+        //$data = DB::table('MProvinsi')->get();
         return view('master.mProvinsi_detail',[
-            'data' => $data,
+            'mProvinsi' => $mProvinsi,
         ]);
     }
 
