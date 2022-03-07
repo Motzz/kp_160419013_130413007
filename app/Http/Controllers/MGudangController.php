@@ -130,7 +130,7 @@ class MGudangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, MGudang $mGudang)
-    {
+    {   
         //
         $data = $request->collect();
         $user = Auth::user();
