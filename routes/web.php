@@ -91,8 +91,31 @@ Route::resource('submenu', 'App\Http\Controllers\SubMenuController');
 Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
 
 
+//fixed ***********************************************************
+
 //item baru
 Route::resource('item', 'App\Http\Controllers\ItemController');
+Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');
+Route::resource('itemTag', 'App\Http\Controllers\ItemTagController');
+Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');
+Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');
+Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');
 
 //COA baru
 Route::resource('coa', 'App\Http\Controllers\COAController');
+Route::resource('coaDetail', 'App\Http\Controllers\COADetailController');
+Route::resource('coaHead', 'App\Http\Controllers\COAHeadController');
+
+//MGudang dan lainlain
+Route::resource('mGudang', 'App\Http\Controllers\MGudangController');
+Route::resource('mGudangAreaSimpan', 'App\Http\Controllers\MGudangAreaSimpanController');
+Route::resource('mGudangValues', 'App\Http\Controllers\MGudangValuesController');
+Route::resource('mKota', 'App\Http\Controllers\MKotaController');
+Route::resource('mPerusahaan', 'App\Http\Controllers\MPerusahaanController');
+Route::resource('mProvinsi', 'App\Http\Controllers\MProvinsiController');
+Route::resource('mPulau', 'App\Http\Controllers\MPulauController');
+
+//payment and paymentterms
+Route::resource('payment', 'App\Http\Controllers\PaymentController');
+Route::resource('paymentTerms', 'App\Http\Controllers\PaymentTermsController');
+
