@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MPulau;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
-class MPulauController extends Controller
+class PaymentController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,9 +22,9 @@ class MPulauController extends Controller
     public function index()
     {
         //
-        $data = DB::table('MPulau')
+        $data = DB::table('Payment')
             ->get();
-        return view('master.mPulau',[
+        return view('master.payment',[
             'data' => $data,
         ]);
     }
@@ -36,7 +37,7 @@ class MPulauController extends Controller
     public function create()
     {
         //
-        return view('master.mPulau_tambah');
+        return view('master.payment_tambah');
     }
 
     /**
@@ -51,10 +52,10 @@ class MPulauController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         
-        DB::table('MPulau')
+        DB::table('Payment')
             ->insert(array(
-                'cidpulau' => $data['cid'],
-                'cname' => $data['name'],
+                'Name' => $data['name'],
+                'Deskripsi' => $data['deskripsi'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
@@ -66,29 +67,28 @@ class MPulauController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\MPulau  $mPulau
+     * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function show(MPulau $mPulau)
+    public function show(Payment $payment)
     {
         //
-        //$data = DB::table('MPulau')->get();
-        return view('master.mPulau_detail',[
-            'mPulau' => $mPulau,
+        return view('master.payment_detail',[
+            'payment' => $payment,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\MPulau  $mPulau
+     * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function edit(MPulau $mPulau)
+    public function edit(Payment $payment)
     {
         //
-        return view('master.mPulau_edit',[
-            'mPulau' => $mPulau,
+        return view('master.payment_edit',[
+            'payment' => $payment,
         ]);
     }
 
@@ -96,34 +96,34 @@ class MPulauController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MPulau  $mPulau
+     * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MPulau $mPulau)
+    public function update(Request $request, Payment $payment)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
-        DB::table('MPulau')
-            ->where('MPulauID', $mPulau['id'])
+        DB::table('Payment')
+            ->where('PaymentID', $payment['id'])
             ->update(array(
-                'cidpulau' => $data['cid'],
-                'cname' => $data['name'],
+                'Name' => $data['name'],
+                'Deskripsi' => $data['deskripsi'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
-            )
-        );
+                )
+        );  
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\MPulau  $mPulau
+     * @param  \App\Models\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MPulau $mPulau)
+    public function destroy(Payment $payment)
     {
         //
-        $mPulau->destroy();
+        $payment->destroy();
     }
 }
