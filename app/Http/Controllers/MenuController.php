@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ItemType;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 
-class ItemTypeController extends Controller
+class MenuController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -22,9 +21,8 @@ class ItemTypeController extends Controller
     public function index()
     {
         //
-        $data = DB::table('ItemType')
-            ->get();
-        return view('master.itemType',[
+        $data = DB::Table('menu')->get();
+        return view('master.menu.index',[
             'data' => $data,
         ]);
     }
@@ -37,7 +35,7 @@ class ItemTypeController extends Controller
     public function create()
     {
         //
-        return view('master.itemType_tambah');
+        return view('master.menu.tambah');
     }
 
     /**
@@ -52,10 +50,10 @@ class ItemTypeController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         
-        DB::table('ItemTransaction')
+        DB::table('menu')
             ->insert(array(
                 'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Url' => $data['url'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
@@ -67,28 +65,28 @@ class ItemTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function show(ItemType $itemType)
+    public function show(Menu $menu)
     {
         //
-        return view('master.itemType.detail',[
-            'itemType'=>$itemType
+        return view('master.menu.detail',[
+            'menu' => $menu,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function edit(ItemType $itemType)
+    public function edit(Menu $menu)
     {
         //
-        return view('master.itemType.edit',[
-            'itemType'=>$itemType
+        return view('master.menu.edit',[
+            'menu' => $menu,
         ]);
     }
 
@@ -96,19 +94,19 @@ class ItemTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ItemType $itemType)
+    public function update(Request $request, Menu $menu)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
-        DB::table('ItemType')
-            ->where('ItemTypeID', $itemType['id'])
+        DB::table('menu')
+            ->where('MenuID', $menu['id'])
             ->update(array(
                 'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Url' => $data['url'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
@@ -118,12 +116,12 @@ class ItemTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ItemType $itemType)
+    public function destroy(Menu $menu)
     {
         //
-        $itemType->delete();
+        $menu->destroy();
     }
 }
