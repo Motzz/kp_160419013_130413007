@@ -92,7 +92,7 @@ class UserAccessController extends Controller
             if($data['menu'][$i] != "" || $data['menu'][$i] != null || $data['menu'][$i] != 0 ){
                 //update berdasarkan nama e apa
                 //updatenya nambah row di bagian user_access
-                
+
 
             }
         }
