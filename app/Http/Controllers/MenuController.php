@@ -52,14 +52,16 @@ class MenuController extends Controller
         
         DB::table('menu')
             ->insert(array(
-                'Name' => $data['name'],
-                'Url' => $data['url'],
+                'Name' => $data['Name'],
+                'Url' => $data['Url'],
+                'Deskripsi' => $data['Deskripsi'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+        return redirect()->route('menu.index')->with('status','Success!!');
     }
 
     /**
@@ -103,14 +105,16 @@ class MenuController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('menu')
-            ->where('MenuID', $menu['id'])
+            ->where('MenuID', $menu['MenuID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Url' => $data['url'],
+                'Name' => $data['Name'],
+                'Url' => $data['Url'],
+                'Deskripsi' => $data['Deskripsi'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+          return redirect()->route('menu.index')->with('status','Success!!');
     }
 
     /**
@@ -122,6 +126,7 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         //
-        $menu->destroy();
+        $menu->delete();
+        return redirect()->route('menu.index')->with('status','Success!!');
     }
 }
