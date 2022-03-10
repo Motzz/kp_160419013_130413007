@@ -38,7 +38,7 @@ class ItemController extends Controller
             ->where('Item.Hapus', '=', 0)
             ->simplePaginate(10);
 
-        //dd($dataItem);
+
 
         /*$access = DB::table('menu')
             ->select('menu.url')
@@ -75,6 +75,7 @@ class ItemController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
         //
         $dataType = DB::table('ItemType')
             ->get();
@@ -113,6 +114,8 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
+
         //
         $data = $request->collect();
         $user = Auth::user();
@@ -154,6 +157,8 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
+        $user = Auth::user();
+
         //
         /*$dataItem = DB::table('Item')
             ->select('Item.*', 'ItemType.Name as typeName', 'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
@@ -188,6 +193,8 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
+        $user = Auth::user();
+
         //
         /*$dataItem = DB::table('Item')
             ->join('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')

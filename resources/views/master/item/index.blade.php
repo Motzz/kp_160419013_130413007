@@ -29,17 +29,17 @@
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">Nama Item</th>
-                              <th scope="col">Kategori item</th>
+                              <th scope="col">Tag</th>
                               <th scope="col">Keterangan</th>
                               <th scope="col">Handle</th>
                             </tr>
                           </thead>
                           <tbody>
-                          @foreach($dataItem as $key => $data)
+                          <!--@foreach($dataItem as $key => $data)
                           <tr>
                               <th scope="row">{{$data->ItemID}}</th>
                               <td>{{$data->ItemName}}</td>
-                              <td>{{$data->ItemCategoryID}}</td>
+                              <td>{{$data->tagName}}</td>
                               <td>{{$data->categoryName}}</td>
                               <td>  
                               <a href="{{route('item.edit',[$data->ItemID])}}" class="btn btn-primary btn-responsive">Edit</a> 
@@ -56,7 +56,10 @@
                                    </form>
                               </td>
                             </tr>
-                            @endforeach                            
+                            @endforeach       -->
+                            @for ($i = 0; $i < count($dataItem); $i++)
+                              {{$dataItem}}
+                            @endfor       
                           </tbody>
                         
                         </table>
