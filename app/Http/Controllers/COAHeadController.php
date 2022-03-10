@@ -121,4 +121,15 @@ class COAHeadController extends Controller
         //
         $cOAHead->destroy();
     }
+
+    public function searchCoaHeadName($coaHeadName)
+    {
+        //
+        $data = DB::table('COAHead')
+            ->where('Nama','like','%'.$coaHeadName.'%')
+            ->get();
+        return view('master.coaHead',[
+            'data' => $data,
+        ]);
+    }
 }

@@ -151,4 +151,18 @@ class ItemCategoryController extends Controller
         //
         $itemCategory->delete();
     }
+
+    public function selectItemCategoryName($categoryName)
+    {
+        //
+        $dataCategory = DB::table('ItemCategory')
+            ->where('Name','like','%'.$categoryName.'%')
+            ->get();
+        $dataCOA = DB::table('COA')
+            ->get();
+        return view('master.itemCategory',[
+            'dataCategory' => $dataCategory,
+            'dataCOA' => $dataCOA,
+        ]);
+    }
 }

@@ -123,4 +123,15 @@ class ItemTransactionController extends Controller
         //
         $itemTransaction->delete();
     }
+
+    public function searchItemTransactionName($transactionName)
+    {
+        //
+        $data = DB::table('ItemTransaction')
+            ->where('Name','like','%'.$transactionName.'%')
+            ->get();
+        return view('master.itemTransaction',[
+            'data' => $data,
+        ]);
+    }
 }

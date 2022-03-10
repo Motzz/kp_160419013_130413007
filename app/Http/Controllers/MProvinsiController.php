@@ -126,4 +126,15 @@ class MProvinsiController extends Controller
         //
         $mProvinsi->destroy();
     }
+
+    public function searchProvinsiName($provName)
+    {
+        //
+        $data = DB::table('MProvinsi')
+            ->where('cidname','like','%'.$provName.'%')
+            ->get();
+        return view('master.mProvinsi',[
+            'data' => $data,
+        ]);
+    }
 }

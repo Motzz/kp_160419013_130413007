@@ -139,4 +139,15 @@ class MPerusahaanController extends Controller
         //
         $mPerusahaan->destroy();
     }
+
+    public function searchPerusahaanName($perName)
+    {
+        //
+        $data = DB::table('MPerusahaan')
+            ->where('cname','like','%'.$perName.'%')
+            ->get();
+        return view('master.mPerusahaan',[
+            'data' => $data,
+        ]);
+    }
 }

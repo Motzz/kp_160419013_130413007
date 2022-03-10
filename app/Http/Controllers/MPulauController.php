@@ -126,4 +126,15 @@ class MPulauController extends Controller
         //
         $mPulau->destroy();
     }
+
+    public function searchPulauName($pulauName)
+    {
+        //
+        $data = DB::table('MPulau')
+            ->where('cname','like','%'.$pulauName.'%')
+            ->get();
+        return view('master.mPulau',[
+            'data' => $data,
+        ]);
+    }
 }

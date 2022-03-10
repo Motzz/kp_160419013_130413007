@@ -129,4 +129,15 @@ class ItemTagController extends Controller
         $itemTag->delete();
         //return redirect()->route('itemTag.index')->with('status','Success!!');
     }
+
+    public function searchItemTagName($tagName)
+    {
+        //
+        $data = DB::table('ItemTag')
+            ->where('Name','like','%'.$tagName.'%')
+            ->get();
+        return view('master.itemTag',[
+            'data' => $data,
+        ]);
+    }
 }

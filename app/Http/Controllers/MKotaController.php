@@ -154,4 +154,18 @@ class MKotaController extends Controller
         //
         $mKota->destroy();
     }
+
+    public function searchKotaName($kotaName)
+    {
+        //
+        $data = DB::table('MKota')
+            ->select('MKota.*', 'MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->where('MKota.cname','like','%'.$kotaName.'%')
+            ->get();
+        return view('master.mKota',[
+            'data' => $data,
+        ]);
+    }
 }

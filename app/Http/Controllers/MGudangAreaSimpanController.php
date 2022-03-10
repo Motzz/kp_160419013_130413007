@@ -139,4 +139,16 @@ class MGudangAreaSimpanController extends Controller
         return redirect()->route('mGudangAreaSimpan.index')->with('status','Success!!');
 
     }
+
+    public function searchGudangAreaSimpanName($gudangAreaSimpanName)
+    {
+        //
+        $data = DB::table('MGudangAreaSimpan')
+            ->where('Hapus','=',0)
+            ->where('cname','like','%'.$gudangAreaSimpanName.'%')
+            ->get();
+        return view('master.mGudangAreaSimpan',[
+            'data' => $data,
+        ]);
+    }
 }

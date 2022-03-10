@@ -158,4 +158,18 @@ class COAController extends Controller
             )
         );
     }
+
+    public function searchCoaName($namaCoa)
+    {
+        //
+        $dataCOA = DB::table('COA')
+            ->select('COA.*','COAHead.Nama as COAHeadName','COADetail.CDet_Name as COADetailName','COADetail.Keterangan as COADetailKeterangan')
+            ->leftjoin('COAHead','COA.Chead','=','COAHead.CH_ID')
+            ->leftjoin('COADetail','COA.Cdet','=','COADetail.COADetailID')
+            ->where('COA.Nama','like','%'.$namaCoa.'%')
+            ->get();
+        return view('master.coa',[
+            'dataCOA' => $dataCOA,
+        ]);
+    }
 }

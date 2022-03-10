@@ -126,4 +126,15 @@ class ItemTypeController extends Controller
         //
         $itemType->delete();
     }
+
+    public function searhItemTypeName($typeName)
+    {
+        //
+        $data = DB::table('ItemType')
+            ->where('Name','like','%'.$typeName.'%')
+            ->get();
+        return view('master.itemType',[
+            'data' => $data,
+        ]);
+    }
 }

@@ -129,4 +129,13 @@ class MenuController extends Controller
         $menu->delete();
         return redirect()->route('menu.index')->with('status','Success!!');
     }
+
+    public function searchMenuName($menuName)
+    {
+        //
+        $data = DB::Table('menu')->where('Name','like','%'.$menuName.'%')->get();
+        return view('master.menu.index',[
+            'data' => $data,
+        ]);
+    }
 }

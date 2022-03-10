@@ -220,4 +220,73 @@ class MGudangController extends Controller
 
         return redirect()->route('gudang.index')->with('status','Success!!');
     }
+
+    public function searchGudangName($gudangName)
+    {
+        //
+        $data = DB::table('MGudang')
+            ->select('MGudang.*', 'MPerusahaan.cname as perusahaanName','MPerusahaan.cnames as perusahaanNames','users.name as manager', 
+            'MKota.cname as kotaName','MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName', 
+            'MGudangAreaSimpan.MGudangAreaSimpanID as gudangAreaSimpanID', 'MGudangAreaSimpan.cname as gudangAreaSimpanName')
+            ->leftjoin('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->leftjoin('users','MPerusahaan.UserIDManager','=','users.id')
+            ->leftjoin('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->leftjoin('MGudangValues', 'MGudang.MGudangID', '=', 'MGudangValues.MGudangID')
+            ->leftjoin('MGudangAreaSimpan', 'MGudangValues.MGudangAreaSimpanID', '=', 'MGudangAreaSimpan.MGudangAreaSimpanID')
+            ->where('MGudang.cname','like','%'.$gudangName.'%')
+            ->get();
+
+        return view('master.mGudang',[
+            'data' => $data,
+        ]);
+    }
+
+    public function searchGudangCode($gudangCode)
+    {
+        //
+        $data = DB::table('MGudang')
+            ->select('MGudang.*', 'MPerusahaan.cname as perusahaanName','MPerusahaan.cnames as perusahaanNames','users.name as manager', 
+            'MKota.cname as kotaName','MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName', 
+            'MGudangAreaSimpan.MGudangAreaSimpanID as gudangAreaSimpanID', 'MGudangAreaSimpan.cname as gudangAreaSimpanName')
+            ->leftjoin('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->leftjoin('users','MPerusahaan.UserIDManager','=','users.id')
+            ->leftjoin('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->leftjoin('MGudangValues', 'MGudang.MGudangID', '=', 'MGudangValues.MGudangID')
+            ->leftjoin('MGudangAreaSimpan', 'MGudangValues.MGudangAreaSimpanID', '=', 'MGudangAreaSimpan.MGudangAreaSimpanID')
+            ->where('MGudang.ccode','like','%'.$gudangCode.'%')
+            ->get();
+
+        return view('master.mGudang',[
+            'data' => $data,
+        ]);
+    }
+
+    public function searchGudangKota($kotaName)
+    {
+        //
+        $data = DB::table('MGudang')
+            ->select('MGudang.*', 'MPerusahaan.cname as perusahaanName','MPerusahaan.cnames as perusahaanNames','users.name as manager', 
+            'MKota.cname as kotaName','MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName', 
+            'MGudangAreaSimpan.MGudangAreaSimpanID as gudangAreaSimpanID', 'MGudangAreaSimpan.cname as gudangAreaSimpanName')
+            ->leftjoin('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->leftjoin('users','MPerusahaan.UserIDManager','=','users.id')
+            ->leftjoin('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
+            ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            ->leftjoin('MGudangValues', 'MGudang.MGudangID', '=', 'MGudangValues.MGudangID')
+            ->leftjoin('MGudangAreaSimpan', 'MGudangValues.MGudangAreaSimpanID', '=', 'MGudangAreaSimpan.MGudangAreaSimpanID')
+            ->where('MKota.cname','like','%'.$kotaName.'%')
+            ->get();
+
+        return view('master.mGudang',[
+            'data' => $data,
+        ]);
+    }
+
 }
+
+

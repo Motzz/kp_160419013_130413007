@@ -124,4 +124,16 @@ class ItemTracingController extends Controller
         //
         $itemTracing->delete();
     }
+
+
+    public function searchItemTracingName($tracingName)
+    {
+        //
+        $data = DB::table('ItemTracing')
+            ->where('Name','like','%'.$tracingName.'%')
+            ->get();
+        return view('master.itemTracing',[
+            'data' => $data,
+        ]);
+    }
 }

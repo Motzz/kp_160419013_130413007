@@ -145,4 +145,17 @@ class COADetailController extends Controller
         $cOADetail->destroy();
         
     }
+
+    public function searchCoaDetailName($namaCoaDetail)
+    {
+        //
+        $data = DB::table('COADetail')
+            ->select('COADetail.*', 'COAHead.Nama as COAHeadName')
+            ->leftjoin('COAHead','COADetail.CoaHead','=','COAHead.CH_ID')
+            ->where('Cdet_Name','like','%'.$namaCoaDetail.'%')
+            ->get();
+        return view('master.coaDetail',[
+            'data' => $data,
+        ]);
+    }
 }
