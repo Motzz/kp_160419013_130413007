@@ -27,17 +27,21 @@ class ItemController extends Controller
             //->limit(100)
             
             ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
-            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName', 'ItemTag.ItemTagID as tagID', 'ItemTag.Name as tagName')
+            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName')
+            //, 'ItemTag.ItemTagID as tagID', 'ItemTag.Name as tagName')
             
             ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
             ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
             ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
             ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
-            ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
-            ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            //->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            //->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
             ->simplePaginate(10);
-
+        
+        $dataTag = DB::table('ItemTag')
+            ->leftjoin('ItemTagValues', 'ItemTag.ItemTagID', '=', 'ItemTagValues.ItemTagID')
+            ->get();
 
 
         /*$access = DB::table('menu')
@@ -53,6 +57,7 @@ class ItemController extends Controller
         if($check){
             return view('master.item.index',[
                 'dataItem' => $dataItem,
+                'dataTag' => $dataTag,
             ]);
         }
         else{
