@@ -153,4 +153,33 @@ class PaymentTermsController extends Controller
             )
         ); 
     }
+
+    public function searchPaymentTermsName($termsName)
+    {
+        //
+        $data = DB::table('PaymentTerms')
+            ->select('PaymentTerms.*','Payment.Name as paymentName', 'Payment.Deskripsi as paymentDeskripsi')
+            ->leftjoin('Payment', 'PaymentTerms.PaymentID','=','Payment.PaymentID')
+            ->where('PaymentTerms.Hapus','=',0)
+            ->where('PaymentTerms.Name','like','%'.$termsName.'%')
+            ->get();
+        return view('master.paymentTerms',[
+            'data' => $data,
+        ]);
+    }
+
+    public function searchPaymentTermsDay($termsDay)
+    {
+        //
+        $data = DB::table('PaymentTerms')
+            ->select('PaymentTerms.*','Payment.Name as paymentName', 'Payment.Deskripsi as paymentDeskripsi')
+            ->leftjoin('Payment', 'PaymentTerms.PaymentID','=','Payment.PaymentID')
+            ->where('PaymentTerms.Hapus','=',0)
+            ->where('PaymentTerms.Days','like','%'.$termsDay.'%')
+            ->get();
+        return view('master.paymentTerms',[
+            'data' => $data,
+        ]);
+    }
+
 }
