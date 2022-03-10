@@ -29,18 +29,20 @@
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">Nama Item</th>
+                              <th scope="col">Kategori</th>
                               <th scope="col">Tag</th>
-                              <th scope="col">Keterangan</th>
                               <th scope="col">Handle</th>
                             </tr>
                           </thead>
                           <tbody>
-                          <!--@foreach($dataItem as $key => $data)
+                          @foreach($dataItem as $key => $data)
+                          
                           <tr>
-                              <th scope="row">{{$data->ItemID}}</th>
-                              <td>{{$data->ItemName}}</td>
-                              <td>{{$data->tagName}}</td>
+                                    
+                              <!--<th scope="row">{{$data->ItemID}}</th>--><th scope="row">{{$loop->iteration}}</th>
+                              <td>{{$data->ItemName}}</td>                       
                               <td>{{$data->categoryName}}</td>
+                              <td>{{$data->tagName}}</td>
                               <td>  
                               <a href="{{route('item.edit',[$data->ItemID])}}" class="btn btn-primary btn-responsive">Edit</a> 
                                   <form action="{{route('item.destroy',[$data->ItemID])}}" method="POST" class="btn btn-responsive">
@@ -56,10 +58,10 @@
                                    </form>
                               </td>
                             </tr>
-                            @endforeach       -->
-                            @for ($i = 0; $i < count($dataItem); $i++)
+                            @endforeach      
+                            <!--@for ($i = 0; $i < count($dataItem); $i++)
                               {{$dataItem}}
-                            @endfor       
+                            @endfor      -->  
                           </tbody>
                         
                         </table>
