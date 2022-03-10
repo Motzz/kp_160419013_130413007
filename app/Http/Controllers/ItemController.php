@@ -226,7 +226,6 @@ class ItemController extends Controller
             ]);
         }
         else{
-            echo '<script>alert("Anda tidak memiliki akses")</script>';
             return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
         }
     }
