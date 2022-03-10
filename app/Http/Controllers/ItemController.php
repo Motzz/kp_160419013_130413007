@@ -22,6 +22,7 @@ class ItemController extends Controller
     public function index()
     {
         //
+        $user = Auth::user();
         $dataItem = DB::table('Item')
             //->limit(100)
             
@@ -38,9 +39,27 @@ class ItemController extends Controller
             ->simplePaginate(10);
 
         //dd($dataItem);
-        return view('master.item.index',[
-            'dataItem' => $dataItem
-        ]);
+
+        /*$access = DB::table('menu')
+            ->select('menu.url')
+            ->leftjoin('role_access', 'menu.MenuID', '=', 'role_access.idMenu')
+            ->leftjoin('user_access', 'menu.MenuID', '=', 'user_access.idMenu')
+            ->where('role_access.idRole',$user->idRole)
+            ->orWhere('user_access.idUsers',$user->id)
+            ->get();
+        */
+        $check = $this->checkAccess('item.index', $user->id, $user->idRole);
+        
+        if($check){
+            return view('master.item.index',[
+                'dataItem' => $dataItem,
+            ]);
+        }
+        else{
+            echo '<script>alert("Anda tidak memiliki akses")</script>';
+            return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
+        }
+        
         /*$dataSatuan = DB::table('satuan')
             ->get();
         return view('/master/barang',[
@@ -68,13 +87,23 @@ class ItemController extends Controller
             ->get();
         $dataTag = DB::table('ItemTag')
             ->get();
-        return view('master.item.tambah',[
-            'dataType'=>$dataType,
-            'dataUnit'=>$dataUnit,
-            'dataCategory'=>$dataCategory,
-            'dataTracing'=>$dataTracing,
-            'dataTag'=>$dataTag,
-        ]);
+
+        
+        $check = $this->checkAccess('item.index', $user->id, $user->idRole);
+        if($check){
+            return view('master.item.tambah',[
+                'dataType'=>$dataType,
+                'dataUnit'=>$dataUnit,
+                'dataCategory'=>$dataCategory,
+                'dataTracing'=>$dataTracing,
+                'dataTag'=>$dataTag,
+            ]);
+        }
+        else{
+            echo '<script>alert("Anda tidak memiliki akses")</script>';
+            return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
+        }
+        
         
     }
 
@@ -141,9 +170,17 @@ class ItemController extends Controller
             ->get();
 
         dd($dataItem);*/
-        return view('master.barang_edit',[
-            'item'=>$item,
-        ]);
+        $check = $this->checkAccess('item.index', $user->id, $user->idRole);
+        if($check){
+            return view('master.barang_edit',[
+                'item'=>$item,
+            ]);
+        }
+        else{
+            echo '<script>alert("Anda tidak memiliki akses")</script>';
+            return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
+        }
+        
     }
 
     /**
@@ -176,14 +213,22 @@ class ItemController extends Controller
             ->get();
         $dataTag = DB::table('ItemTag')
             ->get();
-        return view('master.item_edit',[
-            'item'=>$item,
-            'dataType'=>$dataType,
-            'dataUnit'=>$dataUnit,
-            'dataCategory'=>$dataCategory,
-            'dataTracing'=>$dataTracing,
-            'dataTag'=>$dataTag,
-        ]);
+        
+        $check = $this->checkAccess('item.index', $user->id, $user->idRole);
+        if($check){
+            return view('master.item.edit',[
+                'item'=>$item,
+                'dataType'=>$dataType,
+                'dataUnit'=>$dataUnit,
+                'dataCategory'=>$dataCategory,
+                'dataTracing'=>$dataTracing,
+                'dataTag'=>$dataTag,
+            ]);
+        }
+        else{
+            echo '<script>alert("Anda tidak memiliki akses")</script>';
+            return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
+        }
     }
 
     /**
