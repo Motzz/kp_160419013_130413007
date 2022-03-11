@@ -39,7 +39,7 @@ class MPerusahaanController extends Controller
         //
         $users = DB::table('users')
             ->get();    
-        return view('master.mPerusahaan_tambah',[
+        return view('master.mPerusahaan.tambah',[
             'users' => $users,
         ]);
     }

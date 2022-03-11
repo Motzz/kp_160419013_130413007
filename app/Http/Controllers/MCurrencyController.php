@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ItemType;
+use App\Models\MCurrency;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Auth;
 
-class ItemTypeController extends Controller
+class MCurrencyController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -22,9 +19,9 @@ class ItemTypeController extends Controller
     public function index()
     {
         //
-        $data = DB::table('ItemType')
+        $data = DB::table('MCurrency')
             ->get();
-        return view('master.itemType.index',[
+        return view('master.mcurrency.index',[
             'data' => $data,
         ]);
     }
@@ -37,7 +34,7 @@ class ItemTypeController extends Controller
     public function create()
     {
         //
-        return view('master.itemType.tambah');
+        return view('master.mcurrency.tambah');
     }
 
     /**
@@ -54,8 +51,10 @@ class ItemTypeController extends Controller
         
         DB::table('ItemTransaction')
             ->insert(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'name' => $data['name'],
+                'code' => $data['code'],
+                'country' => $data['country'],
+                'price' => $data['price'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
@@ -67,28 +66,28 @@ class ItemTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\MCurrency  $mCurrency
      * @return \Illuminate\Http\Response
      */
-    public function show(ItemType $itemType)
+    public function show(MCurrency $mCurrency)
     {
         //
-        return view('master.itemType.detail',[
-            'itemType'=>$itemType
+        return view('master.mcurrency.detail',[
+            'mCurrency'=>$mCurrency
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\MCurrency  $mCurrency
      * @return \Illuminate\Http\Response
      */
-    public function edit(ItemType $itemType)
+    public function edit(MCurrency $mCurrency)
     {
         //
-        return view('master.itemType.edit',[
-            'itemType'=>$itemType
+        return view('master.mcurrency.edit',[
+            'mCurrency'=>$mCurrency
         ]);
     }
 
@@ -96,19 +95,21 @@ class ItemTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\MCurrency  $mCurrency
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ItemType $itemType)
+    public function update(Request $request, MCurrency $mCurrency)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
-        DB::table('ItemType')
-            ->where('ItemTypeID', $itemType['id'])
+        DB::table('MCurrency')
+            ->where('MCurrency', $mCurrency['MCurrencyID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'name' => $data['name'],
+                'code' => $data['code'],
+                'country' => $data['country'],
+                'price' => $data['price'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
@@ -118,23 +119,12 @@ class ItemTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ItemType  $itemType
+     * @param  \App\Models\MCurrency  $mCurrency
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ItemType $itemType)
+    public function destroy(MCurrency $mCurrency)
     {
         //
-        $itemType->delete();
-    }
-
-    public function searhItemTypeName($typeName)
-    {
-        //
-        $data = DB::table('ItemType')
-            ->where('Name','like','%'.$typeName.'%')
-            ->get();
-        return view('master.itemType',[
-            'data' => $data,
-        ]);
+        $mCurrency->destroy();
     }
 }
