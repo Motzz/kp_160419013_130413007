@@ -25,7 +25,7 @@ class ItemTagController extends Controller
         //
         $data = DB::table('ItemTag')
             ->get();
-        return view('master.itemTag',[
+        return view('master.itemTag.index',[
             'data' => $data,
         ]);
     }
@@ -38,7 +38,7 @@ class ItemTagController extends Controller
     public function create()
     {
         //
-        return view('master.itemTag_tambah');
+        return view('master.itemTag.tambah');
     }
 
     /**
@@ -55,15 +55,15 @@ class ItemTagController extends Controller
         
         DB::table('ItemTag')
             ->insert(array(
-                'Name' => $data['name'],
-                'Desc' => $data['desc'],
+                'Name' => $data['Name'],
+                'Desc' => $data['Desc'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
-        //return redirect()->route('pt.index')->with('status','Success!!');
+        return redirect()->route('ItemTag.index')->with('status','Success!!');
     }
 
     /**
@@ -72,23 +72,26 @@ class ItemTagController extends Controller
      * @param  \App\Models\ItemTag  $itemTag
      * @return \Illuminate\Http\Response
      */
-    public function show(ItemTag $itemTag)
+    public function show(ItemTag $ItemTag)
     {
         //
+         return view('master.itemTag.detail',[
+            'ItemTag'=>$ItemTag
+        ]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ItemTag  $itemTag
+     * @param  \App\Models\ItemTag  $ItemTag
      * @return \Illuminate\Http\Response
      */
-    public function edit(ItemTag $itemTag)
+    public function edit(ItemTag $ItemTag)
     {
         //
-        return view('master.itemTag_edit',[
-            'itemTag'=>$itemTag
+        return view('master.itemTag.edit',[
+            'ItemTag'=>$ItemTag
         ]);
     }
 
@@ -96,38 +99,38 @@ class ItemTagController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ItemTag  $itemTag
+     * @param  \App\Models\ItemTag  $ItemTag
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ItemTag $itemTag)
+    public function update(Request $request, ItemTag $ItemTag)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
         DB::table('ItemTag')
-            ->where('ItemTagID', $itemTag['id'])
+            ->where('ItemTagID', $ItemTag['ItemTagID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Desc' => $data['desc'],
+                'Name' => $data['Name'],
+                'Desc' => $data['Desc'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
 
-        //return redirect()->route('pt.index')->with('status','Success!!');             
+       return redirect()->route('ItemTag.index')->with('status','Success!!');           
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ItemTag  $itemTag
+     * @param  \App\Models\ItemTag  $ItemTag
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ItemTag $itemTag)
+    public function destroy(ItemTag $ItemTag)
     {
         //
-        $itemTag->delete();
-        //return redirect()->route('itemTag.index')->with('status','Success!!');
+        $ItemTag->delete();
+       return redirect()->route('ItemTag.index')->with('status','Success!!');
     }
 
     public function searchItemTagName($tagName)

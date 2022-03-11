@@ -24,7 +24,7 @@ class ItemTransactionController extends Controller
         //
         $data = DB::table('ItemTransaction')
             ->get();
-        return view('master.itemTransaction',[
+        return view('master.itemTransaction.index',[
             'data' => $data,
         ]);
     }
@@ -37,7 +37,7 @@ class ItemTransactionController extends Controller
     public function create()
     {
         //
-        return view('master.itemTransaction_tambah');
+        return view('master.itemTransaction.tambah');
     }
 
     /**
@@ -54,14 +54,15 @@ class ItemTransactionController extends Controller
         
         DB::table('ItemTransaction')
             ->insert(array(
-                'Name' => $data['name'],
-                'Description' => $data['desc'],
+                'Name' => $data['Name'],
+                'Description' => $data['Description'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+        return redirect()->route('itemTransaction.index')->with('status','Success!!');
     }
 
     /**
@@ -73,6 +74,9 @@ class ItemTransactionController extends Controller
     public function show(ItemTransaction $itemTransaction)
     {
         //
+        return view('master.itemTransaction.detail',[
+            'itemTransaction'=>$itemTransaction
+        ]);
     }
 
     /**
@@ -84,9 +88,10 @@ class ItemTransactionController extends Controller
     public function edit(ItemTransaction $itemTransaction)
     {
         //
-        return view('master.itemTransaction_edit',[
+          return view('master.itemTransaction.edit',[
             'itemTransaction'=>$itemTransaction
         ]);
+
     }
 
     /**
@@ -102,14 +107,15 @@ class ItemTransactionController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('ItemTransaction')
-            ->where('ItemTransactionID', $itemTransaction['id'])
+            ->where('ItemTransactionID', $itemTransaction['ItemTransactionID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Description' => $data['desc'],
+                'Name' => $data['Name'],
+                'Description' => $data['Description'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('itemTransaction.index')->with('status','Success!!');
     }
 
     /**
@@ -122,6 +128,7 @@ class ItemTransactionController extends Controller
     {
         //
         $itemTransaction->delete();
+        return redirect()->route('itemTransaction.index')->with('status','Success!!');
     }
 
     public function searchItemTransactionName($transactionName)

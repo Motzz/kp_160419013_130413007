@@ -126,6 +126,12 @@
             <a class="collapse-item" href="{{route('submenu.index')}}">Sub Menu</a>
             <a class="collapse-item" href="{{route('userAccess.index')}}">User Akses</a>
             <a class="collapse-item" href="{{route('item.index')}}">Item</a>
+            <a class="collapse-item" href="{{route('itemCategory.index')}}">itemCategory</a>
+            <a class="collapse-item" href="{{route('ItemTag.index')}}">itemTag</a>
+            <a class="collapse-item" href="{{route('itemTracing.index')}}">itemTracing</a>
+            <a class="collapse-item" href="{{route('itemTransaction.index')}}">itemTransaction</a>
+            <a class="collapse-item" href="{{route('itemType.index')}}">itemType</a>
+
             <a class="collapse-item" href="{{route('coa.index')}}">Coa</a>
 
         </div>

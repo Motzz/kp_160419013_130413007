@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ItemTag extends Model
 {
     use HasFactory;
+    protected $table = 'itemTag';
+     protected $primaryKey='itemTagID';
 }

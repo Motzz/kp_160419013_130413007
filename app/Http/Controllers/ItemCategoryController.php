@@ -25,7 +25,7 @@ class ItemCategoryController extends Controller
             ->get();
         $dataCOA = DB::table('COA')
             ->get();
-        return view('master.itemCategory',[
+        return view('master.itemCategory.index',[
             'dataCategory' => $dataCategory,
             'dataCOA' => $dataCOA,
         ]);
@@ -41,7 +41,7 @@ class ItemCategoryController extends Controller
         //
         $dataCOA = DB::table('COA')
             ->get();
-        return view('master.itemCategory_tambah',[
+        return view('master.itemCategory.tambah',[
             'dataCOA' => $dataCOA,
         ]);
     }
@@ -60,7 +60,7 @@ class ItemCategoryController extends Controller
         
         DB::table('ItemCategory')
             ->insert(array(
-                'Name' => $data['name'],
+                'Name' => $data['Name'],
                 'Remarks' => $data['remarks'],
                 'NTBDebetCOA' => $data['NTBDebetCOA'],
                 'NTBKreditCOA' => $data['NTBKreditCOA'],
@@ -73,6 +73,7 @@ class ItemCategoryController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+         return redirect()->route('itemCategory.index')->with('status','Success!!');
     }
 
     /**
@@ -88,7 +89,7 @@ class ItemCategoryController extends Controller
             ->get();
         $dataCOA = DB::table('COA')
             ->get();
-        return view('master.itemCategory_detail',[
+        return view('master.itemCategory.detail',[
             'itemCategory' => $itemCategory,
             'dataCategory' => $dataCategory,
             'dataCOA' => $dataCOA,
@@ -106,7 +107,7 @@ class ItemCategoryController extends Controller
         //
         $dataCOA = DB::table('COA')
             ->get();
-        return view('master.itemType_edit',[
+        return view('master.itemCategory.edit',[
             'itemCategory' => $itemCategory,
             'dataCOA' => $dataCOA,
         ]);
@@ -125,9 +126,9 @@ class ItemCategoryController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('ItemCategory')
-            ->where('ItemCategoryID', $itemCategory['id'])
+            ->where('ItemCategoryID', $itemCategory['ItemCategoryID'])
             ->update(array(
-                'Name' => $data['name'],
+                'Name' => $data['Name'],
                 'Remarks' => $data['remarks'],
                 'NTBDebetCOA' => $data['NTBDebetCOA'],
                 'NTBKreditCOA' => $data['NTBKreditCOA'],
@@ -138,6 +139,7 @@ class ItemCategoryController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('itemCategory.index')->with('status','Success!!');
     }
 
     /**
@@ -150,6 +152,7 @@ class ItemCategoryController extends Controller
     {
         //
         $itemCategory->delete();
+        return redirect()->route('itemCategory.index')->with('status','Success!!');
     }
 
     public function selectItemCategoryName($categoryName)

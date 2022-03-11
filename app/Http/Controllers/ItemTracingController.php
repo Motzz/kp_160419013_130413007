@@ -25,7 +25,7 @@ class ItemTracingController extends Controller
         //
         $data = DB::table('ItemTracing')
             ->get();
-        return view('master.itemTracing',[
+        return view('master.itemTracing.index',[
             'data' => $data,
         ]);
     }
@@ -38,7 +38,7 @@ class ItemTracingController extends Controller
     public function create()
     {
         //
-        return view('master.itemTracing_tambah');
+        return view('master.itemTracing.tambah');
     }
 
     /**
@@ -55,14 +55,15 @@ class ItemTracingController extends Controller
         
         DB::table('ItemTracing')
             ->insert(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Name' => $data['Name'],
+                'Notes' => $data['Notes'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+         return redirect()->route('itemTracing.index')->with('status','Success!!');
     }
 
     /**
@@ -85,7 +86,7 @@ class ItemTracingController extends Controller
     public function edit(ItemTracing $itemTracing)
     {
         //
-        return view('master.itemTracing_edit',[
+        return view('master.itemTracing.edit',[
             'itemTracing'=>$itemTracing
         ]);
     }
@@ -103,14 +104,15 @@ class ItemTracingController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('ItemTracing')
-            ->where('ItemTracingID', $itemTracing['id'])
+            ->where('ItemTracingID', $itemTracing['ItemTracingID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Name' => $data['Name'],
+                'Notes' => $data['Notes'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('itemTracing.index')->with('status','Success!!');
     }
 
     /**
@@ -123,6 +125,7 @@ class ItemTracingController extends Controller
     {
         //
         $itemTracing->delete();
+        return redirect()->route('itemTracing.index')->with('status','Success!!');
     }
 
 

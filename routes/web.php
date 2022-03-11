@@ -94,12 +94,12 @@ Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
 //fixed ***********************************************************
 
 //item baru
-Route::resource('item', 'App\Http\Controllers\ItemController');
-Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');
-Route::resource('itemTag', 'App\Http\Controllers\ItemTagController');
-Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');
-Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');
-Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');
+Route::resource('item', 'App\Http\Controllers\ItemController');//
+Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
+Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,delete masik gbs
+Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');//selese,delete masik gbs
+Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');//selese,delete masik gbs
+Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');//selese,delete masik gbs
 
 //COA baru
 Route::resource('coa', 'App\Http\Controllers\COAController');

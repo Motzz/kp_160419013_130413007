@@ -52,16 +52,17 @@ class ItemTypeController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         
-        DB::table('ItemTransaction')
+        DB::table('ItemType')
             ->insert(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Name' => $data['Name'],
+                'Notes' => $data['Notes'],
                 'CreatedBy'=> $user->id,
                 'CreatedOn'=> date("Y-m-d h:i:sa"),
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+        return redirect()->route('itemType.index')->with('status','Success!!');
     }
 
     /**
@@ -105,14 +106,15 @@ class ItemTypeController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('ItemType')
-            ->where('ItemTypeID', $itemType['id'])
+            ->where('ItemTypeID', $itemType['ItemTypeID'])
             ->update(array(
-                'Name' => $data['name'],
-                'Notes' => $data['notes'],
+                'Name' => $data['Name'],
+                'Notes' => $data['Notes'],
                 'UpdatedBy'=> $user->id,
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('itemType.index')->with('status','Success!!');
     }
 
     /**
@@ -125,6 +127,7 @@ class ItemTypeController extends Controller
     {
         //
         $itemType->delete();
+        return redirect()->route('itemType.index')->with('status','Success!!');
     }
 
     public function searhItemTypeName($typeName)
