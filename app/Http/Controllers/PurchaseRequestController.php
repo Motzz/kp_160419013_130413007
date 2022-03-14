@@ -148,6 +148,7 @@ class PurchaseRequestController extends Controller
                 DB::table('purchase_request_detail')->insert(array(
                     'idPurchaseRequest' => $idpr,
                     'jasa' => 1,
+                    'jumlah' =>1,
                     'keterangan_jasa' => $data['keterangan'][$i],
                     'harga' => $data['harga'][$i],
                     )
@@ -254,6 +255,7 @@ class PurchaseRequestController extends Controller
                         'jumlah' => $data['jumlah'][$i],
                         'idBarang' => $data['barang'][$i],
                         'jasa' => 0,
+                        'harga' => $data['harga'][$i],
                         )
                    ); 
                 }
@@ -261,7 +263,9 @@ class PurchaseRequestController extends Controller
                     DB::table('purchase_request_detail')->insert(array(
                         'idPurchaseRequest' => $purchaseRequest->id,
                         'jasa' => 1,
+                        'jumlah' =>1,
                         'keterangan_jasa' => $data['keterangan'][$i],
+                        'harga' => $data['harga'][$i],
                         )
                     ); 
                 }
@@ -286,7 +290,7 @@ class PurchaseRequestController extends Controller
                         DB::table('purchase_request_detail')
                         ->where('idPurchaseRequest', $purchaseRequest->id)
                         ->update(array(
-                            'jumlah' => null,
+                            'jumlah' => 1,
                             'idBarang' => null,
                             'jasa' => 1,
                             'keterangan_jasa' => $data['keterangan'][$i],
@@ -299,18 +303,21 @@ class PurchaseRequestController extends Controller
                 else{
                     if(isset($data['barang'][$i])){
                         DB::table('purchase_request_detail')->insert(array(
-                            'idPurchaseRequest' => $idpr,
+                            'idPurchaseRequest' => $purchaseRequest->id,
                             'jumlah' => $data['jumlah'][$i],
                             'idBarang' => $data['barang'][$i],
                             'jasa' => 0,
+                            'harga' => $data['harga'][$i],
                             )
                        ); 
                     }
                     elseif(isset($data['jasa'][$i])){
                         DB::table('purchase_request_detail')->insert(array(
-                            'idPurchaseRequest' => $idpr,
+                            'idPurchaseRequest' => $purchaseRequest->id,
                             'jasa' => 1,
+                            'jumlah' =>1,
                             'keterangan_jasa' => $data['keterangan'][$i],
+                            'harga' => $data['harga'][$i],
                             )
                         ); 
                     }
