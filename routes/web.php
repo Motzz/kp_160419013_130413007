@@ -95,6 +95,7 @@ Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
 
 //item baru
 Route::resource('item', 'App\Http\Controllers\ItemController');//
+Route::get('/item/search/{itemName}','App\Http\Controllers\ItemController@searchItemName'); //cobak gini ta
 Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
 Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,delete masik gbs
 Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');//selese,delete masik gbs

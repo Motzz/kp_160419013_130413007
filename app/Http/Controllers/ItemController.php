@@ -354,7 +354,7 @@ class ItemController extends Controller
             //->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             //->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
-            ->where('Item.Name','like','%'.$itemName.'%')
+            ->where('Item.ItemName','like','%'.$itemName.'%')
             ->simplePaginate(10);
         
         $dataTag = DB::table('ItemTag')
