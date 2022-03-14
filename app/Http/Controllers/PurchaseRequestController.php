@@ -34,6 +34,7 @@ class PurchaseRequestController extends Controller
             ->join('MPerusahaan', 'MGudang.cidp','=','MPerusahaan.MPerusahaanID')
             ->where('MKota.cidkota', '=', $getLokasi[0]->cidkota)
             ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
+            ->where('purchase_request.hapus','=', 0)    
             ->get();
         return view('master.purchase_request',[
             'data' => $data,
@@ -126,6 +127,8 @@ class PurchaseRequestController extends Controller
         $idpr = DB::table('purchase_request')->insertGetId(array(
             'name' => 'NPP/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex,
             'idGudang' => $data['gudang'],
+            'approved' => 0,
+            'hapus' => 0,
             'created_by'=> $user->id,
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
