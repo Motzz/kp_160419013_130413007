@@ -52,6 +52,7 @@ class HomeController extends Controller
             $message= DB::table('purchase_request')
             ->where('approved',0)
             ->where('hapus',0)
+            ->where('MGudangID',$user->MGudangID)
             ->get();
         }
         elseif(count($user_2) > 0){
