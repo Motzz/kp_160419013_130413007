@@ -24,7 +24,7 @@ class PurchaseRequestController extends Controller
         $user = Auth::user();
         //
         $getLokasi = DB::table('MGudang')
-            ->where('gudang.id', '=', $user->MGudangID)
+            ->where('MGudang.MGudangID', '=', $user->MGudangID)
             ->get();
         $data = DB::table('purchase_request')
             ->select('purchase_request.*')
