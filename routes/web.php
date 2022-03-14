@@ -45,9 +45,9 @@ Route::get('/home/master/satuan/edit', [App\Http\Controllers\SatuanTambahControl
 Route::resource('satuan', 'App\Http\Controllers\SatuanController');
 
 /*role*/
-Route::get('/home/master/role', [App\Http\Controllers\RoleController::class, 'index'])->name('role');
+/*Route::get('/home/master/role', [App\Http\Controllers\RoleController::class, 'index'])->name('role');
 Route::get('/home/master/role/tambah', [App\Http\Controllers\RoleController::class, 'tambah'])->name('roletambah');
-Route::get('/home/master/role/edit', [App\Http\Controllers\RoleController::class, 'index'])->name('roleedit');
+Route::get('/home/master/role/edit', [App\Http\Controllers\RoleController::class, 'index'])->name('roleedit');*/
 Route::resource('role', 'App\Http\Controllers\RoleController');
 
 

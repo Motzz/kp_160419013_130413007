@@ -10,14 +10,19 @@
 <div class="container-fluid">
 
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Role</h1>
-    <a href="{{('/home/master/role/tambah')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        Tambah Role <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                           </svg></a>
-</div>
 
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">Roles</h1>
+          
+          <br>
+          <a href="{{route('role.create')}}" class="btn btn-primary btn-responsive">Tambah Roles
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                </svg>
+          </a> 
+          
+      </div>
+ 
 <!-- Content Row -->
 <div class="row">
     
@@ -32,7 +37,6 @@
                             <tr>
                               <th scope="col">#</th>
                               <th scope="col">Name</th>
-                              <th scope="col">Access</th>
                               <th scope="col">Handle</th>
                             </tr>
                           </thead>
@@ -41,7 +45,6 @@
                             <tr >
                               <th scope="row" name='id'>{{$data->id}}</th>
                               <td>{{$data->name}}</td>
-                              <td>{{$data->access}}</td>
                               <td>  
                                <a href="{{route('role.edit',[$data->id])}}" class="btn btn-primary btn-responsive">Edit </a>
                                   <form action="{{route('role.destroy',[$data->id])}}" method="POST" class="btn btn-responsive">
