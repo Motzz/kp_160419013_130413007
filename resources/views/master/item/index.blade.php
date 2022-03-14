@@ -35,11 +35,29 @@
 <div class="container">
     <div class="row height d-flex justify-content-center align-items-center">
         <div class="col-md-8">
-               <input type="text" class="form-control" placeholder="Search Tag"aria-label="Recipient's username" aria-describedby="button-addon2">
+               <form action="{{ route('item.searchItemTagName',[$dataTag]) }}" method="GET" role="search">
+
+                    <div class="input-group">
+                        <span class="input-group-btn mr-5 mt-1">
+                            <button class="btn btn-info" type="submit" title="Search projects">
+                                <span class="fas fa-search"></span>
+                            </button>
+                        </span>
+                        <input type="text" class="form-control mr-2" name="term" placeholder="Search projects" id="term">
+                        <a href="{{route('item.searchItemTagName',[$dataTag]) }}" class=" mt-1">
+                            <span class="input-group-btn">
+                                <button class="btn btn-danger" type="button" title="Refresh page">
+                                    <span class="fas fa-sync-alt"></span>
+                                </button>
+                            </span>
+                        </a>
+                    </div>
+                </form>
         </div>
-        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+       
     </div>
 </div>
+
 <br>
 <!-- Content Row -->
 

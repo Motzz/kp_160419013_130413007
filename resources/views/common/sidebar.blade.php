@@ -106,11 +106,10 @@
             <h6 class="collapse-header">Other Pages:</h6>
             <a class="collapse-item" href="404.html">404 Page</a>
             <a class="collapse-item" href="blank.html">Blank Page</a>-->
-            <a class="collapse-item" href="{{route('item.index')}}">Item</a>
             <a class="collapse-item" href="{{('/home/master/barang')}}">Barang</a>
             <a class="collapse-item" href="{{('/home/master/satuan')}}">Satuan</a>
             <a class="collapse-item" href="{{route('lokasi.index')}}">Lokasi</a>
-            <a class="collapse-item" href="{{('/home/master/role')}}">Roles</a>
+            <a class="collapse-item" href="{{route('role.index')}}">Roles</a>
             <!--@if(1==1){
                 <a class="collapse-item" href="{{('/home/master/supplier')}}">Supplier</a>
                 @endif
