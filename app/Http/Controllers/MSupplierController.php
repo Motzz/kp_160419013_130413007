@@ -25,6 +25,8 @@ class MSupplierController extends Controller
             ->leftjoin('Tax','MSupplier.TaxID','=','Tax.TaxID')
             ->leftjoin('PaymentTerms','MSupplier.PaymentTermsID','=','PaymentTerms.PaymentTermsID')
             ->leftjoin('MKota','MSupplier.MKotaID','=','MKota.MKotaID')
+            ->leftjoin('COA','MSupplier.COAID','=','COA.COAID')
+            ->where('hapus',0)
             ->get();
         return view('master.msupplier.index',[
             'data' => $data,
@@ -49,12 +51,15 @@ class MSupplierController extends Controller
             ->get();
         $MKota = DB::table('MKota')
             ->get();
+        $COA = DB::table('COA')
+            ->get();
         return view('master.msupplier.index',[
                 'infoSupplier' => $infoSupplier,
                 'MCurrency' => $MCurrency,
                 'Tax' => $Tax,
                 'PaymentTerms' => $PaymentTerms,
                 'MKota' => $MKota,
+                'COA' => $COA,
         ]);
     }
 
@@ -75,7 +80,7 @@ class MSupplierController extends Controller
                 'InfoSupplierID' => $data['infoSupplierID'],
                 'MCurrencyID' => $data['mCurrencyID'],
                 'TaxID' => $data['taxID'],
-                'CostCodeID' => $data['costCodeID'],
+                'COAID' => $data['COAID'],
                 'Name' => $data['name'],
                 'Alamat' => $data['alamat'],
                 'Kota' => $data['kota'],
@@ -143,12 +148,15 @@ class MSupplierController extends Controller
             ->get();
         $MKota = DB::table('MKota')
             ->get();
+        $COA = DB::table('COA')
+            ->get();
         return view('master.mcurrency.index',[
                 'infoSupplier' => $infoSupplier,
                 'MCurrency' => $MCurrency,
                 'Tax' => $Tax,
                 'PaymentTerms' => $PaymentTerms,
                 'MKota' => $MKota,
+                'COA' => $COA,
                 'mSupplier' => $mSupplier,
         ]);
     }
@@ -171,7 +179,7 @@ class MSupplierController extends Controller
                 'InfoSupplierID' => $data['infoSupplierID'],
                 'MCurrencyID' => $data['mCurrencyID'],
                 'TaxID' => $data['taxID'],
-                'CostCodeID' => $data['costCodeID'],
+                'COAID' => $data['COAID'],
                 'Name' => $data['name'],
                 'Alamat' => $data['alamat'],
                 'Kota' => $data['kota'],
