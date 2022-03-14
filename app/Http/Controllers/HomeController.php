@@ -50,25 +50,24 @@ class HomeController extends Controller
         $message = null;
         if(count($getData) > 0){
             $message= DB::table('purchase_request')
-            ->where('approved',0)
-            ->where('hapus',0)
-            ->where('MGudangID',$user->MGudangID)
-            ->get();
+                ->where('approved',0)
+                ->where('hapus',0)
+                ->where('MGudangID',$user->MGudangID)
+                ->get();
         }
         elseif(count($user_2) > 0){
             $message= DB::table('purchase_request')
-            ->where('approved',1)
-            ->where('proses', 1)
-            ->where('hapus',0)
-            ->get();
+                ->where('approved',1)
+                ->where('proses', 1)
+                ->where('hapus',0)
+                ->get();
         }
         elseif(count($user_3) > 0){
             $message= DB::table('purchase_order')
-            ->where('approved',0)
-            ->where('hapus',0)
-            ->get();
+                ->where('approved',0)
+                ->where('hapus',0)
+                ->get();
         }
-        
         
         return view('home',[
             'message' => $message,
