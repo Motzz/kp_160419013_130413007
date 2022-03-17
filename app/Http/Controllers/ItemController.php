@@ -339,7 +339,8 @@ class ItemController extends Controller
     public function searchItemName(Request $request)
     {
         //
-        dd($request->itemName);
+        //dd($request->itemName);
+        $name=$request->input('searchname');
         $user = Auth::user();
         $dataItem = DB::table('Item')
         

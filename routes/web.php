@@ -95,8 +95,8 @@ Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
 
 //item baru
 Route::resource('item', 'App\Http\Controllers\ItemController');//
-//Route::get('/item/searchname','App\Http\Controllers\ItemController@searchItemName'); //cobak gini ta
-Route::get('/item/searchname/', [App\Http\Controllers\ItemController::class, 'searchItemName'])->name('searchItemName');
+Route::get('/item/searchname','App\Http\Controllers\ItemController@searchItemName')->name('searchItemName'); //cobak gini ta
+//Route::get('/item/searchname/', [App\Http\Controllers\ItemController::class, 'searchItemName'])->name('searchItemName');
 
 Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
 Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,delete masik gbs

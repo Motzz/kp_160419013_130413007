@@ -47,10 +47,9 @@
                             <input class="form-control" list="Satuan" id="exampleDataList" placeholder="--Pilih satuan--" name="Satuan">
                             <datalist id="Satuan" name="Satuan">
                                   @foreach($dataSatuan as $key => $data)
-                                     <option name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
-                                  @endforeach
+                                     <option name="idSatuan" {{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
+                                  @endforeach                
                             </datalist>
-                           
                         </div>
 
                   

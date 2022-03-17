@@ -36,7 +36,7 @@ class PurchaseRequestController extends Controller
             ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
             ->where('purchase_request.hapus','=', 0)    
             ->get();
-        return view('master.purchase_request',[
+        return view('master.PurchaseRequest.index',[
             'data' => $data,
         ]);
 
@@ -50,7 +50,7 @@ class PurchaseRequestController extends Controller
             ->join('purchase_request_detail', 'purchase_request.id', '=', 'purchase_request_detail.idPurchaseRequest')
             ->where('purchase_request.id', '=', $data['id'])
             ->get();
-        return view('master.purchase_request',[
+        return view('master.PurchaseRequest',[
             'data' => $data,
         ]);
 
@@ -82,7 +82,7 @@ class PurchaseRequestController extends Controller
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
             ->get();
-        return view('master.purchase_request_tambah',[
+        return view('master.PurchaseRequest.tambah',[
             'dataGudang' => $dataGudang,
             'dataBarang' => $dataBarang,
         ]);
@@ -113,8 +113,8 @@ class PurchaseRequestController extends Controller
         $dataLokasi = DB::table('MGudang')
             ->select('MKota.*','MPerusahaan.cnames as perusahaanCode')
             ->join('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
-            ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.cidp')
-            ->where('MGudang.id', '=', $user->MGudangID)
+            ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->where('MGudang.MGudangID', '=', $user->MGudangID)
             ->get();
         
         $dataPermintaan = DB::table('purchase_request')
@@ -126,7 +126,7 @@ class PurchaseRequestController extends Controller
 
         $idpr = DB::table('purchase_request')->insertGetId(array(
             'name' => 'NPP/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex,
-            'idGudang' => $data['gudang'],
+            'MGudangID' => $data['gudang'],
             'approved' => 0,
             'hapus' => 0,
             'created_by'=> $user->id,
@@ -136,12 +136,23 @@ class PurchaseRequestController extends Controller
             )
         ); 
 
+        $totalHarga = 0;
+
         for($i = 0; $i < count($data['totalRequest']); $i++){
-            if(isset($data['barang'][$i])){
+            DB::table('purchase_request_detail')->insert(array(
+                'idPurchaseRequest' => $idpr,
+                'jumlah' => $data['jumlah'][$i],
+                'ItemID' => $data['barang'][$i],
+                'harga' => $data['harga'][$i],
+                'keterangan_jasa' => $data['Keterangan'][$i],
+                )
+            ); 
+            $totalHarga += $data['harga'][$i];
+            /*if(isset($data['barang'][$i])){
                 DB::table('purchase_request_detail')->insert(array(
                     'idPurchaseRequest' => $idpr,
                     'jumlah' => $data['jumlah'][$i],
-                    'idBarang' => $data['barang'][$i],
+                    'ItemID' => $data['barang'][$i],
                     'jasa' => 0,
                     'harga' => $data['harga'][$i],
                     )
@@ -156,9 +167,15 @@ class PurchaseRequestController extends Controller
                     'harga' => $data['harga'][$i],
                     )
                ); 
-            }
+            }*/
             
         }
+
+        DB::table('purchase_request')
+            ->where('id', $idpr)
+            ->update([
+                'totalHarga' =>  $totalHarga,
+        ]);
 
         return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
@@ -190,27 +207,29 @@ class PurchaseRequestController extends Controller
     public function edit(PurchaseRequest $purchaseRequest)
     {
         //
-          $user = Auth::user();
+        $user = Auth::user();
 
-        $getLokasi = DB::table('gudang')
-            ->where('gudang.id', '=', $user->idGudang)
+        $getLokasi = DB::table('MGudang')
+            ->where('MGudang.MGudangID', '=', $user->MGudangID)
             ->get();
 
-        $dataGudang = DB::table('gudang')
-            ->select('gudang.*')
-            ->join('lokasi','gudang.idLokasi','=','lokasi.id')
-            ->where('lokasi.id', $getLokasi[0]->idLokasi)
+        $dataGudang = DB::table('MGudang')
+            ->select('MGudang.*')
+            ->join('MKota','MGudang.cidkota','=','MKota.cidkota')
+            ->join('MPerusahaan', 'MGudang.cidp','=','MPerusahaan.MPerusahaanID')
+            ->where('MKota.cidkota', $getLokasi[0]->cidkota)
+            ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
             ->get();
-    
-        $dataBarang = DB::table('barang')
-            ->select('barang.*', 'satuan.name as satuanName')
-            ->join('satuan','barang.idSatuan', '=', 'satuan.id')
+          
+        $dataBarang = DB::table('Item')
+            ->select('Item.*', 'Unit.Name as unitName')
+            ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
             ->get();
 
         $dataDetail = DB::table('purchase_request_detail')
             ->where('purchase_request_detail.idPurchaseRequest', '=', $purchaseRequest->id)
             ->get();
-        return view('master.purchase_request_edit',[
+        return view('master.PurchaseRequest.edit',[
             'purchaseRequest'=>$purchaseRequest,
             'dataDetail'=>$dataDetail,
             'dataGudang' => $dataGudang,
@@ -245,88 +264,57 @@ class PurchaseRequestController extends Controller
         $dataDetailTotal = DB::table('purchase_request_detail')
             ->where('idPurchaseRequest', $purchaseRequest->id)
             ->get();
-
+        $totalHarga = 0;
         if(count($dataDetailTotal) > count($data['totalRequest'])){
             DB::table('purchase_request_detail')
                 ->where('idPurchaseRequest', $purchaseRequest->id)
                 ->delete();
-
+            
             for($i = 0; $i < count($data['totalRequest']); $i++){
-                if(isset($data['barang'][$i])){
-                    DB::table('purchase_request_detail')->insert(array(
-                        'idPurchaseRequest' => $purchaseRequest->id,
-                        'jumlah' => $data['jumlah'][$i],
-                        'idBarang' => $data['barang'][$i],
-                        'jasa' => 0,
-                        'harga' => $data['harga'][$i],
-                        )
-                   ); 
-                }
-                elseif(isset($data['jasa'][$i])){
-                    DB::table('purchase_request_detail')->insert(array(
-                        'idPurchaseRequest' => $purchaseRequest->id,
-                        'jasa' => 1,
-                        'jumlah' =>1,
-                        'keterangan_jasa' => $data['keterangan'][$i],
-                        'harga' => $data['harga'][$i],
-                        )
-                    ); 
-                }
-            }
+                DB::table('purchase_request_detail')->insert(array(
+                    'idPurchaseRequest' => $purchaseRequest->id,
+                    'jumlah' => $data['jumlah'][$i],
+                    'ItemID' => $data['barang'][$i],
+                    'harga' => $data['harga'][$i],  
+                    'keterangan_jasa' => $data['Keterangan'][$i],
+                    )
+                ); 
+                $totalHarga += $data['harga'][$i];
+            }     
         }
         else{
             for($i = 0; $i < count($data['totalRequest']); $i++){
                 if($i < count($dataDetailTotal)){
-                    if(isset($data['barang'][$i])){
-                        DB::table('purchase_request_detail')
-                        ->where('idPurchaseRequest', $purchaseRequest->id)
-                        ->update(array(
-                            'jumlah' => $data['jumlah'][$i],
-                            'idBarang' => $data['barang'][$i],
-                            'jasa' => 0,
-                            'keterangan_jasa' => '',
-                            'harga' => $data['harga'][$i],
-                        )
+                    DB::table('purchase_request_detail')
+                    ->where('idPurchaseRequest', $purchaseRequest->id)
+                    ->update(array(
+                        'jumlah' => $data['jumlah'][$i],
+                        'ItemID' => $data['barang'][$i],
+                        'harga' => $data['harga'][$i],
+                        'keterangan_jasa' => $data['Keterangan'][$i],
+                        )           
                     );
-                    }
-                    elseif(isset($data['jasa'][$i])){
-                        DB::table('purchase_request_detail')
-                        ->where('idPurchaseRequest', $purchaseRequest->id)
-                        ->update(array(
-                            'jumlah' => 1,
-                            'idBarang' => null,
-                            'jasa' => 1,
-                            'keterangan_jasa' => $data['keterangan'][$i],
-                            'harga' => $data['harga'][$i],
-                            )
-                        );
-                    }
-                    
+                    $totalHarga += $data['harga'][$i];        
                 }
                 else{
-                    if(isset($data['barang'][$i])){
-                        DB::table('purchase_request_detail')->insert(array(
-                            'idPurchaseRequest' => $purchaseRequest->id,
-                            'jumlah' => $data['jumlah'][$i],
-                            'idBarang' => $data['barang'][$i],
-                            'jasa' => 0,
-                            'harga' => $data['harga'][$i],
-                            )
-                       ); 
-                    }
-                    elseif(isset($data['jasa'][$i])){
-                        DB::table('purchase_request_detail')->insert(array(
-                            'idPurchaseRequest' => $purchaseRequest->id,
-                            'jasa' => 1,
-                            'jumlah' =>1,
-                            'keterangan_jasa' => $data['keterangan'][$i],
-                            'harga' => $data['harga'][$i],
-                            )
-                        ); 
-                    }
+                    DB::table('purchase_request_detail')->insert(array(
+                        'idPurchaseRequest' => $purchaseRequest->id,
+                        'jumlah' => $data['jumlah'][$i],
+                        'ItemID' => $data['barang'][$i],
+                        'harga' => $data['harga'][$i],
+                        'keterangan_jasa' => $data['Keterangan'][$i],
+                        )
+                    ); 
+                    $totalHarga += $data['harga'][$i];        
                 }
             }
         }
+        DB::table('purchase_request')
+            ->where('id', $purchaseRequest->id)
+            ->update([
+                'totalHarga' =>  $totalHarga,
+        ]);
+
         return redirect()->route('purchaseRequest.index')->with('status','Success!!');
     }
 

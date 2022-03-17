@@ -30,7 +30,7 @@
         <div class="col-md-8">
                <form class='form' action="{{route('searchItemName')}}" method="get" >
                     <div class="input-group"> 
-                      <input type="text" class="form-control mr-2" name="itemName" placeholder="Mencari Nama Barang" id="itemName">                   
+                      <input type="text" class="form-control mr-2" name="searchname" placeholder="Mencari Nama Barang" >                   
                             <button class="btn btn-info" type="submit" title="Search name">
                                 <span class="fas fa-search"></span>
                             </button>

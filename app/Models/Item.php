@@ -10,4 +10,5 @@ class Item extends Model
     use HasFactory;
     protected $table = 'Item';
     protected $primaryKey='ItemID';
+    
 }
