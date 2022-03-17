@@ -336,11 +336,13 @@ class ItemController extends Controller
         return redirect()->route('item.index')->with('status','Success!!');
     }
 
-    public function searchItemName($itemName)
+    public function searchItemName(Request $request)
     {
         //
+        dd($request->itemName);
         $user = Auth::user();
         $dataItem = DB::table('Item')
+        
             //->limit(100)
             
             ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
@@ -354,7 +356,7 @@ class ItemController extends Controller
             //->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             //->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
-            ->where('Item.ItemName','like','%'.$itemName.'%')
+            ->where('Item.ItemName','like','%'.$name.'%')
             ->simplePaginate(10);
         
         $dataTag = DB::table('ItemTag')
