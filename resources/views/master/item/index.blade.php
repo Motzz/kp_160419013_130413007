@@ -28,15 +28,12 @@
 <div class="container">
     <div class="row height d-flex justify-content-center align-items-center">
         <div class="col-md-8">
-               <form action="/item/search/{itemName}" method="GET" role="search">
-
-                    <div class="input-group">
-                      <input type="text" class="form-control mr-2" name="itemName" placeholder="Search name" id="term" value="{{old('itemName')}}">
-                      
+               <form class='form' action="{{route('searchItemName')}}" method="get" >
+                    <div class="input-group"> 
+                      <input type="text" class="form-control mr-2" name="itemName" placeholder="Mencari Nama Barang" id="itemName">                   
                             <button class="btn btn-info" type="submit" title="Search name">
                                 <span class="fas fa-search"></span>
                             </button>
-
                     </div>
                 </form>
         </div>
