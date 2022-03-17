@@ -31,7 +31,7 @@
                <form action="/item/search/{itemName}" method="GET" role="search">
 
                     <div class="input-group">
-                      <input type="text" class="form-control mr-2" name="itemName" placeholder="Search name" id="term" value="{{old('itemName')}}">
+                      <input type="text" class="form-control mr-2" name="itemName" placeholder="Search name" id="term" >
                       
                             <button class="btn btn-info" type="submit" title="Search name">
                                 <span class="fas fa-search"></span>
