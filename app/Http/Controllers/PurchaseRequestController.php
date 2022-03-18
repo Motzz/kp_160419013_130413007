@@ -81,6 +81,10 @@ class PurchaseRequestController extends Controller
         $dataBarang = DB::table('Item')
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
+            ->where('Item.Hapus',0)
+            ->get();
+        
+        $dataTag = DB::table('ItemTag')
             ->get();
         
         //nama npp create
@@ -105,6 +109,7 @@ class PurchaseRequestController extends Controller
             'dataBarang' => $dataBarang,
             'namaNpp' => $namaNpp,
             'date' => $date,
+            'dataTag' => $dataTag,
         ]);
         
     }
@@ -119,6 +124,7 @@ class PurchaseRequestController extends Controller
     {
         //
         $data = $request->collect();
+        //dd($data);
         //echo $data['barang'][0];
         //echo count($data['jumlah']);
         $user = Auth::user();
@@ -160,7 +166,7 @@ class PurchaseRequestController extends Controller
 
         $totalHarga = 0;
 
-        for($i = 0; $i < count($data['totalBarangnya']); $i++){
+        for($i = 0; $i < count($data['itemId']); $i++){
             DB::table('purchase_request_detail')->insert(array(
                 'idPurchaseRequest' => $idpr,
                 'jumlah' => $data['itemTotal'][$i],
@@ -246,6 +252,7 @@ class PurchaseRequestController extends Controller
         $dataBarang = DB::table('Item')
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
+            ->where('Item.Hapus',0)
             ->get();
 
         $dataDetail = DB::table('purchase_request_detail')
@@ -278,7 +285,7 @@ class PurchaseRequestController extends Controller
         DB::table('purchase_request')
             ->where('id', $purchaseRequest->id)
             ->update([
-                'MGudangID' => $data['MGudangID'],
+                'MGudangID' => $data['gudang'],
                 'updated_by'=> $user->id,
                 'updated_on'=> date("Y-m-d h:i:sa"),
         ]);
@@ -287,47 +294,47 @@ class PurchaseRequestController extends Controller
             ->where('idPurchaseRequest', $purchaseRequest->id)
             ->get();
         $totalHarga = 0;
-        if(count($dataDetailTotal) > count($data['totalRequest'])){
+        if(count($dataDetailTotal) > count($data['itemId'])){
             DB::table('purchase_request_detail')
                 ->where('idPurchaseRequest', $purchaseRequest->id)
                 ->delete();
             
-            for($i = 0; $i < count($data['totalRequest']); $i++){
+            for($i = 0; $i < count($data['itemId']); $i++){
                 DB::table('purchase_request_detail')->insert(array(
                     'idPurchaseRequest' => $purchaseRequest->id,
-                    'jumlah' => $data['jumlah'][$i],
-                    'ItemID' => $data['barang'][$i],
-                    'harga' => $data['harga'][$i],  
-                    'keterangan_jasa' => $data['Keterangan'][$i],
+                    'jumlah' => $data['itemTotal'][$i],
+                    'ItemID' => $data['itemId'][$i],
+                    'harga' => $data['itemHarga'][$i],  
+                    'keterangan_jasa' => $data['itemKeterangan'][$i],
                     )
                 ); 
-                $totalHarga += $data['harga'][$i];
+                $totalHarga += $data['itemHarga'][$i];
             }     
         }
         else{
-            for($i = 0; $i < count($data['totalRequest']); $i++){
+            for($i = 0; $i < count($data['itemId']); $i++){
                 if($i < count($dataDetailTotal)){
                     DB::table('purchase_request_detail')
                     ->where('idPurchaseRequest', $purchaseRequest->id)
                     ->update(array(
-                        'jumlah' => $data['jumlah'][$i],
-                        'ItemID' => $data['barang'][$i],
-                        'harga' => $data['harga'][$i],
-                        'keterangan_jasa' => $data['Keterangan'][$i],
+                        'jumlah' => $data['itemTotal'][$i],
+                        'ItemID' => $data['itemId'][$i],
+                        'harga' => $data['itemHarga'][$i],
+                        'keterangan_jasa' => $data['itemKeterangan'][$i],
                         )           
                     );
-                    $totalHarga += $data['harga'][$i];        
+                    $totalHarga += $data['itemHarga'][$i];        
                 }
                 else{
                     DB::table('purchase_request_detail')->insert(array(
                         'idPurchaseRequest' => $purchaseRequest->id,
-                        'jumlah' => $data['jumlah'][$i],
-                        'ItemID' => $data['barang'][$i],
-                        'harga' => $data['harga'][$i],
-                        'keterangan_jasa' => $data['Keterangan'][$i],
+                        'jumlah' => $data['itemTotal'][$i],
+                        'ItemID' => $data['itemId'][$i],
+                        'harga' => $data['itemHarga'][$i],
+                        'keterangan_jasa' => $data['itemKeterangan'][$i],
                         )
                     ); 
-                    $totalHarga += $data['harga'][$i];        
+                    $totalHarga += $data['itemHarga'][$i];        
                 }
             }
         }

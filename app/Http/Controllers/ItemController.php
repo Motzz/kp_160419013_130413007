@@ -200,7 +200,7 @@ class ItemController extends Controller
     public function edit(Item $item)
     {
         $user = Auth::user();
-
+        
         //
         /*$dataItem = DB::table('Item')
             ->join('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
@@ -252,7 +252,7 @@ class ItemController extends Controller
         //
         $data = $request->collect();
         $user = Auth::user();
-
+        
         DB::table('Item')
             ->where('id', $item->ItemID)
             ->update(array(
@@ -339,17 +339,14 @@ class ItemController extends Controller
     public function searchItemName(Request $request)
     {
         //
-        //dd($request->itemName);
+        //dd($request);
         $name=$request->input('searchname');
         $user = Auth::user();
         $dataItem = DB::table('Item')
-        
-            //->limit(100)
-            
+            //->limit(100) 
             ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
             'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName')
             //, 'ItemTag.ItemTagID as tagID', 'ItemTag.Name as tagName')
-            
             ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
             ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
             ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
@@ -433,9 +430,10 @@ class ItemController extends Controller
         }
     }
 
-    public function searchItemTagName($itemTagName)
+    public function searchItemTagName(Request $request)
     {
         //
+        $tag=$request->input('searchtag');
         $user = Auth::user();
         $dataItem = DB::table('Item')
             //->limit(100)
@@ -449,8 +447,45 @@ class ItemController extends Controller
             ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
-            ->where('ItemTag.Name','like','%'.$itemTagName.'%')
-            ->get()
+            ->where('ItemTag.Name','like','%'.$tag.'%')
+            ->simplePaginate(10);
+
+        $dataTag = DB::table('ItemTag')
+            ->leftjoin('ItemTagValues', 'ItemTag.ItemTagID', '=', 'ItemTagValues.ItemTagID')
+            ->get(); 
+
+
+        $check = $this->checkAccess('item.index', $user->id, $user->idRole);
+        if($check){
+            return view('master.item.index',[
+                'dataItem' => $dataItem,
+                'dataTag' => $dataTag,
+            ]);
+        }
+        else{
+            return redirect()->route('home')->with('message','Anda tidak memiliki akses kedalam Item Master');
+        }
+    }
+
+
+    public function searchItemTagMulti(Request $request)
+    {
+        //
+        $tag=$request->input('searchtag');
+        $user = Auth::user();
+        $dataItem = DB::table('Item')
+            //->limit(100)
+            
+            ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
+            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName')
+            ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
+            ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
+            ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
+            ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
+            ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            ->where('Item.Hapus', '=', 0)
+            ->where('ItemTag.Name','like','%'.$tag.'%')
             ->simplePaginate(10);
 
         $dataTag = DB::table('ItemTag')

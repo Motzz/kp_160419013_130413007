@@ -95,7 +95,8 @@ Route::resource('userAccess', 'App\Http\Controllers\UserAccessController');
 
 //item baru
 Route::resource('item', 'App\Http\Controllers\ItemController');//
-Route::get('/item/searchname','App\Http\Controllers\ItemController@searchItemName')->name('searchItemName'); //cobak gini ta
+Route::get('/iteme/searchname/',[App\Http\Controllers\ItemController::class, 'searchItemName']); //cobak gini ta
+Route::get('/iteme/searchtag/',[App\Http\Controllers\ItemController::class, 'searchItemTagName']); //cobak gini ta
 //Route::get('/item/searchname/', [App\Http\Controllers\ItemController::class, 'searchItemName'])->name('searchItemName');
 
 Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
@@ -121,4 +122,7 @@ Route::resource('mPulau', 'App\Http\Controllers\MPulauController');
 //payment and paymentterms
 Route::resource('payment', 'App\Http\Controllers\PaymentController');
 Route::resource('paymentTerms', 'App\Http\Controllers\PaymentTermsController');
+
+//mSupplier
+Route::resource('msupplier', 'App\Http\Controllers\MSupplierController');//selese,delete masik gbs
 

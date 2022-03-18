@@ -6,97 +6,235 @@
 </style>
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid"> 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"></h1>
-    </div>
+   <div class="container">
+   <form action="{{route('purchaseRequest.update',[$purchaseRequest->id])}}" method="POST" >
+            @csrf
+            @method('PUT')
+        <div class="py-5 ">
+            <h2>Pembuatan Nota Permintaan Pembelian</h2><br>
+               <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label for="firstName">Nama NPP</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="{{old('name',$purchaseRequest->name)}}" readonly required="">
+                        <div class="invalid-feedback"> Valid first name is required. </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Tanggal Pembuatan</label>
+                        <input type="date" class="form-control" id="lastName" placeholder="" value="{{old('created_on',$purchaseRequest->created_on)}}" readonly required="">
+                        <div class="invalid-feedback"> Valid last name is required. </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName">Tanggal Dibutuhkan</label>
+                        <input type="date" name="tanggalDibutuhkan" class="form-control" id="firstName" placeholder="" value="{{old('tanggalDibutuhkan',$purchaseRequest->tanggalDibutuhkan)}}" required="">
+                        <div class="invalid-feedback"> Valid first name is required. </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Tanggal Batas Akhir</label>
+                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir',$purchaseRequest->tanggalAkhirDibutuhkan)}}" required="">
+                        <div class="invalid-feedback"> Valid last name is required. </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Gudang</label>
+                        <select required name="gudang" class="form-control">
+                            <option value="">
+                                --Pilih gudang--
+                            </option>
+                             @foreach($dataGudang as $key => $data)
+                                @if($data->MGudangID==$purchaseRequest->MGudangID)
+                                <option selected name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }} >{{$data->cname}} </option>
+                                @else
+                                <option name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }}>{{$data->cname}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>     
+        </div>
+        <div class="row">
+            <!--Start Permintaan-->
+            <div class="col-md-6 mb-3 bg-light text-dark border ">
+                <h4 class="mb-3">Billing address</h4>
+                <div >
+                    <div class="form-group"  id='tmbhBarang'>
+                        <label for="title">Barang</label>
+                        <select   class="form-control" id="barang">
+                            <option value="">--Pilih barang--</option>
+                            @foreach($dataBarang as $key => $data)
+                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
+                            @endforeach
+                        </select>
+                        <input min=1   type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
+                    </div>
+                  
+                    <div class="form-group mb-3" id="harga">
+                        <label for="title">Harga</label>
+                        <input  type="number" id="hargaBarang" class="form-control" value="{{old('harga','')}}" >
+                    </div>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="{{route('purchaseRequest.update',[$purchaseRequest->id])}}" method="POST" id="myForm">
-                            @csrf
-                            @method('PUT')
-                    
-                            <div class="form-group" id="gudang">
-                                        <label for="Satuan">Gudang</label>
-                                        <select require name="MGudangID" class="form-control">
-                                            <option value="">
-                                                --Pilih gudang--
-                                            </option>
-                                            @foreach($dataGudang as $key => $data)
-                                            @if($data->MGudangID==$purchaseRequest->MGudangID)
-                                            <option selected name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }} >{{$data->cname}} </option>
-                                            @else
-                                            <option name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }}>{{$data->cname}}</option>
-                                            @endif
-                                            @endforeach
-                                        </select>
-                                    
-                                    
-                                </div>
-                                <div id='totalRequest' name='totalRequest[]'>
-                                @foreach($dataDetail as $key => $data)
-                                    <div class="form-group p-3 mb-2 bg-light text-dark border"  id='tmbhBarangJasa{{"$loop->index"}}' >
-                                        <input type="hidden" name="totalRequest[]" class="totalRequest">
-                                        <div class="form-group"  id='tmbhBarang'>
-                                            <label for="title">Barang</label>
-                                            <select require name="barang[]" class="form-control" id="barang">
-                                                <option value="">--Pilih barang--</option>
-                                                @foreach($dataBarang as $key => $barang)
-                                                @if($barang->ItemID == $data->ItemID)
-                                                <option selected name="idBarang" value="{{$data->ItemID}}"{{$barang->ItemName == $barang->ItemID? 'selected' :'' }}>{{$barang->ItemName}}<nbsp>{{$barang->unitName}}  </option>
-                                                @endif
-                                                <option name="idBarang" value="{{$data->ItemID}}"{{$barang->ItemName == $barang->ItemID? 'selected' :'' }}>{{$barang->ItemName}}<nbsp>{{$barang->unitName}}  </option>
-                                                @endforeach
-                                            </select>
-                                            <input min=1 require name="jumlah[]" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="angka" value="{{old('jumlah',$data->jumlah)}}" />
-                                        </div>
-
-                                        <!--<div class="form-group" id="total">
-                                            <label for="title">Total</label>
-                                            <input require type="number" name="total[]" class="form-control" value="{{old('totalHarga','')}}" >
-                                        </div>-->
-
-                                        <div class="form-group" id="harga">
-                                            <label for="title">Harga</label>
-                                            <input require type="number" name="harga[]" class="form-control" value="{{old('harga',$data->harga)}}" >
-                                        </div>
-
-                                         <div class="form-group" id="ket">
-                                                <label for="title">Keterangan</label>
-                                                <input require type="text" name="Keterangan[]" class="form-control" value="{{old('keterangan',$data->keterangan_jasa)}}" >
-                                        </div>
-                                    </div>
-                                @endforeach
-                                </div>
-                                
-                                    
-                                <div class="form-group" id ="buttonBarang" >
-
-                                    <button class="btn btn-primary" type="button"id="tambah">+</button>
-
-                                    <button class="btn btn-primary" type="button" id="kurang">-</button><br><br>
-                            
-                                    
-                                </div>
-                                    <button class="btn btn-primary">Selesai</button>
-                           
-                        </form>
-                    
+                    <div class="form-group mb-3" id="ket">
+                        <label for="title">Keterangan</label>
+                        <input  type="textarea" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" >
+                    </div>
+                                   
+                    <input class="btn btn-primary btn-lg btn-block" type="button" id="tambahKeranjang" value="Tambah kedalam Keranjang">
                 </div>
             </div>
-        </div>
-    </div>
-</div>     
+            <!--End Permintaan-->
+            <!--Start Keranjang-->
+            
+            <div class="col-md-6 mb-3">
+                
+            
+                <!--<input type="hidden" name="tanggalDibutuhkan" value="{{old('tanggalDibutuhkanVal')}}">
+                <input type="hidden" name="gudang" value="{{old('tanggalDibutuhkanVal')}}">
+                <input type="hidden" name="tanggalAkhir" value="{{old('tanggalAkhirVal')}}">-->
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Keranjang</span>
+                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya" value="0">{{count($dataDetail)}}</span>
+                </h4>
+                <ul class="list-group mb-3 sticky-top" id="keranjang">
+                    @foreach($dataDetail as $data)
+                        @foreach($dataBarang as $item)
+                          @if($item->ItemID == $data->ItemID)
+                    <li  class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <input type="hidden" class="cekId" name="itemId[]" value="{{$data->ItemID}}">
+                            <input type="hidden" class="cekJumlah" name="itemTotal[]" value="{{$data->jumlah}}">
+                            <input type="hidden" class="cekKeterangan" name="itemKeterangan[]" value="{{$data->keterangan_jasa}}">
+                            <input type="hidden" class="cekHarga" name="itemHarga[]" value="{{$data->harga}}">
+                            <h6 class="my-0">{{$item->ItemName}}<small class="hargaVal">({{$data->jumlah}})</small> </h6> 
+                            <small class="text-muted keteranganVal">{{$data->keterangan_jasa}}</small><br>                      
+                        </div>
+                        <div>
+                            <strong>Rp.{{$data->harga}},-</strong>
+                            <button class="btn btn-primary copyKe" type="button" id="copyKe">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-danger" type="button" id="hapusKeranjang">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>  
+                          @endif    
+                        @endforeach           
+                    @endforeach           
+                </ul>
+                <!--<li class="list-group-item d-flex justify-content-between">
+                        <span>Total (USD)</span>
+                        <strong>$20</strong>
+                </li>-->  
+                
+                <button class="btn btn-primary" type="submit" id="tambah">Kirim</button><br>
+                
+            </div>
+            
+            <!--End Keranjang-->
 
+            
+        </div>
+        </form>
+    </div>
+</div>
 <script type="text/javascript">
     var tambahCombo = "";
-    var totalTambah = 0 + $('.totalRequest').length - 1;
-    $("body").on("click", "#tambah", function () {  
+    var totalTambah = 0;
+
+    $('body').on('click','.copyKe', function(){
+        //alert($(this).index('.copyKe'));
+        var i = $(this).index('.copyKe');
+        var idBarang = $('.cekId:eq('+i+')').val();
+        //var namaBarang = $('.cekJumlah:eq('+i+')').val();
+        var jumlahBarang = $('.cekJumlah:eq('+i+')').val();
+        var hargaBarang = $('.cekHarga:eq('+i+')').val();
+        var keteranganBarang = $('.cekKeterangan:eq('+i+')').val();
+        
+        $("#barang").val(idBarang);
+        $("#jumlahBarang").val(jumlahBarang);
+        $("#hargaBarang").val(hargaBarang);
+        $("#keteranganBarang").val(keteranganBarang);
+
+    });
+
+    $('body').on('click','#hapusKeranjang', function(){
+        $(this).parent().parent().remove();
+        totalTambah -= 1;
+        $('#totalBarangnya').val(totalTambah);
+        $('#totalBarangnya').html(totalTambah);
+    });
+
+    $('body').on('click','#tambahKeranjang', function(){
+        var idBarang = $("#barang").val();
+        var namaBarang = $("#barang option:selected").html();
+        var jumlahBarang = $("#jumlahBarang").val();
+        var hargaBarang = $("#hargaBarang").val();
+        var keteranganBarang = $("#keteranganBarang").val();
+        
+        var indexSama = null;
+        for(let i=0;i<$('.cekId').length;i++){
+            if($('.cekId:eq('+i+')').val() == idBarang){
+                if($('.cekHarga:eq('+i+')').val() == hargaBarang){
+                    indexSama = i;
+                }
+            }
+        }
+
+        if(idBarang == "" || namaBarang == "--Pilih barang--" || jumlahBarang == 0 || jumlahBarang == "" || hargaBarang == 0 || hargaBarang == "" || keteranganBarang == ""){
+            alert('Harap lengkapi data Barang untuk menambahkan ke keranjang');
+            die;
+        }
+        //alert(jumlahBarang + hargaBarang+ keteranganBarang);
+        else if(indexSama != null){
+            var jumlah = $('.cekJumlah:eq('+indexSama+')').val();
+            $('.cekJumlah:eq('+indexSama+')').val(parseInt(jumlah) + parseInt(jumlahBarang))
+            var keterangan = $('.cekKeterangan:eq('+indexSama+')').val();
+            $('.cekKeterangan:eq('+indexSama+')').val(keterangan + ".\n" +keteranganBarang)
+            
+            $('.keteranganVal:eq('+indexSama+')').html($('.cekKeterangan:eq('+indexSama+')').val());
+            $('.hargaVal:eq('+indexSama+')').html(($('.cekJumlah:eq('+indexSama+')').val()));
+
+        }
+        else{
+            var htmlKeranjang = "";
+            htmlKeranjang += '<li class="list-group-item d-flex justify-content-between lh-condensed">\n';
+            htmlKeranjang += '<div>\n';
+            htmlKeranjang += '<input type="hidden" class="cekId" name="itemId[]" value="'+idBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekJumlah" name="itemTotal[]" value="'+jumlahBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekKeterangan" name="itemKeterangan[]" value="'+keteranganBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekHarga" name="itemHarga[]" value="'+hargaBarang+'">\n';
+            htmlKeranjang += '<h6 class="my-0">'+ namaBarang +'<small class="hargaVal" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
+            htmlKeranjang += '<small class="text-muted keteranganVal" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
+            htmlKeranjang += '</div>\n';
+            htmlKeranjang += '<div>\n';
+            htmlKeranjang += '<strong value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
+            htmlKeranjang += '<button class="btn btn-danger" type="button" id="copyKe">\n';
+            htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
+            htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+            htmlKeranjang += '</svg>\n';
+            htmlKeranjang += '</button>\n';
+            htmlKeranjang += '<button class="btn btn-danger" type="button" id="hapusKeranjang">\n';
+            htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">\n';
+            htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+            htmlKeranjang += '</svg>\n';
+            htmlKeranjang += '</button>\n';
+            htmlKeranjang += '</div>\n';
+            htmlKeranjang += '</li>\n';
+
+            $('#keranjang').append(htmlKeranjang);
+            totalTambah += 1
+            $('#totalBarangnya').val(totalTambah);
+            $('#totalBarangnya').html(totalTambah);
+        }
+
+    });
+
+
+   /* $("body").on("click", "#tambah", function () {  
         totalTambah++;
         tambahCombo +='<div class="form-group p-3 mb-2 bg-light text-dark border" id="tmbhBarangJasa'+totalTambah+'">\n';
         tambahCombo +='<input type="hidden" name="totalRequest[]">\n';
@@ -105,7 +243,7 @@
         tambahCombo += '<select require name="barang[]" class="form-control" id="barang'+totalTambah+'">\n';
         tambahCombo += '<option value="">--Pilih barang--</option>\n';
         tambahCombo += '@foreach($dataBarang as $key => $data)\n';
-        tambahCombo += '<option name="idBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>{{$data->unitName}} </option>\n';
+        tambahCombo += '<option name="idBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>\n';
         tambahCombo += '@endforeach\n';
         tambahCombo += '</select>\n';
         tambahCombo += '<input min=1 require name="jumlah[]" id="jml" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient'+"'"+'s username" aria-describedby="basic-addon2"id="angka" />\n';

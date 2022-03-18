@@ -22,7 +22,7 @@
                  
                 <div class="card-body">
             
-                    <form action="{{route('supplier.store')}}" method="POST" >
+                    <form action="{{route('msupplier.store')}}" method="POST" >
                       @csrf
 
                         <div class="form-group">
@@ -38,15 +38,6 @@
                            <input require type="text" name="email" class="form-control" 
                            value="{{old('email','')}}">
  
-                           <label for="idBank" >Bank</label>
-                            <select name="idBank" class="form-control">
-                                     <option value="">--Pilih Bank--</option>
-                                     @foreach($dataBank as $key => $data)
-                                     <option name="idBank" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
-                                     @endforeach
-                            </select>
-                      
-
                            <label for="title">Nomor rekening</label>
                            <input require type="text" name="nomor_rekening" class="form-control" 
                            value="{{old('nomor_rekening','')}}">
@@ -55,14 +46,7 @@
                            <input require type="text" name="nomor_telepon" class="form-control" 
                            value="{{old('nomor_telepon','')}}" >
 
-                            <label for="Satuan" >Info Supplier</label>
-                            <select name="idInfoSupplier" class="form-control">
-                                     <option value="">--Pilih InfoSupplier--</option>
-                                     @foreach($dataInfoSupplier as $key => $data)
-                                     <option name="idInfoSupplier" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
-                                     @endforeach
-                            </select>
-
+                    
 
 
                       

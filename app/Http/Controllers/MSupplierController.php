@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MSupplier;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class MSupplierController extends Controller
 {
     public function __construct()
@@ -26,7 +26,7 @@ class MSupplierController extends Controller
             ->leftjoin('PaymentTerms','MSupplier.PaymentTermsID','=','PaymentTerms.PaymentTermsID')
             ->leftjoin('MKota','MSupplier.MKotaID','=','MKota.MKotaID')
             ->leftjoin('COA','MSupplier.COAID','=','COA.COAID')
-            ->where('hapus',0)
+            ->where('MSupplier.Hapus','=',0)
             ->get();
         return view('master.msupplier.index',[
             'data' => $data,
@@ -53,7 +53,7 @@ class MSupplierController extends Controller
             ->get();
         $COA = DB::table('COA')
             ->get();
-        return view('master.msupplier.index',[
+        return view('master.msupplier.tambah',[
                 'infoSupplier' => $infoSupplier,
                 'MCurrency' => $MCurrency,
                 'Tax' => $Tax,
@@ -113,6 +113,7 @@ class MSupplierController extends Controller
                 
             )
         );
+         return redirect()->route('msupplier.index')->with('status','Success!!');
     }
 
     /**
@@ -150,7 +151,7 @@ class MSupplierController extends Controller
             ->get();
         $COA = DB::table('COA')
             ->get();
-        return view('master.mcurrency.index',[
+        return view('master.mcurrency.edit',[
                 'infoSupplier' => $infoSupplier,
                 'MCurrency' => $MCurrency,
                 'Tax' => $Tax,
@@ -209,6 +210,7 @@ class MSupplierController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('msupplier.index')->with('status','Success!!');
     }
 
     /**
@@ -230,5 +232,6 @@ class MSupplierController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('msupplier.index')->with('status','Success!!');
     }
 }

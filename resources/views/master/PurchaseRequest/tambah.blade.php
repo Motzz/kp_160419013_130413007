@@ -9,7 +9,8 @@
 <div class="container-fluid"> 
     <!-- Page Heading -->
    <div class="container">
-   <form action="purchaseRequest.store" method="GET" >
+   <form action="{{route('purchaseRequest.store')}}" method="POST" >
+           @csrf
         <div class="py-5 ">
             <h2>Pembuatan Nota Permintaan Pembelian</h2><br>
                <div class="row">
@@ -25,17 +26,17 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="firstName">Tanggal Dibutuhkan</label>
-                        <input type="date" name="tanggalDibutuhkan" class="form-control" id="firstName" placeholder="" value="{{old('tanggalDibutuhkan')}}" required="">
+                        <input type="date" name="tanggalDibutuhkan" class="form-control" id="firstName" placeholder="" value="{{old('tanggalDibutuhkan','')}}" required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Batas Akhir</label>
-                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir')}}" required="">
+                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir','')}}" required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="lastName">Gudang</label>
-                        <select require name="gudang" class="form-control">
+                        <label for="lastName">Gudang</label> 
+                        <select name="gudang" class="form-control theSelect" >
                             <option value="">
                                 --Pilih gudang--
                             </option>
@@ -44,54 +45,70 @@
                             @endforeach
                         </select>
                     </div>
+                    
                 </div>     
         </div>
         <div class="row">
             <!--Start Permintaan-->
             <div class="col-md-6 mb-3 bg-light text-dark border ">
                 <h4 class="mb-3">Billing address</h4>
-                <form class="needs-validation" novalidate="">
-                    <input type="hidden" name="totalRequest[]">
+                <div >
                     <div class="form-group"  id='tmbhBarang'>
                         <label for="title">Barang</label>
-                        <select require name="barang" class="form-control" id="barang">
-                            <option value="">--Pilih barang--</option>
-                            @foreach($dataBarang as $key => $data)
-                            <option id="namaBarang" name="idBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
+                        <select   class="form-control" id="tag">
+                            <option value="">Semua Data</option>
+                            @foreach($dataTag as $key => $data)
+                            <option id="namaBarang" value="{{$data->ItemTagID}}"{{$data->Name == $data->ItemTagID? 'selected' :'' }}>{{$data->Name}}</option>
                             @endforeach
                         </select>
-                        <input min=1 require name="jumlah" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
+                        
+                        <select   class="form-control" id="barang">
+                            <option value="">--Pilih barang--</option>
+                            @foreach($dataBarang as $key => $data)
+                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
+                            @endforeach
+                        </select>
+                        <input min=1   type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
                     </div>
                   
                     <div class="form-group mb-3" id="harga">
                         <label for="title">Harga</label>
-                        <input require type="number" id="hargaBarang" name="harga" class="form-control" value="{{old('harga','')}}" >
+                        <input  type="number" id="hargaBarang" class="form-control" value="{{old('harga','')}}" >
                     </div>
 
                     <div class="form-group mb-3" id="ket">
                         <label for="title">Keterangan</label>
-                        <input require type="text" id="keteranganBarang" name="Keterangan" class="form-control" value="{{old('keterangan','')}}" >
+                        <input  type="text" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" >
                     </div>
                                    
-                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="tambahKeranjang">Tambah kedalam Keranjang</button>
-                </form>
+                    <input class="btn btn-primary btn-lg btn-block" type="button" id="tambahKeranjang" value="Tambah kedalam Keranjang">
+                </div>
             </div>
             <!--End Permintaan-->
             <!--Start Keranjang-->
+            
             <div class="col-md-6 mb-3">
+                
+            
+                <!--<input type="hidden" name="tanggalDibutuhkan" value="{{old('tanggalDibutuhkanVal')}}">
+                <input type="hidden" name="gudang" value="{{old('tanggalDibutuhkanVal')}}">
+                <input type="hidden" name="tanggalAkhir" value="{{old('tanggalAkhirVal')}}">-->
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Keranjang</span>
-                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya">0</span>
+                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya" value="0">0</span>
                 </h4>
                 <ul class="list-group mb-3 sticky-top" id="keranjang">
                     <!--<li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
                             <input type="hidden" name="itemId[]" value="">
-                            <h6 class="my-0" name="itemName[]">Product name <small name="itemTotal[]">(6)</small> </h6> 
-                            <small class="text-muted" name="itemKeterangan[]">Keterangan</small><br>                      
+                            <input type="hidden" name="itemTotal[]" value="">
+                            <input type="hidden" name="itemKeterangan[]" value="">
+                            <input type="hidden" name="itemHarga[]" value="">
+                            <h6 class="my-0">Product name <small>(6)</small> </h6> 
+                            <small class="text-muted">Keterangan</small><br>                      
                         </div>
                         <div>
-                            <strong name="itemHarga[]">$20</strong>
+                            <strong>$20</strong>
                             <button class="btn btn-danger" type="button" id="hapusKeranjang">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
                                     <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
@@ -100,26 +117,35 @@
                         </div>
                     </li>     -->             
                 </ul>
-                <li class="list-group-item d-flex justify-content-between">
+                <!--<li class="list-group-item d-flex justify-content-between">
                         <span>Total (USD)</span>
                         <strong>$20</strong>
-                    </li>
-                <form class="card p-2">
-                    <button class="btn btn-primary" type="button"id="tambah">cek ot</button><br>
-                </form>
+                </li>-->  
+                
+                <button class="btn btn-primary" type="submit" id="tambah">Kirim</button><br>
+                
             </div>
+            
             <!--End Keranjang-->
 
             
         </div>
-    </form>
+        </form>
     </div>
 </div>
 <script type="text/javascript">
     var tambahCombo = "";
     var totalTambah = 0;
+    
+
+    $('body').on('click','#tag', function(){
+        
+    });
+
     $('body').on('click','#hapusKeranjang', function(){
-        $(this).parent().remove();
+        //alert($('.cekId:eq(2)').val());
+        //alert($('.cekId').length);
+        $(this).parent().parent().remove();
         totalTambah -= 1;
         $('#totalBarangnya').val(totalTambah);
         $('#totalBarangnya').html(totalTambah);
@@ -131,28 +157,63 @@
         var jumlahBarang = $("#jumlahBarang").val();
         var hargaBarang = $("#hargaBarang").val();
         var keteranganBarang = $("#keteranganBarang").val();
+        
+        var indexSama = null;
+        for(let i=0;i<$('.cekId').length;i++){
+            if($('.cekId:eq('+i+')').val() == idBarang){
+                if($('.cekHarga:eq('+i+')').val() == hargaBarang){
+                    indexSama = i;
+                }
+            }
+        }
+
+        if(idBarang == "" || namaBarang == "--Pilih barang--" || jumlahBarang == 0 || jumlahBarang == "" || hargaBarang == 0 || hargaBarang == "" || keteranganBarang == ""){
+            alert('Harap lengkapi data Barang untuk menambahkan ke keranjang');
+            die;
+        }
         //alert(jumlahBarang + hargaBarang+ keteranganBarang);
+        else if(indexSama != null){
+            var jumlah = $('.cekJumlah:eq('+indexSama+')').val();
+            $('.cekJumlah:eq('+indexSama+')').val(parseInt(jumlah) + parseInt(jumlahBarang))
+            var keterangan = $('.cekKeterangan:eq('+indexSama+')').val();
+            $('.cekKeterangan:eq('+indexSama+')').val(keterangan + ".\n" +keteranganBarang)
+            
+            $('.keteranganVal:eq('+indexSama+')').html($('.cekKeterangan:eq('+indexSama+')').val());
+            $('.hargaVal:eq('+indexSama+')').html(($('.cekJumlah:eq('+indexSama+')').val()));
 
-        var htmlKeranjang = "";
-        htmlKeranjang += '<li class="list-group-item d-flex justify-content-between lh-condensed">\n';
-        htmlKeranjang += '<div>\n';
-        htmlKeranjang += '<input type="hidden" name="itemId[]" value="'+idBarang+'">\n';
-        htmlKeranjang += '<h6 class="my-0" name="itemName[]">'+ namaBarang +'<small name="itemTotal[]" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
-        htmlKeranjang += '<small class="text-muted" name="itemKeterangan[]" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
-        htmlKeranjang += '</div>\n';
-        htmlKeranjang += '<strong name="itemHarga[]" value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
-        htmlKeranjang += '<button class="btn btn-danger" type="button" id="hapusKeranjang">\n';
-        htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">\n';
-        htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
-        htmlKeranjang += '</svg>\n';
-        htmlKeranjang += '</button>\n';
-        htmlKeranjang += '</div>\n';
-        htmlKeranjang += '</li>\n';
+        }
+        else{
+            var htmlKeranjang = "";
+            htmlKeranjang += '<li class="list-group-item d-flex justify-content-between lh-condensed">\n';
+            htmlKeranjang += '<div>\n';
+            htmlKeranjang += '<input type="hidden" class="cekId" name="itemId[]" value="'+idBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekJumlah" name="itemTotal[]" value="'+jumlahBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekKeterangan" name="itemKeterangan[]" value="'+keteranganBarang+'">\n';
+            htmlKeranjang += '<input type="hidden" class="cekHarga" name="itemHarga[]" value="'+hargaBarang+'">\n';
+            htmlKeranjang += '<h6 class="my-0">'+ namaBarang +'<small class="hargaVal" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
+            htmlKeranjang += '<small class="text-muted keteranganVal" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
+            htmlKeranjang += '</div>\n';
+            htmlKeranjang += '<div>\n';
+            htmlKeranjang += '<strong value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
+            htmlKeranjang += '<button class="btn btn-danger" type="button" id="copyKe">\n';
+            htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
+            htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+            htmlKeranjang += '</svg>\n';
+            htmlKeranjang += '</button>\n';
+            htmlKeranjang += '<button class="btn btn-danger" type="button" id="hapusKeranjang">\n';
+            htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">\n';
+            htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+            htmlKeranjang += '</svg>\n';
+            htmlKeranjang += '</button>\n';
+            htmlKeranjang += '</div>\n';
+            htmlKeranjang += '</li>\n';
 
-        $('#keranjang').append(htmlKeranjang);
-        totalTambah += 1
-        $('#totalBarangnya').val(totalTambah);
-        $('#totalBarangnya').html(totalTambah);
+            $('#keranjang').append(htmlKeranjang);
+            totalTambah += 1
+            $('#totalBarangnya').val(totalTambah);
+            $('#totalBarangnya').html(totalTambah);
+        }
+
     });
 
 

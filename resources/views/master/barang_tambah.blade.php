@@ -36,20 +36,21 @@
 
                         </div>
                         <div class="form-group">
-                            <!--<label for="Satuan" >Satuan</label>
+                            <label for="Satuan" >Satuan</label>
                             <select name="Satuan" class="form-control">
                                      <option value="">--Pilih satuan--</option>
                                      @foreach($dataSatuan as $key => $data)
                                      <option name="idSatuan" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
                                      @endforeach
-                            </select>-->
-                            <label for="Satuan" >Satuan</label>
+                            </select>
+                            <!--<label for="Satuan" >Satuan</label>
                             <input class="form-control" list="Satuan" id="exampleDataList" placeholder="--Pilih satuan--" name="Satuan">
                             <datalist id="Satuan" name="Satuan">
                                   @foreach($dataSatuan as $key => $data)
                                      <option name="idSatuan" {{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
                                   @endforeach                
-                            </datalist>
+                            </datalist>-->
+                       
                         </div>
 
                   

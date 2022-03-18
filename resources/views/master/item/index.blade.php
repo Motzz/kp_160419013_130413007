@@ -28,7 +28,7 @@
 <div class="container">
     <div class="row height d-flex justify-content-center align-items-center">
         <div class="col-md-8">
-               <form class='form' action="{{route('searchItemName')}}" method="get" >
+               <form class='form' action="/iteme/searchname/" method="get" >
                     <div class="input-group"> 
                       <input type="text" class="form-control mr-2" name="searchname" placeholder="Mencari Nama Barang" >                   
                             <button class="btn btn-info" type="submit" title="Search name">
@@ -39,9 +39,36 @@
         </div>
        
     </div>
+</div><br>
+<div class="container">
+    <div class="row height d-flex justify-content-center align-items-center">
+        <div class="col-md-8">
+               <form class='form' action="/iteme/searchtag/" method="get" >
+                    <div class="input-group"> 
+                        <div class="input-group-btn search-panel">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    	<span id="search_concept">Filter by</span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a href="#contains">Contains</a></li>
+                      <li><a href="#its_equal">It's equal</a></li>
+                      <li><a href="#greather_than">Greather than ></a></li>
+                      <li><a href="#less_than">Less than < </a></li>
+                      <li class="divider"></li>
+                      <li><a href="#all">Anything</a></li>
+                    </ul>
+                </div>
+                      <input type="text" class="form-control mr-2" name="searchtag" placeholder="Mencari Tag Barang" >                   
+                            <button class="btn btn-info" type="submit" title="Search name">
+                                <span class="fas fa-search"></span>
+                            </button>
+                    </div>
+                </form>
+        </div>
+       
+    </div>
 </div>
 
-<br>
 <!-- Content Row -->
 
 <div class="container">
