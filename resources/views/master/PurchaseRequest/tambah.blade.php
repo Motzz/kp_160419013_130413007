@@ -25,12 +25,12 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="firstName">Tanggal Dibutuhkan</label>
-                        <input type="date" class="form-control" id="firstName" placeholder="" value="" required="">
+                        <input type="date" name="tanggalDibutuhkan" class="form-control" id="firstName" placeholder="" value="{{old('tanggalDibutuhkan')}}" required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Batas Akhir</label>
-                        <input type="date" class="form-control" id="lastName" placeholder="" value="" required="">
+                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir')}}" required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">

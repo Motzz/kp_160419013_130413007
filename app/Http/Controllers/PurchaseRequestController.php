@@ -149,6 +149,8 @@ class PurchaseRequestController extends Controller
             'MGudangID' => $data['gudang'],
             'approved' => 0,
             'hapus' => 0,
+            'tanggalDibutuhkan' => $data['tanggalDibutuhkan'],
+            'tanggalAkhirDibutuhkan' => $data['tanggalAkhir'],
             'created_by'=> $user->id,
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
@@ -158,16 +160,16 @@ class PurchaseRequestController extends Controller
 
         $totalHarga = 0;
 
-        for($i = 0; $i < count($data['totalRequest']); $i++){
+        for($i = 0; $i < count($data['totalBarangnya']); $i++){
             DB::table('purchase_request_detail')->insert(array(
                 'idPurchaseRequest' => $idpr,
-                'jumlah' => $data['jumlah'][$i],
-                'ItemID' => $data['barang'][$i],
-                'harga' => $data['harga'][$i],
-                'keterangan_jasa' => $data['Keterangan'][$i],
+                'jumlah' => $data['itemTotal'][$i],
+                'ItemID' => $data['itemId'][$i],
+                'harga' => $data['itemHarga'][$i],
+                'keterangan_jasa' => $data['itemKeterangan'][$i],
                 )
             ); 
-            $totalHarga += $data['harga'][$i];
+            $totalHarga += $data['itemHarga'][$i];
             /*if(isset($data['barang'][$i])){
                 DB::table('purchase_request_detail')->insert(array(
                     'idPurchaseRequest' => $idpr,
