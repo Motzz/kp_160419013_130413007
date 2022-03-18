@@ -77,14 +77,34 @@ class PurchaseRequestController extends Controller
             ->where('MKota.cidkota', $getLokasi[0]->cidkota)
             ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
             ->get();
-    
+
         $dataBarang = DB::table('Item')
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
             ->get();
+        
+        //nama npp create
+        $dataLokasi = DB::table('MGudang')
+            ->select('MKota.*','MPerusahaan.cnames as perusahaanCode')
+            ->join('MKota', 'MGudang.cidkota', '=', 'MKota.cidkota')
+            ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
+            ->where('MGudang.MGudangID', '=', $user->MGudangID)
+            ->get();
+        $date = date("Y-m-d");
+        $year = date("Y");
+        $month = date("m");
+        $dataPermintaan = DB::table('purchase_request')
+            ->where('name', 'like', 'NPP/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/%")
+            ->get();   
+        $totalIndex = str_pad(strval(count($dataPermintaan) + 1),4,'0',STR_PAD_LEFT);
+        $namaNpp = 'NPP/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex;
+        
+
         return view('master.PurchaseRequest.tambah',[
             'dataGudang' => $dataGudang,
             'dataBarang' => $dataBarang,
+            'namaNpp' => $namaNpp,
+            'date' => $date,
         ]);
         
     }

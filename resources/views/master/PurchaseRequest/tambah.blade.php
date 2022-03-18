@@ -6,20 +6,21 @@
 </style>
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid"> 
     <!-- Page Heading -->
    <div class="container">
+   <form action="purchaseRequest.store" method="GET" >
         <div class="py-5 ">
             <h2>Pembuatan Nota Permintaan Pembelian</h2><br>
                <div class="row">
                     <div class="col-md-6 mb-4">
                         <label for="firstName">Nama NPP</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="{{$namaNpp}}" readonly required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Pembuatan</label>
-                        <input type="date" class="form-control" id="lastName" placeholder="" value="" required="">
+                        <input type="date" class="form-control" id="lastName" placeholder="" value="{{$date}}" readonly required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -53,26 +54,26 @@
                     <input type="hidden" name="totalRequest[]">
                     <div class="form-group"  id='tmbhBarang'>
                         <label for="title">Barang</label>
-                        <select require name="barang[]" class="form-control" id="barang">
+                        <select require name="barang" class="form-control" id="barang">
                             <option value="">--Pilih barang--</option>
                             @foreach($dataBarang as $key => $data)
-                            <option name="idBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
+                            <option id="namaBarang" name="idBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
                             @endforeach
                         </select>
-                        <input min=1 require name="jumlah[]" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="angka" />
+                        <input min=1 require name="jumlah" type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
                     </div>
                   
                     <div class="form-group mb-3" id="harga">
                         <label for="title">Harga</label>
-                        <input require type="number" name="harga[]" class="form-control" value="{{old('harga','')}}" >
+                        <input require type="number" id="hargaBarang" name="harga" class="form-control" value="{{old('harga','')}}" >
                     </div>
 
                     <div class="form-group mb-3" id="ket">
                         <label for="title">Keterangan</label>
-                        <input require type="text" name="Keterangan[]" class="form-control" value="{{old('keterangan','')}}" >
+                        <input require type="text" id="keteranganBarang" name="Keterangan" class="form-control" value="{{old('keterangan','')}}" >
                     </div>
                                    
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Tambah kedalam Keranjang</button>
+                    <button class="btn btn-primary btn-lg btn-block" type="submit" id="tambahKeranjang">Tambah kedalam Keranjang</button>
                 </form>
             </div>
             <!--End Permintaan-->
@@ -80,25 +81,29 @@
             <div class="col-md-6 mb-3">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Keranjang</span>
-                    <span class="badge badge-secondary badge-pill" id="totalBarangnya">0</span>
+                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya">0</span>
                 </h4>
-                <ul class="list-group mb-3 sticky-top">
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <ul class="list-group mb-3 sticky-top" id="keranjang">
+                    <!--<li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
-                            <h6 class="my-0">Product name <small name="total">(6)</small> </h6> 
-                            <small class="text-muted">Keterangan</small>
+                            <input type="hidden" name="itemId[]" value="">
+                            <h6 class="my-0" name="itemName[]">Product name <small name="itemTotal[]">(6)</small> </h6> 
+                            <small class="text-muted" name="itemKeterangan[]">Keterangan</small><br>                      
                         </div>
-                        <button class="btn btn-danger" type="button" id="hapus">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
-                                 <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
-                            </svg>
-                        </button>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong name="itemHarga[]">$20</strong>
+                            <button class="btn btn-danger" type="button" id="hapusKeranjang">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </li>     -->             
+                </ul>
+                <li class="list-group-item d-flex justify-content-between">
                         <span>Total (USD)</span>
                         <strong>$20</strong>
                     </li>
-                </ul>
                 <form class="card p-2">
                     <button class="btn btn-primary" type="button"id="tambah">cek ot</button><br>
                 </form>
@@ -107,12 +112,50 @@
 
             
         </div>
-      
+    </form>
     </div>
 </div>
 <script type="text/javascript">
     var tambahCombo = "";
     var totalTambah = 0;
+    $('body').on('click','#hapusKeranjang', function(){
+        $(this).parent().remove();
+        totalTambah -= 1;
+        $('#totalBarangnya').val(totalTambah);
+        $('#totalBarangnya').html(totalTambah);
+    });
+
+    $('body').on('click','#tambahKeranjang', function(){
+        var idBarang = $("#barang").val();
+        var namaBarang = $("#barang option:selected").html();
+        var jumlahBarang = $("#jumlahBarang").val();
+        var hargaBarang = $("#hargaBarang").val();
+        var keteranganBarang = $("#keteranganBarang").val();
+        //alert(jumlahBarang + hargaBarang+ keteranganBarang);
+
+        var htmlKeranjang = "";
+        htmlKeranjang += '<li class="list-group-item d-flex justify-content-between lh-condensed">\n';
+        htmlKeranjang += '<div>\n';
+        htmlKeranjang += '<input type="hidden" name="itemId[]" value="'+idBarang+'">\n';
+        htmlKeranjang += '<h6 class="my-0" name="itemName[]">'+ namaBarang +'<small name="itemTotal[]" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
+        htmlKeranjang += '<small class="text-muted" name="itemKeterangan[]" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
+        htmlKeranjang += '</div>\n';
+        htmlKeranjang += '<strong name="itemHarga[]" value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
+        htmlKeranjang += '<button class="btn btn-danger" type="button" id="hapusKeranjang">\n';
+        htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">\n';
+        htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+        htmlKeranjang += '</svg>\n';
+        htmlKeranjang += '</button>\n';
+        htmlKeranjang += '</div>\n';
+        htmlKeranjang += '</li>\n';
+
+        $('#keranjang').append(htmlKeranjang);
+        totalTambah += 1
+        $('#totalBarangnya').val(totalTambah);
+        $('#totalBarangnya').html(totalTambah);
+    });
+
+
     $("body").on("click", "#tambah", function () {  
         totalTambah++;
         tambahCombo +='<div class="form-group p-3 mb-2 bg-light text-dark border" id="tmbhBarangJasa'+totalTambah+'">\n';
