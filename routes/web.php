@@ -105,6 +105,7 @@ Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,de
 Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');//selese,delete masik gbs
 Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');//selese,delete masik gbs
 Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');//selese,delete masik gbs
+Route::resource('ItemTagValues', 'App\Http\Controllers\ItemTagValuesController');
 
 //COA baru
 Route::resource('coa', 'App\Http\Controllers\COAController');

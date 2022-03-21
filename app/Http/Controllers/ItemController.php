@@ -127,14 +127,15 @@ class ItemController extends Controller
         $user = Auth::user();
 
         $idItem = DB::table('Item')->insertGetId(array(
-            'ItemTypeID' => $data['typeItem'],
+            'ItemTypeID' => $data['typeItem'],//comboBox
             'ItemName' => $data['nameItem'],
-            'UnitID' => $data['itemUnit'],
-            'ItemCategoryID'=> $data['itemCategory'],
+            'UnitID' => $data['itemUnit'],//comboBox
+            'ItemCategoryID'=> $data['itemCategory'],//comboBox
             'Notes'=> $data['note'],
-            'CanBeSell'=> $data['canBeSell'],
-            'CanBePurchased'=> $data['canBePurchased'],
-            'ItemTracingID'=> $data['itemTracing'],
+            'CanBeSell'=> $data['CanBeSell'],
+            'CanBePurchased'=> $data['CanBePurchased'],
+            'ItemTracingID'=> $data['itemTracing'],//comboBox
+            'RoutesToManufactured'=> $data['RoutesToManufactured'],
             'CreatedBy'=> $user->id,//
             'CreatedOn'=> date("Y-m-d h:i:sa"),//
             'UpdatedBy'=> $user->id,//
@@ -144,13 +145,15 @@ class ItemController extends Controller
             )
         ); 
 
-        for($i = 0; $i < count($data['itemTagTotal']); $i++){
+        //dd($data);
+
+        /*for($i = 0; $i < count($data['itemTagTotal']); $i++){
             DB::table('ItemTagValues')->insert(array(
                 'ItemID' => $idItem,
                 'ItemTagID' => $data['itemTagID'][$i],
                 )
-           ); 
-        }
+           );
+        }*/
 
         return redirect()->route('item.index')->with('status','Success!!');
     }
@@ -179,10 +182,22 @@ class ItemController extends Controller
             ->get();
 
         dd($dataItem);*/
+        $dataType = DB::table('ItemType')
+            ->get();
+        $dataUnit = DB::table('Unit')
+            ->get();
+        $dataCategory = DB::table('ItemCategory')
+            ->get();
+        $dataTracing = DB::table('ItemTracing')
+            ->get();
         $check = $this->checkAccess('item.index', $user->id, $user->idRole);
         if($check){
-            return view('master.barang_edit',[
+            return view('master.item.detail',[
                 'item'=>$item,
+                'dataType'=>$dataType,
+                'dataUnit'=>$dataUnit,
+                'dataCategory'=>$dataCategory,
+                'dataTracing'=>$dataTracing,
             ]);
         }
         else{
@@ -254,22 +269,24 @@ class ItemController extends Controller
         $user = Auth::user();
         
         DB::table('Item')
-            ->where('id', $item->ItemID)
+            ->where('ItemID', $item->ItemID)
             ->update(array(
-                'ItemTypeID' => $data['typeItem'],
+                'ItemTypeID' => $data['typeItem'],//comboBox
                 'ItemName' => $data['nameItem'],
-                'UnitID' => $data['itemUnit'],
-                'ItemCategoryID'=> $data['itemCategory'],
+                'UnitID' => $data['itemUnit'],//comboBox
+                'ItemCategoryID'=> $data['itemCategory'],//comboBox
                 'Notes'=> $data['note'],
-                'CanBeSell'=> $data['canBeSell'],
-                'CanBePurchased'=> $data['canBePurchased'],
-                'ItemTracingID'=> $data['itemTracing'],
-                'UpdatedBy'=> $user->id,
-                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+                'CanBeSell'=> $data['CanBeSell'],
+                'CanBePurchased'=> $data['CanBePurchased'],
+                'ItemTracingID'=> $data['itemTracing'],//comboBox
+                'RoutesToManufactured'=> $data['RoutesToManufactured'],
+                'UpdatedBy'=> $user->id,//
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),//
+                'Hapus' => 0,//
                 'HaveExpiredDate' => $data['expiredDate'],
         ));
 
-        $dataTagValues = DB::table('ItemTagValues')
+        /*$dataTagValues = DB::table('ItemTagValues')
             ->where('ItemID', $item->ItemID)
             ->get();
 
@@ -306,7 +323,7 @@ class ItemController extends Controller
                     ); 
                 }
             }
-        }
+        }*/
         
         return redirect()->route('item.index')->with('status','Success!!');
     }
@@ -328,10 +345,6 @@ class ItemController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
                 'Hapus' => 1,
         ));
-        DB::table('ItemTagValues')
-            ->where('ItemID','=',$item->ItemID)
-            ->delete();
-
 
         return redirect()->route('item.index')->with('status','Success!!');
     }

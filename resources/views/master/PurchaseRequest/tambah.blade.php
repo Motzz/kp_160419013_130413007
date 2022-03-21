@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Gudang</label> 
-                        <select name="gudang" class="form-control theSelect" >
+                        <select name="gudang" class="form-control selectpicker" data-live-search="true" data-show-subtext="true">
                             <option value="">
                                 --Pilih gudang--
                             </option>
@@ -55,17 +55,16 @@
                 <div >
                     <div class="form-group"  id='tmbhBarang'>
                         <label for="title">Barang</label>
-                        <select   class="form-control" id="tag">
+                        <select class="form-control selectpicker" id="tag" data-live-search="true">
                             <option value="all">Semua Data</option>
                             @foreach($dataTag as $key => $data)
                             <option id="namaTag" value="{{$data->ItemTagID}}"{{$data->Name == $data->ItemTagID? 'selected' :'' }}>{{$data->Name}}</option>
                             @endforeach
                         </select>
-                        
-                        <select   class="form-control" id="barang">
-                            <option value="">--Pilih barang--</option>
+                        <select class="form-control selectpicker" id="barang" data-live-search="true" data-show-subtext="true">
+                            <option value="pilih">--Pilih barang--</option>
                             @foreach($dataBarang as $key => $data)
-                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
+                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})</option>
                             @endforeach
                         </select>
                         <input min=1   type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
@@ -142,24 +141,36 @@
         
     //});
     $("#tag").change(function() {
-        alert(this.value);
-        var optionnya = "";
+        //alert(this.value);
+        var idTag = this.value;
+        var optionnya = '';
+        var dataBarangTag = <?php echo json_encode($dataBarangTag); ?>;
+        var dataBarang = <?php echo json_encode($dataBarang); ?>;
+
         if(this.value == "all"){
-            optionnya = '<option value="">--Pilih barang--</option>\n';
-            optionnya = '@foreach($dataBarang as $key => $data)\n';
-            optionnya = '<option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>\n';
-            optionnya = '@endforeach\n';
+            optionnya += '<option value="pilih">--Pilih barang--</option>\n';
+            $.each(dataBarang, function( key, value ){
+                optionnya += '<option id="namaBarang" value="'+value.ItemID+'">'+value.ItemName+'<nbsp>('+value.unitName+')  </option>\n';                      
+            });
         }
         else{
             //alert('masuk sini');
-            optionnya = '<option value="">--Pilih barang--</option>\n';
-            optionnya = '@foreach($dataBarangTag as $key => $data)\n';
-            optionnya = '@if($data->ItemTagID == '+ parseInt(this.value) +')\n';
-            optionnya = '<option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>\n';
-            optionnya = '@endif\n';
-            optionnya = '@endforeach\n';
+            optionnya += '<option value="">--Pilih barang--</option>\n';
+            $.each(dataBarangTag, function( key, value ){
+                //alert(value.ItemName);
+                if(value.ItemTagID.toString() == idTag.toString()){
+                    //alert('masuk');
+                    optionnya += '<option id="namaBarang" value="'+value.ItemID+'">'+value.ItemName+'<nbsp>('+value.unitName+')  </option>\n';               
+                }
+            });
+            //foreach($dataBarangTag as $key => $data){
+            //if($data->ItemTagID == parseInt(this.value)){
+            //}
+            //}
+            //endif
+            //endforeach
         }
-        
+        //alert(optionnya);
                             
         $('#barang').empty();
         $('#barang').append(optionnya);
@@ -217,7 +228,7 @@
             htmlKeranjang += '<small class="text-muted keteranganVal" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
             htmlKeranjang += '</div>\n';
             htmlKeranjang += '<div>\n';
-            htmlKeranjang += '<strong value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
+            htmlKeranjang += '<strong value="'+hargaBarang * jumlahBarang+'">Rp. '+hargaBarang * jumlahBarang+',-</strong>\n';
             htmlKeranjang += '<button class="btn btn-danger" type="button" id="copyKe">\n';
             htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
             htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
