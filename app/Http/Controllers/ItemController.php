@@ -468,12 +468,12 @@ class ItemController extends Controller
     }
 
 
-    public function searchItemTagMulti(Request $request)
+    public function searchItemTagMulti(Request $request) //nantik
     {
         //
         $tag=$request->input('searchtag');
         $user = Auth::user();
-        $dataItem = DB::table('Item')
+        $dataItem1 = DB::table('Item')
             //->limit(100)
             
             ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
@@ -485,9 +485,36 @@ class ItemController extends Controller
             ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
             ->where('Item.Hapus', '=', 0)
-            ->where('ItemTag.Name','like','%'.$tag.'%')
-            ->simplePaginate(10);
+            //->where('ItemTag.Name','like','%'.$tag.'%');
+            //->where('ItemTag.Name','like','pipil Kering')->where('ItemTag.Name','like','Jagung')->get();
+            ->where('ItemTagValues.ItemTagID','like','2')->get();
+            //->simplePaginate(10);
+        
+        
+        $dataItem2 = DB::table('Item')
+            //->limit(100)
+            
+            ->select('Item.*', 'ItemType.Name as typeName' ,'ItemType.Notes as typeNotes', 'Unit.Name as unitName', 
+            'ItemCategory.Name as categoryName', 'ItemTracing.Name as tracingName')
+            ->leftjoin('ItemType', 'Item.ItemTypeID', '=', 'ItemType.ItemTypeID')
+            ->leftjoin('Unit', 'Item.UnitID', '=', 'Unit.UnitID') 
+            ->leftjoin('ItemCategory', 'Item.ItemCategoryID', '=', 'ItemCategory.ItemCategoryID')  
+            ->leftjoin('ItemTracing', 'Item.ItemTracingID', '=', 'ItemTracing.ItemTracingID')
+            ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            ->leftjoin('ItemTag', 'ItemTagValues.ItemTagID', '=', 'ItemTag.ItemTagID')
+            ->where('Item.Hapus', '=', 0)
+            //->where('ItemTag.Name','like','%'.$tag.'%');
+            //->where('ItemTag.Name','like','pipil Kering')->where('ItemTag.Name','like','Jagung')->get();
+            ->where('ItemTagValues.ItemTagID','like','1')->get();
+        
+        $dataItem = null;
+        foreach($dataItem1 as $data){
+            foreach($dataItem2 as $data){
 
+            }
+        }
+
+        dd($dataItem);
         $dataTag = DB::table('ItemTag')
             ->leftjoin('ItemTagValues', 'ItemTag.ItemTagID', '=', 'ItemTagValues.ItemTagID')
             ->get(); 

@@ -56,9 +56,9 @@
                     <div class="form-group"  id='tmbhBarang'>
                         <label for="title">Barang</label>
                         <select   class="form-control" id="tag">
-                            <option value="">Semua Data</option>
+                            <option value="all">Semua Data</option>
                             @foreach($dataTag as $key => $data)
-                            <option id="namaBarang" value="{{$data->ItemTagID}}"{{$data->Name == $data->ItemTagID? 'selected' :'' }}>{{$data->Name}}</option>
+                            <option id="namaTag" value="{{$data->ItemTagID}}"{{$data->Name == $data->ItemTagID? 'selected' :'' }}>{{$data->Name}}</option>
                             @endforeach
                         </select>
                         
@@ -138,8 +138,31 @@
     var totalTambah = 0;
     
 
-    $('body').on('click','#tag', function(){
+    //$('body').on('click','#namaTag', function(){
         
+    //});
+    $("#tag").change(function() {
+        alert(this.value);
+        var optionnya = "";
+        if(this.value == "all"){
+            optionnya = '<option value="">--Pilih barang--</option>\n';
+            optionnya = '@foreach($dataBarang as $key => $data)\n';
+            optionnya = '<option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>\n';
+            optionnya = '@endforeach\n';
+        }
+        else{
+            //alert('masuk sini');
+            optionnya = '<option value="">--Pilih barang--</option>\n';
+            optionnya = '@foreach($dataBarangTag as $key => $data)\n';
+            optionnya = '@if($data->ItemTagID == '+ parseInt(this.value) +')\n';
+            optionnya = '<option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>\n';
+            optionnya = '@endif\n';
+            optionnya = '@endforeach\n';
+        }
+        
+                            
+        $('#barang').empty();
+        $('#barang').append(optionnya);
     });
 
     $('body').on('click','#hapusKeranjang', function(){

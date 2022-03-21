@@ -81,9 +81,17 @@ class PurchaseRequestController extends Controller
         $dataBarang = DB::table('Item')
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
+            ->leftjoin('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
             ->where('Item.Hapus',0)
             ->get();
-        
+
+        $dataBarangTag = DB::table('Item')
+            ->select('Item.*', 'Unit.Name as unitName','ItemTagValues.ItemTagID')
+            ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
+            ->join('ItemTagValues', 'Item.ItemID', '=', 'ItemTagValues.ItemID')
+            ->where('Item.Hapus',0)
+            ->get();
+        //dd($dataBarangTag);
         $dataTag = DB::table('ItemTag')
             ->get();
         
@@ -106,6 +114,7 @@ class PurchaseRequestController extends Controller
 
         return view('master.PurchaseRequest.tambah',[
             'dataGudang' => $dataGudang,
+            'dataBarangTag' => $dataBarangTag,
             'dataBarang' => $dataBarang,
             'namaNpp' => $namaNpp,
             'date' => $date,
@@ -175,7 +184,7 @@ class PurchaseRequestController extends Controller
                 'keterangan_jasa' => $data['itemKeterangan'][$i],
                 )
             ); 
-            $totalHarga += $data['itemHarga'][$i];
+            $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i];
             /*if(isset($data['barang'][$i])){
                 DB::table('purchase_request_detail')->insert(array(
                     'idPurchaseRequest' => $idpr,
@@ -308,7 +317,7 @@ class PurchaseRequestController extends Controller
                     'keterangan_jasa' => $data['itemKeterangan'][$i],
                     )
                 ); 
-                $totalHarga += $data['itemHarga'][$i];
+                $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i];
             }     
         }
         else{
@@ -323,7 +332,7 @@ class PurchaseRequestController extends Controller
                         'keterangan_jasa' => $data['itemKeterangan'][$i],
                         )           
                     );
-                    $totalHarga += $data['itemHarga'][$i];        
+                    $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i];        
                 }
                 else{
                     DB::table('purchase_request_detail')->insert(array(
@@ -334,7 +343,7 @@ class PurchaseRequestController extends Controller
                         'keterangan_jasa' => $data['itemKeterangan'][$i],
                         )
                     ); 
-                    $totalHarga += $data['itemHarga'][$i];        
+                    $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i];        
                 }
             }
         }
