@@ -198,7 +198,7 @@ class MSupplierController extends Controller
                 'AtasNama' => $data['atasNama'],
                 'Lokasi' => $data['lokasi'],
                 'Kode' => $data['kode'],
-                'Hapus' => 0,
+                'Hapus' => 0,//
                 'Keterangan' => $data['keterangan'],
                 'SaldoDP' => $data['saldoDP'],
                 'NamaNPWP' => $data['namaNPWP'],
@@ -206,8 +206,8 @@ class MSupplierController extends Controller
                 'SPPKP' => $data['SPPKP'],
                 'KTP' => $data['KTP'],
                 'MKotaID' => $data['mKotaID'],
-                'UpdatedBy'=> $user->id,
-                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+                'UpdatedBy'=> $user->id,//
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),//
             )
         );
         return redirect()->route('msupplier.index')->with('status','Success!!');

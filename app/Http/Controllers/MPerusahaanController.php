@@ -24,7 +24,7 @@ class MPerusahaanController extends Controller
         //
         $data = DB::table('MPerusahaan')
             ->get();
-        return view('master.mPerusahaan',[
+        return view('master.mPerusahaan.index',[
             'data' => $data,
         ]);
     }
@@ -67,6 +67,7 @@ class MPerusahaanController extends Controller
                 'UserIDManager' => $data['manager']
             )
         );
+        return redirect()->route('mPerusahaan.index')->with('status','Success!!');
     }
 
     /**
@@ -77,11 +78,10 @@ class MPerusahaanController extends Controller
      */
     public function show(MPerusahaan $mPerusahaan)
     {
-        //
         $data = DB::table('MPerusahaan')
             ->join('users','MPerusahaan.UserIDManager','=','users.id')
             ->get();
-        return view('master.mPerusahaan_detail',[
+        return view('master.mPerusahaan.detail',[
             'data' => $data,
         ]);
     }
@@ -97,7 +97,7 @@ class MPerusahaanController extends Controller
         //
         $users = DB::table('users')
             ->get();    
-        return view('master.mPerusahaan_edit',[
+        return view('master.mPerusahaan.edit',[
             'mPerusahaan' => $mPerusahaan,
             'users' => $users,
         ]);
@@ -117,7 +117,7 @@ class MPerusahaanController extends Controller
         $user = Auth::user();
         
         DB::table('MPerusahaan')
-            ->where('MPerusahaanID', $mPerusahaan['id'])
+            ->where('MPerusahaanID', $mPerusahaan['MPerusahaanID'])
             ->update(array(
                 'cname' => $data['name'],
                 'cnames' => $data['names'],
@@ -126,6 +126,7 @@ class MPerusahaanController extends Controller
                 'UserIDManager' => $data['manager']
             )
         );
+        return redirect()->route('mPerusahaan.index')->with('status','Success!!');
     }
 
     /**
@@ -137,7 +138,8 @@ class MPerusahaanController extends Controller
     public function destroy(MPerusahaan $mPerusahaan)
     {
         //
-        $mPerusahaan->destroy();
+        $mPerusahaan->delete();
+        return redirect()->route('mPerusahaan.index')->with('status','Success!!');
     }
 
     public function searchPerusahaanName($perName)

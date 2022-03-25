@@ -37,7 +37,7 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Components:</h6>
             <a class="collapse-item" href="{{route('purchaseRequest.index')}}">Permintaan Pembelian</a>
-            <a class="collapse-item" href="cards.html">Purchase Order</a>
+            <a class="collapse-item" href="{{route('purchaseOrder.index')}}">Purchase Order</a>
             <a class="collapse-item" href="cards.html">Surat Jalan</a>
         </div>
     </div>
@@ -131,7 +131,10 @@
             <a class="collapse-item" href="{{route('itemTransaction.index')}}">itemTransaction</a>
             <a class="collapse-item" href="{{route('itemType.index')}}">itemType</a>
             <a class="collapse-item" href="{{route('ItemTagValues.index')}}">ItemTagValues</a>
-
+            <a class="collapse-item" href="{{route('mPulau.index')}}">Pulau</a>
+            <a class="collapse-item" href="{{route('mProvinsi.index')}}">Provinsi</a>
+            <a class="collapse-item" href="{{route('mKota.index')}}">Kota</a>
+            <a class="collapse-item" href="{{route('mPerusahaan.index')}}">Perusahaan</a>
             <a class="collapse-item" href="{{route('coa.index')}}">Coa</a>
 
         </div>

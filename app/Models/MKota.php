@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MKota extends Model
 {
     use HasFactory;
+     protected $table = 'MKota';
+     protected $primaryKey='MKotaID';
 }

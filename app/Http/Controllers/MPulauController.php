@@ -23,7 +23,7 @@ class MPulauController extends Controller
         //
         $data = DB::table('MPulau')
             ->get();
-        return view('master.mPulau',[
+        return view('master.mPulau.index',[
             'data' => $data,
         ]);
     }
@@ -36,7 +36,7 @@ class MPulauController extends Controller
     public function create()
     {
         //
-        return view('master.mPulau_tambah');
+        return view('master.mPulau.tambah');
     }
 
     /**
@@ -61,6 +61,7 @@ class MPulauController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+         return redirect()->route('mPulau.index')->with('status','Success!!');
     }
 
     /**
@@ -73,7 +74,7 @@ class MPulauController extends Controller
     {
         //
         //$data = DB::table('MPulau')->get();
-        return view('master.mPulau_detail',[
+        return view('master.mPulau.detail',[
             'mPulau' => $mPulau,
         ]);
     }
@@ -87,7 +88,7 @@ class MPulauController extends Controller
     public function edit(MPulau $mPulau)
     {
         //
-        return view('master.mPulau_edit',[
+        return view('master.mPulau.edit',[
             'mPulau' => $mPulau,
         ]);
     }
@@ -105,7 +106,7 @@ class MPulauController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('MPulau')
-            ->where('MPulauID', $mPulau['id'])
+            ->where('MPulauID', $mPulau['MPulauID'])
             ->update(array(
                 'cidpulau' => $data['cid'],
                 'cname' => $data['name'],
@@ -113,6 +114,7 @@ class MPulauController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('mPulau.index')->with('status','Success!!');
     }
 
     /**
@@ -124,7 +126,8 @@ class MPulauController extends Controller
     public function destroy(MPulau $mPulau)
     {
         //
-        $mPulau->destroy();
+        $mPulau->delete();
+        return redirect()->route('mPulau.index')->with('status','Success!!');
     }
 
     public function searchPulauName($pulauName)

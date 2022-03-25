@@ -27,8 +27,10 @@ class MKotaController extends Controller
             ->select('MKota.*', 'MProvinsi.cname as provinsiName', 'MPulau.cname as pulauName')
             ->leftjoin('MPulau','MKota.cidpulau','=','MPulau.cidpulau')
             ->leftjoin('MProvinsi','MKota.cidprov','=','MProvinsi.cidprov')
+            //->simplePaginate(10);
             ->get();
-        return view('master.mKota',[
+            //{{$data->links()}}
+        return view('master.mKota.index',[
             'data' => $data,
         ]);
     }
@@ -45,7 +47,7 @@ class MKotaController extends Controller
             ->get();
         $dataMProvinsi = DB::table('MProvinsi')
             ->get();    
-        return view('master.mKota_tambah',[
+        return view('master.mKota.tambah',[
             'dataMPulau' => $dataMPulau,
             'dataMProvinsi' => $dataMProvinsi,
         ]);
@@ -76,6 +78,7 @@ class MKotaController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         ); 
+         return redirect()->route('mKota.index')->with('status','Success!!');
     }
 
     /**
@@ -103,15 +106,15 @@ class MKotaController extends Controller
      * @param  \App\Models\MKota  $mKota
      * @return \Illuminate\Http\Response
      */
-    public function edit(MKota $mKota)
+    public function edit(MKota $mKotum)
     {
         //
         $dataMPulau = DB::table('MPulau')
             ->get();
         $dataMProvinsi = DB::table('MProvinsi')
             ->get();    
-        return view('master.mKota_edit',[
-            'mKota' => $mKota,
+        return view('master.mKota.edit',[
+            'mKota' => $mKotum,
             'dataMPulau' => $dataMPulau,
             'dataMProvinsi' => $dataMProvinsi,
         ]);
@@ -124,13 +127,13 @@ class MKotaController extends Controller
      * @param  \App\Models\MKota  $mKota
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MKota $mKota)
+    public function update(Request $request, MKota $mKotum)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
         DB::table('MKota')
-            ->where('MKotaID', $mKota['id'])
+            ->where('MKotaID', $mKota['MKotaID'])
             ->update(array(
                 'cidkota' => $data['cid'],
                 'ckode' => $data['kode'],
@@ -141,6 +144,7 @@ class MKotaController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('mKota.index')->with('status','Success!!');
     }
 
     /**
@@ -152,7 +156,8 @@ class MKotaController extends Controller
     public function destroy(MKota $mKota)
     {
         //
-        $mKota->destroy();
+        $mKota->delete();
+         return redirect()->route('mKota.index')->with('status','Success!!');
     }
 
     public function searchKotaName($kotaName)

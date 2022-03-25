@@ -9,43 +9,57 @@
 <div class="container-fluid"> 
     <!-- Page Heading -->
    <div class="container">
-   <form action="{{route('purchaseRequest.store')}}" method="POST" >
-           @csrf
+   <form action="{{route('purchaseRequest.update',[$purchaseRequest->id])}}" method="POST" >
+            @csrf
+            @method('PUT')
         <div class="py-5 ">
-            <h2>Pembuatan Nota Permintaan Pembelian</h2><br>
+            <h2>Pembuatan Purchase Order</h2><br>
                <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label for="firstName">Nama NPP</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="{{$namaNpp}}" readonly required="">
+                        <label for="firstName">Nama PO</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="{{old('name',$purchaseRequest->name)}}" readonly required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Pembuatan</label>
-                        <input type="date" class="form-control" id="lastName" placeholder="" value="{{$date}}" readonly required="">
+                        <input type="date" class="form-control" id="lastName" placeholder="" value="{{old('created_on',$purchaseRequest->created_on)}}" readonly required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="firstName">Tanggal Dibutuhkan</label>
-                        <input type="date" name="tanggalDibutuhkan" class="form-control" id="firstName" placeholder="" value="{{old('tanggalDibutuhkan','')}}" required="">
-                        <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Batas Akhir</label>
-                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir','')}}" required="">
+                        <input type="date" name="tanggalAkhir" class="form-control" id="lastName" placeholder="" value="{{old('tanggalAkhir',$purchaseRequest->tanggalAkhirDibutuhkan)}}" required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="lastName">Gudang</label> 
-                        <select name="gudang" class="form-control selectpicker" data-live-search="true" data-show-subtext="true">
+                        <label for="lastName">Cara Pembayaran</label>
+                        <select required name="gudang" class="form-control">
                             <option value="">
-                                --Pilih gudang--
+                                --Pilih Cara Pembayaran--
                             </option>
-                            @foreach($dataGudang as $key => $data)
+                             @foreach($dataGudang as $key => $data)
+                                @if($data->MGudangID==$purchaseRequest->MGudangID)
+                                <option selected name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }} >{{$data->cname}} </option>
+                                @else
                                 <option name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }}>{{$data->cname}}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
-                    
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Gudang</label>
+                        <select required name="gudang" class="form-control">
+                            <option value="">
+                                --Pilih gudang--
+                            </option>
+                             @foreach($dataGudang as $key => $data)
+                                @if($data->MGudangID==$purchaseRequest->MGudangID)
+                                <option selected name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }} >{{$data->cname}} </option>
+                                @else
+                                <option name="idGudang" value="{{$data->MGudangID}}"{{$data->cname == $data->MGudangID? 'selected' :'' }}>{{$data->cname}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
                 </div>     
         </div>
         <div class="row">
@@ -55,16 +69,10 @@
                 <div >
                     <div class="form-group"  id='tmbhBarang'>
                         <label for="title">Barang</label>
-                        <!--<select class="form-control selectpicker" id="tag" data-live-search="true">
-                            <option value="all">Semua Data</option>
-                            @foreach($dataTag as $key => $data)
-                            <option id="namaTag" value="{{$data->ItemTagID}}"{{$data->Name == $data->ItemTagID? 'selected' :'' }}>{{$data->Name}}</option>
-                            @endforeach
-                        </select>-->
-                        <select class="form-control selectpicker" id="barang" data-live-search="true" data-show-subtext="true">
-                            <option value="pilih">--Pilih barang--</option>
+                        <select   class="form-control" id="barang">
+                            <option value="">--Pilih barang--</option>
                             @foreach($dataBarang as $key => $data)
-                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})</option>
+                            <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})  </option>
                             @endforeach
                         </select>
                         <input min=1   type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
@@ -77,7 +85,7 @@
 
                     <div class="form-group mb-3" id="ket">
                         <label for="title">Keterangan</label>
-                        <input  type="text" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" >
+                        <input  type="textarea" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" >
                     </div>
                                    
                     <input class="btn btn-primary btn-lg btn-block" type="button" id="tambahKeranjang" value="Tambah kedalam Keranjang">
@@ -94,27 +102,38 @@
                 <input type="hidden" name="tanggalAkhir" value="{{old('tanggalAkhirVal')}}">-->
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Keranjang</span>
-                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya" value="0">0</span>
+                    <span class="badge badge-secondary badge-pill" name="totalBarangnya" id="totalBarangnya" value="0">{{count($dataDetail)}}</span>
                 </h4>
                 <ul class="list-group mb-3 sticky-top" id="keranjang">
-                    <!--<li class="list-group-item d-flex justify-content-between lh-condensed">
+                    @foreach($dataDetail as $data)
+                        @foreach($dataBarang as $item)
+                          @if($item->ItemID == $data->ItemID)
+                    <li  class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
-                            <input type="hidden" name="itemId[]" value="">
-                            <input type="hidden" name="itemTotal[]" value="">
-                            <input type="hidden" name="itemKeterangan[]" value="">
-                            <input type="hidden" name="itemHarga[]" value="">
-                            <h6 class="my-0">Product name <small>(6)</small> </h6> 
-                            <small class="text-muted">Keterangan</small><br>                      
+                            <input type="hidden" class="cekId" name="itemId[]" value="{{$data->ItemID}}">
+                            <input type="hidden" class="cekJumlah" name="itemTotal[]" value="{{$data->jumlah}}">
+                            <input type="hidden" class="cekKeterangan" name="itemKeterangan[]" value="{{$data->keterangan_jasa}}">
+                            <input type="hidden" class="cekHarga" name="itemHarga[]" value="{{$data->harga}}">
+                            <h6 class="my-0">{{$item->ItemName}}<small class="hargaVal">({{$data->jumlah}})</small> </h6> 
+                            <small class="text-muted keteranganVal">{{$data->keterangan_jasa}}</small><br>                      
                         </div>
                         <div>
-                            <strong>$20</strong>
+                            <strong>Rp.{{$data->harga}},-</strong>
+                            <button class="btn btn-primary copyKe" type="button" id="copyKe">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                                </svg>
+                            </button>
                             <button class="btn btn-danger" type="button" id="hapusKeranjang">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
                                     <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
                                 </svg>
                             </button>
                         </div>
-                    </li>     -->             
+                    </li>  
+                          @endif    
+                        @endforeach           
+                    @endforeach           
                 </ul>
                 <!--<li class="list-group-item d-flex justify-content-between">
                         <span>Total (USD)</span>
@@ -135,50 +154,24 @@
 <script type="text/javascript">
     var tambahCombo = "";
     var totalTambah = 0;
-    
 
-    //$('body').on('click','#namaTag', function(){
+    $('body').on('click','.copyKe', function(){
+        //alert($(this).index('.copyKe'));
+        var i = $(this).index('.copyKe');
+        var idBarang = $('.cekId:eq('+i+')').val();
+        //var namaBarang = $('.cekJumlah:eq('+i+')').val();
+        var jumlahBarang = $('.cekJumlah:eq('+i+')').val();
+        var hargaBarang = $('.cekHarga:eq('+i+')').val();
+        var keteranganBarang = $('.cekKeterangan:eq('+i+')').val();
         
-    //});
-    $("#tag").change(function() {
-        //alert(this.value);
-        var idTag = this.value;
-        var optionnya = '';
-        var dataBarangTag = <?php echo json_encode($dataBarangTag); ?>;
-        var dataBarang = <?php echo json_encode($dataBarang); ?>;
+        $("#barang").val(idBarang);
+        $("#jumlahBarang").val(jumlahBarang);
+        $("#hargaBarang").val(hargaBarang);
+        $("#keteranganBarang").val(keteranganBarang);
 
-        if(this.value == "all"){
-            optionnya += '<option value="pilih">--Pilih barang--</option>\n';
-            $.each(dataBarang, function( key, value ){
-                optionnya += '<option id="namaBarang" value="'+value.ItemID+'">'+value.ItemName+'<nbsp>('+value.unitName+')  </option>\n';                      
-            });
-        }
-        else{
-            //alert('masuk sini');
-            optionnya += '<option value="">--Pilih barang--</option>\n';
-            $.each(dataBarangTag, function( key, value ){
-                //alert(value.ItemName);
-                if(value.ItemTagID.toString() == idTag.toString()){
-                    //alert('masuk');
-                    optionnya += '<option id="namaBarang" value="'+value.ItemID+'">'+value.ItemName+'<nbsp>('+value.unitName+')  </option>\n';               
-                }
-            });
-            //foreach($dataBarangTag as $key => $data){
-            //if($data->ItemTagID == parseInt(this.value)){
-            //}
-            //}
-            //endif
-            //endforeach
-        }
-        //alert(optionnya);
-                            
-        $('#barang').empty();
-        $('#barang').append(optionnya);
     });
 
     $('body').on('click','#hapusKeranjang', function(){
-        //alert($('.cekId:eq(2)').val());
-        //alert($('.cekId').length);
         $(this).parent().parent().remove();
         totalTambah -= 1;
         $('#totalBarangnya').val(totalTambah);
@@ -228,7 +221,7 @@
             htmlKeranjang += '<small class="text-muted keteranganVal" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
             htmlKeranjang += '</div>\n';
             htmlKeranjang += '<div>\n';
-            htmlKeranjang += '<strong value="'+hargaBarang * jumlahBarang+'">Rp. '+hargaBarang * jumlahBarang+',-</strong>\n';
+            htmlKeranjang += '<strong value="'+hargaBarang+'">Rp. '+hargaBarang+',-</strong>\n';
             htmlKeranjang += '<button class="btn btn-danger" type="button" id="copyKe">\n';
             htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
             htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
@@ -251,7 +244,7 @@
     });
 
 
-    $("body").on("click", "#tambah", function () {  
+   /* $("body").on("click", "#tambah", function () {  
         totalTambah++;
         tambahCombo +='<div class="form-group p-3 mb-2 bg-light text-dark border" id="tmbhBarangJasa'+totalTambah+'">\n';
         tambahCombo +='<input type="hidden" name="totalRequest[]">\n';
@@ -305,7 +298,7 @@
         //$("#buttonBarang").hide();
     });*/
 
-    $(document).ready(function(){
+    /*$(document).ready(function(){
         $('input[name=jenis0]').click(function(){
 
             if($("#barang").is(':checked'))
@@ -322,7 +315,7 @@
               //$("#buttonBarang").hide();
             }
         });
-    });
+    });*/
     
     /*$('#myForm input').on('change', function() {
            $("input[name=jenis]").change(function(){

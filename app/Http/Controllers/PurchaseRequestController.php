@@ -163,6 +163,7 @@ class PurchaseRequestController extends Controller
             'name' => 'NPP/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex,
             'MGudangID' => $data['gudang'],
             'approved' => 0,
+            'approvedAkhir' => 0,
             'hapus' => 0,
             'tanggalDibutuhkan' => $data['tanggalDibutuhkan'],
             'tanggalAkhirDibutuhkan' => $data['tanggalAkhir'],
@@ -295,6 +296,8 @@ class PurchaseRequestController extends Controller
             ->where('id', $purchaseRequest->id)
             ->update([
                 'MGudangID' => $data['gudang'],
+                'tanggalDibutuhkan' => $data['tanggalDibutuhkan'],
+                'tanggalAkhirDibutuhkan' => $data['tanggalAkhir'],
                 'updated_by'=> $user->id,
                 'updated_on'=> date("Y-m-d h:i:sa"),
         ]);

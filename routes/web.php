@@ -73,8 +73,7 @@ Route::resource('supplier', 'App\Http\Controllers\SupplierController');
 /*bank   - no debug still dont know  belum dibuat blade nya*/
 Route::resource('bank', 'App\Http\Controllers\BankController');
 
-//Purchase Request 
-Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestController');
+
 
 //Info Supplier (ex:tik, alat tulis, gadget, dll) 
 Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');
@@ -116,15 +115,31 @@ Route::resource('coaHead', 'App\Http\Controllers\COAHeadController');
 Route::resource('mGudang', 'App\Http\Controllers\MGudangController');
 Route::resource('mGudangAreaSimpan', 'App\Http\Controllers\MGudangAreaSimpanController');
 Route::resource('mGudangValues', 'App\Http\Controllers\MGudangValuesController');
-Route::resource('mKota', 'App\Http\Controllers\MKotaController');
-Route::resource('mPerusahaan', 'App\Http\Controllers\MPerusahaanController');
-Route::resource('mProvinsi', 'App\Http\Controllers\MProvinsiController');
-Route::resource('mPulau', 'App\Http\Controllers\MPulauController');
+//Route::resource('mKota', 'App\Http\Controllers\MKotaController');
+//Route::resource('mPerusahaan', 'App\Http\Controllers\MPerusahaanController');
+//Route::resource('mProvinsi', 'App\Http\Controllers\MProvinsiController');
+//Route::resource('mPulau', 'App\Http\Controllers\MPulauController');
 
 //payment and paymentterms
 Route::resource('payment', 'App\Http\Controllers\PaymentController');
 Route::resource('paymentTerms', 'App\Http\Controllers\PaymentTermsController');
 
 //mSupplier
-Route::resource('msupplier', 'App\Http\Controllers\MSupplierController');//selese,delete masik gbs
+Route::resource('msupplier', 'App\Http\Controllers\MSupplierController');
 
+//mPulau
+Route::resource('mPulau', 'App\Http\Controllers\MPulauController');//selese
+
+//mProvinsi
+Route::resource('mProvinsi', 'App\Http\Controllers\MProvinsiController');//selese
+
+//mPerusahaan
+Route::resource('mPerusahaan', 'App\Http\Controllers\MPerusahaanController');//selese
+
+Route::resource('mKota', 'App\Http\Controllers\MKotaController');//selese
+
+//Purchase Request 
+Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestController');
+
+//Purchase Order 
+Route::resource('purchaseOrder', 'App\Http\Controllers\PurchaseOrderController');

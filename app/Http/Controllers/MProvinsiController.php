@@ -23,7 +23,7 @@ class MProvinsiController extends Controller
         //
         $data = DB::table('MProvinsi')
             ->get();
-        return view('master.mProvinsi',[
+        return view('master.mProvinsi.index',[
             'data' => $data,
         ]);
     }
@@ -36,7 +36,7 @@ class MProvinsiController extends Controller
     public function create()
     {
         //
-        return view('master.mProvinsi_tambah');
+        return view('master.mProvinsi.tambah');
     }
 
     /**
@@ -61,6 +61,7 @@ class MProvinsiController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('mProvinsi.index')->with('status','Success!!');
     }
 
     /**
@@ -73,7 +74,7 @@ class MProvinsiController extends Controller
     {
         //
         //$data = DB::table('MProvinsi')->get();
-        return view('master.mProvinsi_detail',[
+        return view('master.mProvinsi.detail',[
             'mProvinsi' => $mProvinsi,
         ]);
     }
@@ -87,7 +88,7 @@ class MProvinsiController extends Controller
     public function edit(MProvinsi $mProvinsi)
     {
         //
-        return view('master.mProvinsi_edit',[
+        return view('master.mProvinsi.edit',[
             'mProvinsi' => $mProvinsi,
         ]);       
     }
@@ -105,7 +106,7 @@ class MProvinsiController extends Controller
         $data = $request->collect();
         $user = Auth::user();
         DB::table('MProvinsi')
-            ->where('MProvinsiID', $mProvinsi['id'])
+            ->where('MProvinsiID', $mProvinsi['MProvinsiID'])
             ->update(array(
                 'cidprov' => $data['cid'],
                 'cname' => $data['name'],
@@ -113,6 +114,8 @@ class MProvinsiController extends Controller
                 'UpdatedOn'=> date("Y-m-d h:i:sa"),
             )
         );
+        return redirect()->route('mProvinsi.index')->with('status','Success!!');
+        
     }
 
     /**
@@ -124,7 +127,8 @@ class MProvinsiController extends Controller
     public function destroy(MProvinsi $mProvinsi)
     {
         //
-        $mProvinsi->destroy();
+        $mProvinsi->delete();
+        return redirect()->route('mProvinsi.index')->with('status','Success!!');
     }
 
     public function searchProvinsiName($provName)
