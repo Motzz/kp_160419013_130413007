@@ -78,18 +78,29 @@ class PurchaseOrderController extends Controller
             ->get();
         $dataTax=DB::table('Tax')
             ->get();
-
+        
         
         //data Purchase Request yang disetujui
         $dataPurchaseRequestDetail = DB::table('purchase_request_detail')
-            ->select('purchase_request_detail.*','purchase_request.name')//
+            ->select('purchase_request_detail.*','purchase_request.name','Item.ItemName as ItemName','Unit.Name as UnitName')//
             ->join('purchase_request', 'purchase_request_detail.idPurchaseRequest', '=','purchase_request.id')
+            ->join('Item','purchase_request_detail.ItemID','=','Item.ItemID')
+            ->join('Unit','Item.UnitID','=','Unit.UnitID')
             ->where('purchase_request.approved', 1)
             ->where('purchase_request.approvedAkhir', 1)
             ->where('purchase_request.hapus', 0)
             ->where('purchase_request.proses', 1)
             ->where('purchase_request_detail.jumlahProses', '<', DB::raw('purchase_request_detail.jumlah'))//errorr disini
             ->get();
+        //dd($dataPurchaseRequestDetail);
+        
+        $dataPurchaseRequest = DB::table('purchase_request')
+            ->where('purchase_request.approved', 1)
+            ->where('purchase_request.approvedAkhir', 1)
+            ->where('purchase_request.hapus', 0)
+            ->where('purchase_request.proses', 1)
+            ->get();
+            //dd($dataPurchaseRequest);
 //dd($dataPurchaseRequestDetail);
         //nama npp create
         $dataLokasi = DB::table('MGudang')
@@ -118,6 +129,7 @@ class PurchaseOrderController extends Controller
             'dataTag' => $dataTag,
             'dataTax' => $dataTax,
             'dataPurchaseRequestDetail' => $dataPurchaseRequestDetail,
+            'dataPurchaseRequest' => $dataPurchaseRequest,
         ]);
     }
 

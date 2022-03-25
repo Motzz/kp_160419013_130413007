@@ -54,7 +54,7 @@
         data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Permintaan Pembelian</a>
+            <a class="collapse-item" href="{{route('approvedPurchaseRequest.index')}}">Permintaan Pembelian</a>
             <a class="collapse-item" href="utilities-border.html">Purchase Order</a>
             <a class="collapse-item" href="utilities-animation.html">Animations----</a>
             <a class="collapse-item" href="utilities-other.html">Other----</a>

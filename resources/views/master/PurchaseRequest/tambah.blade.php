@@ -45,6 +45,14 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Jenis Permintaan</label> 
+                        <select name="jenisProses" class="form-control selectpicker" data-live-search="true" data-show-subtext="true">
+                            <option value="1" selected>Pembelian Melalui Pusat</option>
+                            <option value="0">Pembelian Melalui Lokal</option>
+                        </select>
+                    </div>
                     
                 </div>     
         </div>
@@ -67,17 +75,18 @@
                             <option id="namaBarang" value="{{$data->ItemID}}"{{$data->ItemName == $data->ItemID? 'selected' :'' }}>{{$data->ItemName}}<nbsp>({{$data->unitName}})</option>
                             @endforeach
                         </select>
-                        <input min=1   type="number" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
+                        <input min=1   type="number" step=".01" class="form-control" placeholder="Jumlah barang" aria-label="Recipient's username" aria-describedby="basic-addon2"id="jumlahBarang" />
                     </div>
                   
                     <div class="form-group mb-3" id="harga">
                         <label for="title">Harga</label>
-                        <input  type="number" id="hargaBarang" class="form-control" value="{{old('harga','')}}" >
+                        <input  type="text" step=".01" id="tanpa-rupiah" class="form-control" value="{{old('harga','')}}" >
+                        <input type="hidden" id="hargaBarang" value = "">
                     </div>
 
                     <div class="form-group mb-3" id="ket">
                         <label for="title">Keterangan</label>
-                        <input  type="text" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" >
+                        <textarea rows="3" id="keteranganBarang" class="form-control" value="{{old('keterangan','')}}" ></textarea>
                     </div>
                                    
                     <input class="btn btn-primary btn-lg btn-block" type="button" id="tambahKeranjang" value="Tambah kedalam Keranjang">
@@ -116,10 +125,10 @@
                         </div>
                     </li>     -->             
                 </ul>
-                <!--<li class="list-group-item d-flex justify-content-between">
-                        <span>Total (USD)</span>
-                        <strong>$20</strong>
-                </li>-->  
+                <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (Rupiah)</span>
+                        <strong id="TotalHargaKeranjang"></strong>
+                </li> 
                 
                 <button class="btn btn-primary" type="submit" id="tambah">Kirim</button><br>
                 
@@ -213,8 +222,12 @@
             $('.cekKeterangan:eq('+indexSama+')').val(keterangan + ".\n" +keteranganBarang)
             
             $('.keteranganVal:eq('+indexSama+')').html($('.cekKeterangan:eq('+indexSama+')').val());
-            $('.hargaVal:eq('+indexSama+')').html(($('.cekJumlah:eq('+indexSama+')').val()));
-
+            $('.jumlahVal:eq('+indexSama+')').html(($('.cekJumlah:eq('+indexSama+')').val()));
+            $('.hargaVal:eq('+indexSama+')').html( "Rp. " + ($('.cekJumlah:eq('+indexSama+')').val()* $("#hargaBarang").val())+',-');
+            
+            var totalHargaKeranjang = $('#TotalHargaKeranjang').val()
+            totalHargaKeranjang += ($('.cekJumlah:eq('+indexSama+')').val()) * ($("#hargaBarang").val());
+            $('#TotalHargaKeranjang').html(formatRupiah(totalHargaKeranjang));
         }
         else{
             var htmlKeranjang = "";
@@ -224,14 +237,14 @@
             htmlKeranjang += '<input type="hidden" class="cekJumlah" name="itemTotal[]" value="'+jumlahBarang+'">\n';
             htmlKeranjang += '<input type="hidden" class="cekKeterangan" name="itemKeterangan[]" value="'+keteranganBarang+'">\n';
             htmlKeranjang += '<input type="hidden" class="cekHarga" name="itemHarga[]" value="'+hargaBarang+'">\n';
-            htmlKeranjang += '<h6 class="my-0">'+ namaBarang +'<small class="hargaVal" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
+            htmlKeranjang += '<h6 class="my-0">'+ namaBarang +'<small class="jumlahVal" value="'+jumlahBarang+'">('+jumlahBarang+')</small> </h6>\n';
             htmlKeranjang += '<small class="text-muted keteranganVal" value="'+keteranganBarang+'">'+keteranganBarang+'</small><br>\n';
             htmlKeranjang += '</div>\n';
             htmlKeranjang += '<div>\n';
-            htmlKeranjang += '<strong value="'+hargaBarang * jumlahBarang+'">Rp. '+hargaBarang * jumlahBarang+',-</strong>\n';
-            htmlKeranjang += '<button class="btn btn-danger" type="button" id="copyKe">\n';
+            htmlKeranjang += '<strong class="hargaVal" value="'+hargaBarang * jumlahBarang+'">Rp. '+hargaBarang * jumlahBarang+',-</strong>\n';
+            htmlKeranjang += '<button class="btn btn-primary" type="button" id="copyKe">\n';
             htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
-            htmlKeranjang += '<path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>\n';
+            htmlKeranjang += '<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>\n';
             htmlKeranjang += '</svg>\n';
             htmlKeranjang += '</button>\n';
             htmlKeranjang += '<button class="btn btn-danger" type="button" id="hapusKeranjang">\n';
@@ -246,6 +259,10 @@
             totalTambah += 1
             $('#totalBarangnya').val(totalTambah);
             $('#totalBarangnya').html(totalTambah);
+
+            var totalHargaKeranjang = $('#TotalHargaKeranjang').val()
+            totalHargaKeranjang += hargaBarang * jumlahBarang;
+            $('#TotalHargaKeranjang').html(formatRupiah(totalHargaKeranjang));
         }
 
     });
@@ -272,7 +289,7 @@
         //tambahCombo +='</div>\n';
         tambahCombo +='<div class="form-group" id="harga'+totalTambah+'">\n';
         tambahCombo +='<label for="title">Harga</label>\n';
-        tambahCombo +='<input require type="number" name="harga[]" class="form-control">\n';
+        tambahCombo +='<input require type="number" step=".01" id="tanpa-rupiah" name="harga[]" class="form-control">\n';
         tambahCombo +='</div>\n';
         tambahCombo +='<div class="form-group" id="ket'+totalTambah+'">\n';
         tambahCombo +='<label for="title">Keterangan</label>\n';
@@ -283,6 +300,7 @@
         $('#totalRequest').append(tambahCombo);
         tambahCombo = "";
     });
+
     $("body").on("click", "#kurang", function () {
         //$('#barang'+ totalTambah).remove();//i
         //$('#jml'+ totalTambah).remove();//i
@@ -292,6 +310,40 @@
             totalTambah--;
         }  
     });
+
+     /* Tanpa Rupiah */
+     var tanpa_rupiah = document.getElementById('tanpa-rupiah');
+    tanpa_rupiah.addEventListener('keyup', function(e)
+    {
+        $('#hargaBarang').val(this.value);
+        tanpa_rupiah.value = formatRupiah(this.value);
+    });
+
+    /* Dengan Rupiah */
+    var dengan_rupiah = document.getElementById('dengan-rupiah');
+    dengan_rupiah.addEventListener('keyup', function(e)
+    {
+        $('#hargaBarang').val(this.value);
+        dengan_rupiah.value = formatRupiah(this.value, 'Rp. ');
+    });
+
+    /* Fungsi */
+    function formatRupiah(angka, prefix)
+    {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split    = number_string.split(','),
+            sisa     = split[0].length % 3,
+            rupiah     = split[0].substr(0, sisa),
+            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+            
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
 
     /*$('body').on("click", "#barang", function (){
         $("#tmbhBarang").show();

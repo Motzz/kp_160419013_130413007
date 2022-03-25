@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+//use PDF;
+use Barryvdh\DomPDF\Facade as PDF;
 use Auth;
 
 class PurchaseRequestController extends Controller
@@ -167,6 +169,7 @@ class PurchaseRequestController extends Controller
             'hapus' => 0,
             'tanggalDibutuhkan' => $data['tanggalDibutuhkan'],
             'tanggalAkhirDibutuhkan' => $data['tanggalAkhir'],
+            'jenisProses' => $data['jenisProses'],
             'created_by'=> $user->id,
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
@@ -268,12 +271,21 @@ class PurchaseRequestController extends Controller
         $dataDetail = DB::table('purchase_request_detail')
             ->where('purchase_request_detail.idPurchaseRequest', '=', $purchaseRequest->id)
             ->get();
-        return view('master.PurchaseRequest.edit',[
-            'purchaseRequest'=>$purchaseRequest,
-            'dataDetail'=>$dataDetail,
-            'dataGudang' => $dataGudang,
-            'dataBarang' => $dataBarang,
-        ]);
+
+        if($purchaseRequest->approved == 1 || $purchaseRequest->approved == 2){
+            return redirect()->route('purchaseRequest.index')->with('status','Tidak dapat mengubah data');
+        }
+        else{
+            return view('master.PurchaseRequest.edit',[
+                'purchaseRequest'=>$purchaseRequest,
+                'dataDetail'=>$dataDetail,
+                'dataGudang' => $dataGudang,
+                'dataBarang' => $dataBarang,
+            ]);
+        }
+
+        
+        
 
     }
 
@@ -298,6 +310,7 @@ class PurchaseRequestController extends Controller
                 'MGudangID' => $data['gudang'],
                 'tanggalDibutuhkan' => $data['tanggalDibutuhkan'],
                 'tanggalAkhirDibutuhkan' => $data['tanggalAkhir'],
+                'jenisProses' => $data['jenisProses'],
                 'updated_by'=> $user->id,
                 'updated_on'=> date("Y-m-d h:i:sa"),
         ]);
@@ -376,5 +389,43 @@ class PurchaseRequestController extends Controller
                 'hapus' => 1,
         ]);
        return redirect()->route('purchaseRequest.index')->with('status','Success!!');
+    }
+
+    public function pdf(PurchaseRequest $purchaseRequest)
+    {
+         $user = Auth::user();
+
+        $getLokasi = DB::table('MGudang')
+            ->where('MGudang.MGudangID', '=', $user->MGudangID)
+            ->get();
+
+        $dataGudang = DB::table('MGudang')
+            ->select('MGudang.*')
+            ->join('MKota','MGudang.cidkota','=','MKota.cidkota')
+            ->join('MPerusahaan', 'MGudang.cidp','=','MPerusahaan.MPerusahaanID')
+            ->where('MKota.cidkota', $getLokasi[0]->cidkota)
+            ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
+            ->get();
+          
+        $dataBarang = DB::table('Item')
+            ->select('Item.*', 'Unit.Name as unitName')
+            ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
+            ->where('Item.Hapus',0)
+            ->get();
+
+        $dataDetail = DB::table('purchase_request_detail')
+            ->where('purchase_request_detail.idPurchaseRequest', '=', $purchaseRequest->id)
+            ->get();
+        
+        $pdf = PDF::loadview('master.PurchaseRequest.pdf',[
+                'purchaseRequest'=>$purchaseRequest,
+                'dataDetail'=>$dataDetail,
+                'dataGudang' => $dataGudang,
+                'dataBarang' => $dataBarang,
+            ]);
+        
+        //Storage::put('public/permintaan.pdf', $pdf->output());
+	    return $pdf->download('permintaan.pdf');
+        
     }
 }

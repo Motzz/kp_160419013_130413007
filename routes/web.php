@@ -140,6 +140,8 @@ Route::resource('mKota', 'App\Http\Controllers\MKotaController');//selese
 
 //Purchase Request 
 Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestController');
-
+Route::get('purchaseRequest/pdf/{purchaseRequest}',[App\Http\Controllers\PurchaseRequestController::class, 'pdf']);
+//approve purchase request
+Route::resource('approvedPurchaseRequest', 'App\Http\Controllers\ApprovedPRController');
 //Purchase Order 
 Route::resource('purchaseOrder', 'App\Http\Controllers\PurchaseOrderController');
