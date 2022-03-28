@@ -68,15 +68,14 @@ Route::resource('pt', 'App\Http\Controllers\PTController');
 Route::resource('gudang', 'App\Http\Controllers\GudangController');
 
 /*supplier   - no debug still dont know  belum dibuat blade nya*/
-Route::resource('supplier', 'App\Http\Controllers\SupplierController');
+//Route::resource('supplier', 'App\Http\Controllers\SupplierController');
 
 /*bank   - no debug still dont know  belum dibuat blade nya*/
 Route::resource('bank', 'App\Http\Controllers\BankController');
 
 
 
-//Info Supplier (ex:tik, alat tulis, gadget, dll) 
-Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');
+
 
 
 /*==================================yang belom==========================================*/ 
@@ -99,12 +98,7 @@ Route::get('/iteme/searchtag/',[App\Http\Controllers\ItemController::class, 'sea
 Route::get('/iteme/searchtagmulti/',[App\Http\Controllers\ItemController::class, 'searchItemTagMulti']); //cobak gini ta
 //Route::get('/item/searchname/', [App\Http\Controllers\ItemController::class, 'searchItemName'])->name('searchItemName');
 
-Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
-Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,delete masik gbs
-Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');//selese,delete masik gbs
-Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');//selese,delete masik gbs
-Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');//selese,delete masik gbs
-Route::resource('ItemTagValues', 'App\Http\Controllers\ItemTagValuesController');
+
 
 //COA baru
 Route::resource('coa', 'App\Http\Controllers\COAController');
@@ -124,8 +118,24 @@ Route::resource('mGudangValues', 'App\Http\Controllers\MGudangValuesController')
 Route::resource('payment', 'App\Http\Controllers\PaymentController');
 Route::resource('paymentTerms', 'App\Http\Controllers\PaymentTermsController');
 
+
+Route::resource('itemCategory', 'App\Http\Controllers\ItemCategoryController');//selese,delete masik gbs
+
+Route::resource('ItemTag', 'App\Http\Controllers\ItemTagController');//selese,delete masik gbs
+
+Route::resource('itemTracing', 'App\Http\Controllers\ItemTracingController');//selese,delete masik gbs
+
+Route::resource('itemTransaction', 'App\Http\Controllers\ItemTransactionController');//selese,delete masik gbs
+
+Route::resource('itemType', 'App\Http\Controllers\ItemTypeController');//selese,delete masik gbs
+
+Route::resource('ItemTagValues', 'App\Http\Controllers\ItemTagValuesController');
+
 //mSupplier
-Route::resource('msupplier', 'App\Http\Controllers\MSupplierController');
+Route::resource('msupplier', 'App\Http\Controllers\MSupplierController');//selese,delete masik gbs
+
+//Info Supplier (ex:tik, alat tulis, gadget, dll) 
+Route::resource('infoSupplier', 'App\Http\Controllers\InfoSupplierController');//selese
 
 //mPulau
 Route::resource('mPulau', 'App\Http\Controllers\MPulauController');//selese
@@ -136,7 +146,11 @@ Route::resource('mProvinsi', 'App\Http\Controllers\MProvinsiController');//seles
 //mPerusahaan
 Route::resource('mPerusahaan', 'App\Http\Controllers\MPerusahaanController');//selese
 
+//mKota
 Route::resource('mKota', 'App\Http\Controllers\MKotaController');//selese
+
+//tax
+Route::resource('tax', 'App\Http\Controllers\TaxController');//selese
 
 //Purchase Request 
 Route::resource('purchaseRequest', 'App\Http\Controllers\PurchaseRequestController');

@@ -266,7 +266,22 @@
         }
 
     });
+    $('body').on('click','.copyKe', function(){
+        //alert($(this).index('.copyKe'));
+        var i = $(this).index('.copyKe');
+        var idBarang = $('.cekId:eq('+i+')').val();
+        //var namaBarang = $('.cekJumlah:eq('+i+')').val();
+        var jumlahBarang = $('.cekJumlah:eq('+i+')').val();
+        var hargaBarang = $('.cekHarga:eq('+i+')').val();
+        var keteranganBarang = $('.cekKeterangan:eq('+i+')').val();
+        
+        $("#barang").val(idBarang);
+        $("#jumlahBarang").val(jumlahBarang);
+        $("#hargaBarang").val(hargaBarang);
+        $("#tanpa-rupiah").val(formatRupiah(hargaBarang));
+        $("#keteranganBarang").val(keteranganBarang);
 
+    });
 
     $("body").on("click", "#tambah", function () {  
         totalTambah++;
@@ -300,7 +315,7 @@
         $('#totalRequest').append(tambahCombo);
         tambahCombo = "";
     });
-
+    
     $("body").on("click", "#kurang", function () {
         //$('#barang'+ totalTambah).remove();//i
         //$('#jml'+ totalTambah).remove();//i

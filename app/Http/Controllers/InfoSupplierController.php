@@ -25,7 +25,7 @@ class InfoSupplierController extends Controller
         //
         $data = DB::table('infoSupplier')
             ->get();
-        return view('master.infoSupplier',[
+        return view('master.infoSupplier.index',[
             'data' => $data,
         ]);
     }
@@ -38,7 +38,7 @@ class InfoSupplierController extends Controller
     public function create()
     {
         //
-        return view('master.infoSupplier_tambah');
+        return view('master.infoSupplier.tambah');
     }
 
     /**
@@ -80,7 +80,7 @@ class InfoSupplierController extends Controller
     public function edit(InfoSupplier $infoSupplier)
     {
         //
-        return view('master.infoSupplier_edit',[
+        return view('master.infoSupplier.edit',[
             'infoSupplier'=>$infoSupplier
         ]);
     }
@@ -98,7 +98,7 @@ class InfoSupplierController extends Controller
         $data = $request->collect(); //la teros iki
         
         DB::table('infoSupplier')
-            ->where('id', $infoSupplier['id'])
+            ->where('InfoSupplierID', $infoSupplier['InfoSupplierID'])
             ->update(array(
                 'name' => $data['name'],
                 'keterangan' => $data['keterangan'],

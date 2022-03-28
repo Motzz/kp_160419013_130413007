@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MSupplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Auth;
 class MSupplierController extends Controller
 {
     public function __construct()
@@ -77,10 +78,11 @@ class MSupplierController extends Controller
         
         DB::table('MSupplier')
             ->insert(array(
-                'InfoSupplierID' => $data['infoSupplierID'],
-                'MCurrencyID' => $data['mCurrencyID'],
-                'TaxID' => $data['taxID'],
-                'COAID' => $data['COAID'],
+                'InfoSupplierID' => $data['infoSupplierID'],//combobox
+                'PaymentTermsID' => $data['PaymentTermsID'],//combobox
+                'MCurrencyID' => $data['mCurrencyID'],//combobox
+                'TaxID' => $data['taxID'],//combobox
+                'COAID' => $data['COAID'],//combobox
                 'Name' => $data['name'],
                 'Alamat' => $data['alamat'],
                 'Kota' => $data['kota'],
@@ -88,7 +90,7 @@ class MSupplierController extends Controller
                 'Phone1' => $data['phone1'],
                 'Phone2' => $data['phone2'],
                 'Fax1' => $data['fax1'],
-                'Fax2' => $data['fax2'],
+                'Fax2' => $data['fax2'],//
                 'ContactPerson' => $data['contactPerson'],
                 'Email' => $data['email'],
                 'NPWP' => $data['NPWP'],
@@ -98,18 +100,20 @@ class MSupplierController extends Controller
                 'AtasNama' => $data['atasNama'],
                 'Lokasi' => $data['lokasi'],
                 'Kode' => $data['kode'],
-                'Hapus' => 0,
+                'Hapus' => 0,//
                 'Keterangan' => $data['keterangan'],
                 'SaldoDP' => $data['saldoDP'],
                 'NamaNPWP' => $data['namaNPWP'],
                 'SKT' => $data['SKT'],
                 'SPPKP' => $data['SPPKP'],
                 'KTP' => $data['KTP'],
-                'MKotaID' => $data['mKotaID'],
-                'CreatedBy'=> $user->id,
-                'CreatedOn'=> date("Y-m-d h:i:sa"),
-                'UpdatedBy'=> $user->id,
-                'UpdatedOn'=> date("Y-m-d h:i:sa"),
+                'MKotaID' => $data['mKotaID'],//combobox
+                'Petani'=>$data['Petani'],
+                'Khusus'=>$data['Khusus'],
+                'CreatedBy'=> $user->id,//
+                'CreatedOn'=> date("Y-m-d h:i:sa"),//
+                'UpdatedBy'=> $user->id,//
+                'UpdatedOn'=> date("Y-m-d h:i:sa"),//
                 
             )
         );
@@ -136,7 +140,7 @@ class MSupplierController extends Controller
      * @param  \App\Models\MSupplier  $mSupplier
      * @return \Illuminate\Http\Response
      */
-    public function edit(MSupplier $mSupplier)
+    public function edit(MSupplier $msupplier)
     {
         //
         $infoSupplier = DB::table('infoSupplier')
@@ -151,14 +155,14 @@ class MSupplierController extends Controller
             ->get();
         $COA = DB::table('COA')
             ->get();
-        return view('master.mcurrency.edit',[
+        return view('master.msupplier.edit',[
                 'infoSupplier' => $infoSupplier,
                 'MCurrency' => $MCurrency,
                 'Tax' => $Tax,
                 'PaymentTerms' => $PaymentTerms,
                 'MKota' => $MKota,
                 'COA' => $COA,
-                'mSupplier' => $mSupplier,
+                'msupplier' => $msupplier,
         ]);
     }
 
@@ -169,13 +173,13 @@ class MSupplierController extends Controller
      * @param  \App\Models\MSupplier  $mSupplier
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MSupplier $mSupplier)
+    public function update(Request $request, MSupplier $msupplier)
     {
         //
         $data = $request->collect();
         $user = Auth::user();
         DB::table('MSupplier')
-            ->where('MSupplier', $mSupplier['id'])
+            ->where('SupplierID', $msupplier['SupplierID'])
             ->update(array(
                 'InfoSupplierID' => $data['infoSupplierID'],
                 'MCurrencyID' => $data['mCurrencyID'],
@@ -222,10 +226,11 @@ class MSupplierController extends Controller
     public function destroy(MSupplier $mSupplier)
     {
         //
-        $data = $request->collect();
+        //$data = $request->collect();
         $user = Auth::user();
+        dd($mSupplier);
         DB::table('MSupplier')
-            ->where('MSupplier', $mSupplier['id'])
+            ->where('SupplierID', $mSupplier->SupplierID)
             ->update(array(
                 'Hapus' => 1,
                 'UpdatedBy'=> $user->id,

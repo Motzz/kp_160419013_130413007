@@ -35,8 +35,10 @@ class PurchaseOrderController extends Controller
             ->join('MKota','MGudang.cidkota', '=', 'MKota.cidkota')
             ->join('MPerusahaan', 'MGudang.cidp','=','MPerusahaan.MPerusahaanID')
             ->where('purchase_order.hapus','=', 0)  
-            ->where('MPerusahaan.MPerusahaanID', $getPerusahaan[0]->MPerusahaanID)  
+            //->where('MPerusahaan.MPerusahaanID', $getPerusahaan[0]->MPerusahaanID)  
             ->get();
+
+        //dd($data);
         return view('master.PurchaseOrder.index',[
             'data' => $data,
         ]);
@@ -169,6 +171,9 @@ class PurchaseOrderController extends Controller
             'approved' => 0,
             'hapus' => 0,
             'proses' => 0,         
+            'keteranganLokasi' => $data['keteranganLokasi'],         
+            'keteranganPenagihan' => $data['keteranganPenagihan'],         
+            'keteranganPembayaran' => $data['keteranganPembayaran'],         
             'created_by'=> $user->id,
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
@@ -181,25 +186,25 @@ class PurchaseOrderController extends Controller
         for($i = 0; $i < count($data['itemId']); $i++){
             DB::table('purchase_order_detail')->insert(array(
                 'idPurchaseOrder' => $idpo,
-                'idPurchaseRequestDetail' => $data['idPurchaseRequestDetail'][$i],
+                'idPurchaseRequestDetail' => $data['prdID'][$i],
                 'idItem' => $data['itemId'][$i],
                 'jumlah' => $data['itemTotal'][$i],
                 'harga' => $data['itemHarga'][$i],
-                'idTax' => $data['tax'][$i],
+                'diskon' => $data['itemDiskon'][$i],
+                'idTax' => $data['itemTax'][$i],
                 'keterangan' => $data['itemKeterangan'][$i],
                 )
             ); 
 
-            $totalNow = DB::table('purchase_request_detail')->select('jumlah')->where('id', $data['idPurchaseRequestDetail'][$i])->get();
+            $totalNow = DB::table('purchase_request_detail')->select('jumlah', 'jumlahProses')->where('id', $data['prdID'][$i])->get();
             DB::table('purchase_request_detail')
-            ->where('id', $data['idPurchaseRequestDetail'][$i])
+            ->where('id', $data['prdID'][$i])
             ->update([
-                'jumlahProses' => $totalNow[0]->jumlah + $data['itemTotal'][$i],
+                'jumlahProses' => $totalNow[0]->jumlahProses + $data['itemTotal'][$i],
             ]);
             
-            $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i] * (100 - $data['taxPercent'][$i]) / 100;
-            
-            
+            $totalHarga += (($data['itemHarga'][$i]-$data['itemDiskon'][$i]) * $data['itemTotal'][$i]) * (100.0 + $data['itemTaxValue'][$i]) / 100.0;
+                 
         }
 
         DB::table('purchase_order')
@@ -208,7 +213,7 @@ class PurchaseOrderController extends Controller
                 'totalHarga' =>  $totalHarga,
         ]);
 
-        return redirect()->route('PurchaseOrder.index')->with('status','Success!!');
+        return redirect()->route('purchaseOrder.index')->with('status','Success!!');
     }
 
     /**
@@ -262,11 +267,13 @@ class PurchaseOrderController extends Controller
             ->where('purchase_request.approvedAkhir', 1)
             ->where('purchase_request.hapus', 0)
             ->where('purchase_request.proses', 1)
-            ->where('purchase_request_detail.jumlahProses', '<', 'purchase_request_detail.jumlah')
+            ->where('purchase_request_detail.jumlahProses', '<', DB::raw('purchase_request_detail.jumlah'))
             ->get();
 
         $dataDetail = DB::table('purchase_order_detail')
-            ->where('purchase_request_detail.idPurchaseRequest', '=', $purchaseOrder->id)
+            ->where('purchase_order_detail.idPurchaseOrder', '=', $purchaseOrder->id)
+            ->get();
+        $dataTax=DB::table('Tax')
             ->get();
         return view('master.PurchaseOrder.edit',[
             'purchaseOrder'=>$purchaseOrder,
@@ -274,6 +281,7 @@ class PurchaseOrderController extends Controller
             'dataSupplier' => $dataSupplier,
             'dataPayment' => $dataPayment,
             'dataBarang' => $dataBarang,
+            'dataTax' => $dataTax,
             'dataPurchaseRequestDetail' => $dataPurchaseRequestDetail,
         ]);
     }
@@ -299,6 +307,9 @@ class PurchaseOrderController extends Controller
                 'idSupplier' => $data['supplier'],
                 'idPaymentTerms' => $data['paymentTerms'],
                 'tanggal_akhir' => $data['tanggal_akhir'],
+                'keteranganLokasi' => $data['keteranganLokasi'],         
+                'keteranganPenagihan' => $data['keteranganPenagihan'],         
+                'keteranganPembayaran' => $data['keteranganPembayaran'],     
                 'updated_by'=> $user->id,
                 'updated_on'=> date("Y-m-d h:i:sa"),
         ]);
@@ -322,10 +333,11 @@ class PurchaseOrderController extends Controller
                     'jumlah' => $data['itemTotal'][$i],
                     'harga' => $data['itemHarga'][$i],
                     'idTax' => $data['tax'][$i],
+                    'diskon' => $data['itemDiskon'][$i],
                     'keterangan' => $data['itemKeterangan'][$i],
                     )
                 ); 
-                $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i] * $data['taxPercent'][$i];
+                $totalHarga += (($data['itemHarga'][$i]-$data['itemDiskon'][$i]) * $data['itemTotal'][$i]) * (100.0 + $data['itemTaxValue'][$i]) / 100.0;
             }     
         }
         else{
@@ -338,10 +350,11 @@ class PurchaseOrderController extends Controller
                         'jumlah' => $data['itemTotal'][$i],
                         'harga' => $data['itemHarga'][$i],
                         'idTax' => $data['tax'][$i],
+                        'diskon' => $data['itemDiskon'][$i],
                         'keterangan' => $data['itemKeterangan'][$i],
                         )           
                     );
-                    $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i] * $data['taxPercent'][$i];
+                    $totalHarga += (($data['itemHarga'][$i]-$data['itemDiskon'][$i]) * $data['itemTotal'][$i]) * (100.0 + $data['itemTaxValue'][$i]) / 100.0;
       
                 }
                 else{
@@ -352,10 +365,11 @@ class PurchaseOrderController extends Controller
                         'jumlah' => $data['itemTotal'][$i],
                         'harga' => $data['itemHarga'][$i],
                         'idTax' => $data['tax'][$i],
+                        'diskon' => $data['itemDiskon'][$i],
                         'keterangan' => $data['itemKeterangan'][$i],
                         )
                     ); 
-                    $totalHarga += $data['itemHarga'][$i] * $data['itemTotal'][$i] * $data['taxPercent'][$i];     
+                    $totalHarga += (($data['itemHarga'][$i]-$data['itemDiskon'][$i]) * $data['itemTotal'][$i]) * (100.0 + $data['itemTaxValue'][$i]) / 100.0;     
                 }
             }
         }

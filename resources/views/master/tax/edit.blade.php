@@ -26,20 +26,28 @@ $currentUrl = Route::current()->getName();  //buat dapetno nama directory nya / 
                  
                 <div class="card-body">
             
-                    <form action="{{route('itemTracing.update',[$itemTracing->ItemTracingID])}}" method="POST" >
+                    <form action="{{route('tax.update',[$tax->TaxID])}}" method="POST" >
                       @csrf
                       @method('PUT')
 
-                        <div class="form-group">
-                           <label for="title">Nama Item Tracing</label>
-                           <input require type="text" name="Name" class="form-control" 
-                           value="{{old('Name',$itemTracing->Name)}}" >
+
+
+                         <div class="form-group">
+                           <label for="title">Nama tax</label>
+                           <input require type="text" name="name" class="form-control" 
+                           value="{{old('Name',$tax->Name)}}">
                         </div>
 
                         <div class="form-group">
-                            <label for="title">Notes</label>
-                           <input require type="text" name="Notes" class="form-control" 
-                           value="{{old('Notes',$itemTracing->Notes)}}" >
+                            <label for="title">Deskripsi</label>
+                           <input require type="text" name="deskripsi" class="form-control" 
+                           value="{{old('Deskripsi',$tax->Deskripsi)}}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="title">Tax Percent</label>
+                           <input require type="number" name="taxpercent" class="form-control" 
+                           value="{{old('TaxPercent',$tax->TaxPercent)}}">
                         </div>
 
                        <button class="btn btn-primary">Save</button>

@@ -9,6 +9,7 @@ class InfoSupplier extends Model
 {
     use HasFactory;
     protected $table = 'infoSupplier';
+    protected $primaryKey='InfoSupplierID';
 
     protected $fillable=[
         'name',

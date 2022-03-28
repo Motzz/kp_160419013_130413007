@@ -136,6 +136,7 @@
             <a class="collapse-item" href="{{route('mKota.index')}}">Kota</a>
             <a class="collapse-item" href="{{route('mPerusahaan.index')}}">Perusahaan</a>
             <a class="collapse-item" href="{{route('coa.index')}}">Coa</a>
+            <a class="collapse-item" href="{{route('tax.index')}}">Tax</a>
 
         </div>
     </div>
