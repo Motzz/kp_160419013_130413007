@@ -161,7 +161,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,//buat pdf
+        //Barryvdh\DomPDF\ServiceProvider::class,//buat pdf
 
         /*
          * Package Service Providers...
