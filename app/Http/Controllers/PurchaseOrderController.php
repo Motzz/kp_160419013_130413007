@@ -224,7 +224,7 @@ class PurchaseOrderController extends Controller
                 'totalHarga' =>  $totalHarga,
         ]);
 
-        return redirect()->route('purchaseOrder.index')->with('status','Success!!');
+        return redirect()->route('purchaseOrder.index')->with('status','Pembuatan PO/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex.' Berhasil');
     }
 
     /**
@@ -286,6 +286,20 @@ class PurchaseOrderController extends Controller
             ->get();
         $dataTax=DB::table('Tax')
             ->get();
+
+        $dataPerusahaan =DB::table('MPerusahaan')
+            ->get();
+
+        $dataPurchaseRequest = DB::table('purchase_request')
+            ->select('purchase_request.*','MPerusahaan.MPerusahaanID as cidp')
+            ->join('MGudang','purchase_request.MGudangID','=','MGudang.MGudangID')
+            ->join('MPerusahaan','MGudang.cidp','=','MPerusahaan.MPerusahaanID')
+            ->where('purchase_request.approved', 1)
+            ->where('purchase_request.approvedAkhir', 1)
+            ->where('purchase_request.hapus', 0)
+            ->where('purchase_request.proses', 1)
+            ->get();
+
         return view('master.PurchaseOrder.edit',[
             'purchaseOrder'=>$purchaseOrder,
             'dataDetail'=>$dataDetail,
@@ -294,6 +308,8 @@ class PurchaseOrderController extends Controller
             'dataBarang' => $dataBarang,
             'dataTax' => $dataTax,
             'dataPurchaseRequestDetail' => $dataPurchaseRequestDetail,
+            'dataPurchaseRequest' => $dataPurchaseRequest,
+            'dataPerusahaan' => $dataPerusahaan,
         ]);
     }
 

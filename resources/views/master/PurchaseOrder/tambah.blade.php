@@ -202,6 +202,23 @@
     $('#TotalHargaKeranjang').val(0);
 
 
+    $('body').on('click','.copyKe', function(){
+        //alert($(this).index('.copyKe'));
+        var i = $(this).index('.copyKe');
+        var idBarang = $('.cekId:eq('+i+')').val();
+        //var namaBarang = $('.cekJumlah:eq('+i+')').val();
+        var jumlahBarang = $('.cekJumlah:eq('+i+')').val();
+        var hargaBarang = $('.cekHarga:eq('+i+')').val();
+        var keteranganBarang = $('.cekKeterangan:eq('+i+')').val();
+        
+        $("#barang").val(idBarang);
+        $("#jumlahBarang").val(jumlahBarang);
+        $("#hargaBarang").val(hargaBarang);
+        $("#tanpa-rupiah").val(formatRupiah(hargaBarang));
+        $("#keteranganBarang").val(keteranganBarang);
+
+    });
+    
     $("#perusahaanID").change(function() {
         //alert(this.value);
         var id = this.value;
@@ -378,7 +395,7 @@
             htmlKeranjang += '</div>\n';
             htmlKeranjang += '<div>\n';
             htmlKeranjang += '<strong class="hargaVal" value="'+ ((hargaBarang-diskonBarang) * jumlahBarang) * (100.0+taxPercent) / 100.0+'">Rp. '+ ((hargaBarang * jumlahBarang) - diskonBarang) * (100.0+taxPercent) / 100.0+',-</strong>\n';
-            htmlKeranjang += '<button class="btn btn-primary" type="button" id="copyKe">\n';
+            htmlKeranjang += '<button class="btn btn-primary copyKe" type="button" id="copyKe">\n';
             htmlKeranjang += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">\n';
             htmlKeranjang += '<path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>\n';
             htmlKeranjang += '</svg>\n';
