@@ -14,15 +14,26 @@
         <div class="py-5 ">
             <h2>Pembuatan Purchase Order</h2><br>
                <div class="row">
-                    <div class="col-md-6 mb-4">
+                    <!--<div class="col-md-6 mb-4">
                         <label for="firstName">Nama NPP</label>
                         <input type="text" class="form-control" id="firstName" placeholder="" value="{{$namaPo}}" readonly required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Pembuatan</label>
                         <input type="date" class="form-control" id="lastName" placeholder="" value="{{$date}}" readonly required="">
                         <div class="invalid-feedback"> Valid last name is required. </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName">Pilih Perusahaan</label> 
+                        <select id="perusahaanID" name="perusahaan" class="form-control selectpicker" data-live-search="true" data-show-subtext="true">
+                            <option value="">
+                                --Pilih Perusahaan--
+                            </option>
+                            @foreach($dataPerusahaan as $key => $data)
+                                <option name="idPerusahaan" singkatan="{{$data->cnames}}" value="{{$data->MPerusahaanID}}"{{$data->cname == $data->MPerusahaanID? 'selected' :'' }}>{{$data->cname}} ({{$data->cnames}})</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="lastName">Tanggal Batas Akhir</label>
@@ -78,9 +89,9 @@
 
                     <select class="form-control selectpicker" id="pReq" data-show-subtext="true">
                             <option value="pilih">--Permintaan Order--</option>
-                            @foreach($dataPurchaseRequest as $key => $data)
+                            <!--@foreach($dataPurchaseRequest as $key => $data)
                             <option id="preqID" value="{{$data->id}}"{{$data->name == $data->id? 'selected' :'' }}>{{$data->name}}</option>
-                            @endforeach
+                            @endforeach-->
                     </select><br>
 
 
@@ -190,6 +201,35 @@
     var totalTambah = 0;
     $('#TotalHargaKeranjang').val(0);
 
+
+    $("#perusahaanID").change(function() {
+        //alert(this.value);
+        var id = this.value;
+        var singkatan = $("#perusahaanID option:selected").attr('singkatan');
+        //alert(singkatan);
+        var optionnya = '';
+        //var dataBarangTag = <?php //echo json_encode($dataBarangTag); ?>;
+        var dataPurchaseRequest = <?php echo json_encode($dataPurchaseRequest); ?>;
+
+        //alert('masuk sini');
+        optionnya += '<option value="" selected>--Permintaan Order--</option>\n';
+        $.each(dataPurchaseRequest, function( key, value ){
+            //alert(value.ItemName);
+            if(value.cidp.toString() == id.toString()){
+                //alert('masuk');
+                optionnya += '<option id="preqID" idPr='+ value.id +' value="'+value.id+'">'+value.name+'</option>\n';               
+            }
+        });
+        //alert(optionnya);
+        
+        //alert(optionnya);
+                            
+        $("#pReq").empty();
+        $("#pReq").append(optionnya);
+        $('.selectpicker').selectpicker('refresh');
+
+
+    });
     //$('body').on('click','#namaTag', function(){
         
     //});
