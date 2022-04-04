@@ -80,6 +80,8 @@ class PurchaseRequestController extends Controller
             ->where('MPerusahaan.MPerusahaanID','=', $getLokasi[0]->cidp)
             ->get();
 
+        $dataPerusahaan = DB::table('MPerusahaan')->get();
+
         $dataBarang = DB::table('Item')
             ->select('Item.*', 'Unit.Name as unitName')
             ->join('Unit','Item.UnitID', '=', 'Unit.UnitID')
@@ -121,6 +123,7 @@ class PurchaseRequestController extends Controller
             'namaNpp' => $namaNpp,
             'date' => $date,
             'dataTag' => $dataTag,
+            'dataPerusahaan' => $dataPerusahaan,
         ]);
         
     }

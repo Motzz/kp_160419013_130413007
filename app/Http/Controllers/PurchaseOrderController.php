@@ -80,6 +80,9 @@ class PurchaseOrderController extends Controller
             ->get();
         $dataTax=DB::table('Tax')
             ->get();
+
+        $dataPerusahaan =DB::table('MPerusahaan')
+            ->get();
         
         
         //data Purchase Request yang disetujui
@@ -97,6 +100,9 @@ class PurchaseOrderController extends Controller
         //dd($dataPurchaseRequestDetail);
         
         $dataPurchaseRequest = DB::table('purchase_request')
+            ->select('purchase_request.*','MPerusahaan.MPerusahaanID as cidp')
+            ->join('MGudang','purchase_request.MGudangID','=','MGudang.MGudangID')
+            ->join('MPerusahaan','MGudang.cidp','=','MPerusahaan.MPerusahaanID')
             ->where('purchase_request.approved', 1)
             ->where('purchase_request.approvedAkhir', 1)
             ->where('purchase_request.hapus', 0)
@@ -132,6 +138,7 @@ class PurchaseOrderController extends Controller
             'dataTax' => $dataTax,
             'dataPurchaseRequestDetail' => $dataPurchaseRequestDetail,
             'dataPurchaseRequest' => $dataPurchaseRequest,
+            'dataPerusahaan' => $dataPerusahaan,
         ]);
     }
 
@@ -145,6 +152,7 @@ class PurchaseOrderController extends Controller
     {
         //
         $data = $request->collect();
+        //dd($data);
         $user = Auth::user();
         $year = date("Y");
         $month = date("m");
@@ -155,9 +163,12 @@ class PurchaseOrderController extends Controller
             ->join('MPerusahaan', 'MGudang.cidp', '=', 'MPerusahaan.MPerusahaanID')
             ->where('MGudang.MGudangID', '=', $user->MGudangID)
             ->get();
+        $dataLokasiPerusahaan = DB::table('MPerusahaan')
+            ->where("MPerusahaanID", $data['perusahaan'])
+            ->get();
         
         $dataPo = DB::table('purchase_order')
-            ->where('name', 'like', 'PO/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/%")
+            ->where('name', 'like', 'PO/'.$dataLokasiPerusahaan[0]->cnames.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/%")
             ->get();
         
 
@@ -213,7 +224,7 @@ class PurchaseOrderController extends Controller
                 'totalHarga' =>  $totalHarga,
         ]);
 
-        return redirect()->route('purchaseOrder.index')->with('status','Success!!');
+        return redirect()->route('purchaseOrder.index')->with('status','Pembuatan PO/'.$dataLokasi[0]->perusahaanCode.'/'.$dataLokasi[0]->ckode.'/'.$year.'/'.$month."/".$totalIndex.' Berhasil');
     }
 
     /**
@@ -275,6 +286,20 @@ class PurchaseOrderController extends Controller
             ->get();
         $dataTax=DB::table('Tax')
             ->get();
+
+        $dataPerusahaan =DB::table('MPerusahaan')
+            ->get();
+
+        $dataPurchaseRequest = DB::table('purchase_request')
+            ->select('purchase_request.*','MPerusahaan.MPerusahaanID as cidp')
+            ->join('MGudang','purchase_request.MGudangID','=','MGudang.MGudangID')
+            ->join('MPerusahaan','MGudang.cidp','=','MPerusahaan.MPerusahaanID')
+            ->where('purchase_request.approved', 1)
+            ->where('purchase_request.approvedAkhir', 1)
+            ->where('purchase_request.hapus', 0)
+            ->where('purchase_request.proses', 1)
+            ->get();
+
         return view('master.PurchaseOrder.edit',[
             'purchaseOrder'=>$purchaseOrder,
             'dataDetail'=>$dataDetail,
@@ -283,6 +308,8 @@ class PurchaseOrderController extends Controller
             'dataBarang' => $dataBarang,
             'dataTax' => $dataTax,
             'dataPurchaseRequestDetail' => $dataPurchaseRequestDetail,
+            'dataPurchaseRequest' => $dataPurchaseRequest,
+            'dataPerusahaan' => $dataPerusahaan,
         ]);
     }
 
