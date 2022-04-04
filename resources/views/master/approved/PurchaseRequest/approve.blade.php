@@ -19,13 +19,13 @@
                         @method('PUT')
 
                         <div class="form-group">
-                            <table class="table table-bordered">
+                            <table id="example1" class="table table-bordered">
                                 <thead class="thead-light">
                                     <tr>
                                     <th scope="col" colspan="3"><h2>PERSETUJUAN PERMINTAAN PEMBELIAN</h2></th>
                                     <th scope="col" colspan="3">
                                         Nama Npp : {{$purchaseRequest->name}}<br>
-                                        Tanggal pembuatan : {{$purchaseRequest->created_on}}
+                                        Tanggal pembuatan : {{date("d-m-Y", strtotime($purchaseRequest->created_on))}}
 
                                     </th>
                                     </tr>
@@ -40,8 +40,8 @@
                                         @endif 
                                     @endforeach
                                     Jenis permintaan : {{$purchaseRequest->jenisProses}} <br>
-                                    Tanggal dibutuhkan : {{$purchaseRequest->tanggalDibutuhkan}}<br>
-                                    Tanggal batas akhir : {{$purchaseRequest->tanggalAkhirDibutuhkan}}
+                                    Tanggal dibutuhkan : {{date("d-m-Y", strtotime($purchaseRequest->tanggalDibutuhkan))}}<br>
+                                    Tanggal batas akhir : {{date("d-m-Y", strtotime($purchaseRequest->tanggalAkhirDibutuhkan))}}
                                     </th>
                                     </tr>
                                 </thead>
@@ -63,12 +63,17 @@
                                             <th scope="row">{{$data->id}}</th>
                                             <th scope="row">{{$data->ItemName}}</th>
                                             <td>{{$data->jumlah}}</td>
-                                            <td>{{$data->harga}}</td>              
+                                            <td>{{number_format($data->harga, 2)}}</td>              
                                             <td>{{$data->keterangan_jasa}}</td>                                          
-                                            <td>{{$data->jumlah * $data->harga}}</td>                                          
+                                            <td>{{number_format($data->jumlah * $data->harga, 2)}}</td>                                          
                                             @endif
                                         </tr>
                                         @endforeach
+
+                                        <tr>
+                                            <th scope="row" colspan="5">Total Harga</th>
+                                            <th scope="row">{{number_format($purchaseRequest->totalHarga, 2)}}</th>
+                                        </tr>
                                 
                                 </tbody>
                             </table>

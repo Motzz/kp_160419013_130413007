@@ -28,7 +28,7 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-       <table class="table">
+       <table id="example1" class="table">
                           <thead>
                             <tr>
                               <th scope="col">#</th>

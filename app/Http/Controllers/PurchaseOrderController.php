@@ -189,6 +189,7 @@ class PurchaseOrderController extends Controller
             'created_on'=> date("Y-m-d h:i:sa"),
             'updated_by'=> $user->id,
             'updated_on'=> date("Y-m-d h:i:sa"),
+            'MPerusahaanID'=> $data['perusahaan'],
             )
         ); 
 

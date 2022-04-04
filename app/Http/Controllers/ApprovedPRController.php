@@ -154,7 +154,7 @@ class ApprovedPRController extends Controller
             }
 
         }
-        else if($approvedPurchaseRequest['approve'] ==1 || $approvedPurchaseRequest['approveAkhir'] == 0){
+        else if($approvedPurchaseRequest['approve'] ==1 && $approvedPurchaseRequest['approveAkhir'] == 0){
             DB::table('purchase_request')
             ->where('id', $approvedPurchaseRequest['id'])
             ->update(array(
